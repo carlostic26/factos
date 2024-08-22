@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 const Color scaffoldBackgroundColor = Color(0xFF1F1F1F);
-const Color buttonLigthColor = Color.fromARGB(255, 161, 161, 161);
+const Color buttonLigthColor = Color.fromARGB(255, 179, 179, 179);
+const Color factoBackgroundColor = Color.fromARGB(255, 179, 179, 179);
 const Color buttonNoLigthColor = Color.fromARGB(255, 103, 103, 103);
 const Color searchFieldBackgroundColor = Color(0xFF595959);
 const Color titleTextColor = Color(0xFFDBDBDB);
