@@ -1,5 +1,3 @@
-import 'package:factos/presentation/common/widgets/facto_widget.dart';
-import 'package:factos/presentation/screens/welcome/widgets/welcome_first_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,11 +6,12 @@ class WelcomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String variable = '';
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
 
-    return const Scaffold(
-      body: Center(child: FactoWidget()),
-      bottomNavigationBar: SizedBox(height: 70, child: Placeholder()),
+    return Scaffold(
+      body: Container(),
+      bottomNavigationBar: const SizedBox(height: 70, child: Placeholder()),
     );
   }
 }

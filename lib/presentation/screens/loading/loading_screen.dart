@@ -17,7 +17,7 @@ class LoadingScreen extends ConsumerWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    Future.delayed(const Duration(seconds: 10), () {
+    Future.delayed(const Duration(seconds: 1), () {
       ref.read(buttonState.notifier).enableButton();
       isLoaded = true;
     });

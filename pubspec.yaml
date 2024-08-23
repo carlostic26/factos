@@ -16,6 +16,7 @@ dependencies:
   riverpod: ^2.5.1
   flutter_riverpod: ^2.5.1
   percent_indicator: ^4.2.3
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:
@@ -29,10 +30,12 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-   - assets/images/emoti_informatico.png
+   - assets/
+   - assets/icons/
+   - assets/images/
 
   fonts:
      - family: Inter
        fonts:
-         - asset: assets\fonts\Inter_Bold.ttf
-         - asset: assets\fonts\Inter_ExtraLight.ttf
+         - asset: assets/fonts/Inter_Bold.ttf
+         - asset: assets/fonts/Inter_ExtraLight.ttf
