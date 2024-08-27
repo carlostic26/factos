@@ -15,3 +15,15 @@ class ButtonStateNotifier extends StateNotifier<bool> {
 final buttonState = StateNotifierProvider<ButtonStateNotifier, bool>((ref) {
   return ButtonStateNotifier();
 });
+
+class PageNotifier extends StateNotifier<int> {
+  PageNotifier() : super(0);
+
+  void setPage(int page) {
+    state = page;
+  }
+}
+
+final pageProvider = StateNotifierProvider<PageNotifier, int>((ref) {
+  return PageNotifier();
+});

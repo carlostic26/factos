@@ -24,22 +24,25 @@ class LoadingScreen extends ConsumerWidget {
 
     return Scaffold(
       body: Container(
-        color: scaffoldBackgroundColor,
+        color: scaffoldBackgroundGlobalColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 200, width: 200, child: Placeholder()),
+            SizedBox(
+                height: height * 0.22,
+                width: width * 0.65,
+                child: Image.asset('assets/images/logo.png')),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
             Container(
               alignment: Alignment.center,
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
               child: LinearPercentIndicator(
                   alignment: MainAxisAlignment.center,
                   width: width * 0.8,
-                  lineHeight: 10,
+                  lineHeight: 7,
                   percent: 100 / 100,
                   animation: true,
                   animationDuration: 10000,

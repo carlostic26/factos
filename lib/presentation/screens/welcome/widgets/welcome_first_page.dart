@@ -18,9 +18,7 @@ class WelcomeFirstPage extends StatelessWidget {
             textAlign: TextAlign.center,
             'Bienvenido a \nFactos de Programación',
             style: TextStyle(
-                fontFamily: 'Inter_Bold.ttf',
-                fontWeight: FontWeight.bold,
-                fontSize: 20),
+                fontFamily: 'Inter', fontWeight: FontWeight.bold, fontSize: 20),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 70, 0, 25),
@@ -34,23 +32,11 @@ class WelcomeFirstPage extends StatelessWidget {
             child: Text(
               textAlign: TextAlign.center,
               'Una app para enterarse sobre conceptos, historias, fundadores, sugerencias, afirmaciones, tips, y curiosidades.',
-              style: TextStyle(fontFamily: 'Inter_ExtraLight.ttf'),
+              style: TextStyle(fontFamily: 'Inter'),
             ),
           ),
           const Expanded(
             child: SizedBox(),
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: IconButton(
-              onPressed: () {
-                //TODO: Go to next page
-              },
-              icon: const Icon(
-                Icons.arrow_forward,
-                color: Colors.white,
-              ),
-            ),
           ),
         ],
       ),
