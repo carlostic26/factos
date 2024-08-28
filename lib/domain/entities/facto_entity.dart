@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 
 class Facto {
   final String title;
+  final String category;
   final String description;
-  final String namefont;
+  final String nameFont;
   final String linkFont;
-  final Icon iconTag;
 
-  Facto(
-      {required this.title,
-      required this.description,
-      required this.namefont,
-      required this.linkFont,
-      required this.iconTag});
+  Facto({
+    required this.title,
+    required this.category,
+    required this.description,
+    required this.nameFont,
+    required this.linkFont,
+  });
 }
