@@ -1,4 +1,4 @@
-import 'package:factos/domain/entities/facto_entity.dart';
+import 'package:factos/feature/home/domain/entities/facto_entity.dart';
 
 class FactoModel extends Facto {
   FactoModel(
@@ -6,17 +6,18 @@ class FactoModel extends Facto {
       required super.category,
       required super.description,
       required super.nameFont,
-      required super.linkFont});
+      required super.linkFont,
+      required super.linkImg});
 
   //Para el caso donde esté implementando API
   factory FactoModel.fromJson(json) {
     return FactoModel(
-      title: '',
-      category: '',
-      description: '',
-      nameFont: '',
-      linkFont: '',
-    );
+        title: '',
+        category: '',
+        description: '',
+        nameFont: '',
+        linkFont: '',
+        linkImg: '');
   }
 
   // Método para convertir el objeto a un Json
@@ -27,6 +28,7 @@ class FactoModel extends Facto {
       'description': description,
       'namefont': nameFont,
       'linkFont': linkFont,
+      'linkImg': linkImg
     };
   }
 }

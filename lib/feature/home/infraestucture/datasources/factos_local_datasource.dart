@@ -1,5 +1,5 @@
 import 'package:factos/core/error/failures.dart';
-import 'package:factos/infraestucture/models/factos_model.dart';
+import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';

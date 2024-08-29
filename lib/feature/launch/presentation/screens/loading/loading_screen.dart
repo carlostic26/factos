@@ -1,6 +1,9 @@
 import 'package:factos/config/styles/constants/theme_data.dart';
-import 'package:factos/presentation/provider/riverpod.dart';
-import 'package:factos/presentation/screens/welcome/welcome_screen.dart';
+import 'package:factos/feature/home/presentation/provider/riverpod.dart';
+import 'package:factos/feature/home/presentation/screens/home/home_screen.dart';
+import 'package:factos/feature/launch/presentation/provider/riverpod.dart';
+import 'package:factos/feature/launch/presentation/screens/loading/widgets/counting_animation.dart';
+import 'package:factos/feature/launch/presentation/screens/welcome/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -10,7 +13,6 @@ class LoadingScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final numFactos = ref.watch(maxFactosState);
     final buttonContinue = ref.watch(buttonState);
     bool isLoaded = false;
 
@@ -48,13 +50,27 @@ class LoadingScreen extends ConsumerWidget {
                   animationDuration: 10000,
                   progressColor: Colors.blueGrey),
             ),
-            Text(
-              "Recopilando $numFactos factos...",
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  color: subtitleTextColor,
-                  fontSize: 12,
-                  fontFamily: 'Inter_ExtraLight.ttf'),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Recopilando  ",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: subtitleTextColor,
+                      fontSize: 12,
+                      fontFamily: 'Inter_ExtraLight.ttf'),
+                ),
+                CountingAnimation(endCount: 1225),
+                Text(
+                  " factos...",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: subtitleTextColor,
+                      fontSize: 12,
+                      fontFamily: 'Inter_ExtraLight.ttf'),
+                ),
+              ],
             ),
             const SizedBox(
               height: 80,
@@ -69,7 +85,7 @@ class LoadingScreen extends ConsumerWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => const WelcomeScreen()));
+                                  builder: (_) => const HomeScreen()));
                         }
                       : null,
                   style: ButtonStyle(

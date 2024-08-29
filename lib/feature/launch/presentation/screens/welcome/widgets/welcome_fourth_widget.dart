@@ -1,5 +1,5 @@
 import 'package:factos/config/styles/constants/theme_data.dart';
-import 'package:factos/presentation/screens/welcome/widgets/factos_category_widget.dart';
+import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_category_widget.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeFourthPage extends StatelessWidget {

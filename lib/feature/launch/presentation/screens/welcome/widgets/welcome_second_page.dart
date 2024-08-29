@@ -1,5 +1,5 @@
 import 'package:factos/config/styles/constants/theme_data.dart';
-import 'package:factos/presentation/common/widgets/facto_widget.dart';
+import 'package:factos/feature/home/presentation/common/widgets/facto_widget.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeSecondPage extends StatelessWidget {

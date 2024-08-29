@@ -1,7 +1,5 @@
 import 'package:riverpod/riverpod.dart';
 
-final maxFactosState = StateProvider((ref) => 121325);
-
 //final buttonState = StateProvider((ref) => false);
 
 class ButtonStateNotifier extends StateNotifier<bool> {

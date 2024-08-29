@@ -1,5 +1,5 @@
 import 'package:factos/config/styles/constants/theme_data.dart';
-import 'package:factos/presentation/screens/loading/loading_screen.dart';
+import 'package:factos/feature/launch/presentation/screens/loading/loading_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

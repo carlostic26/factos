@@ -6,6 +6,7 @@ class Facto {
   final String description;
   final String nameFont;
   final String linkFont;
+  final String linkImg;
 
   Facto({
     required this.title,
@@ -13,5 +14,6 @@ class Facto {
     required this.description,
     required this.nameFont,
     required this.linkFont,
+    required this.linkImg,
   });
 }
