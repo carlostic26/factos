@@ -4,12 +4,13 @@ const Color buttonLigthColor = Color.fromARGB(255, 179, 179, 179);
 const Color factoBackgroundColor = Color.fromARGB(255, 192, 192, 192);
 const Color buttonNoLigthColor = Color.fromARGB(255, 103, 103, 103);
 const Color tagBackgroundColor = Color.fromARGB(255, 139, 139, 139);
-const Color searchFieldBackgroundColor = Color(0xFF595959);
+const Color searchFieldBackgroundColor = Color.fromARGB(213, 89, 89, 89);
 const Color titleTextColor = Color.fromARGB(255, 233, 233, 233);
 const Color subtitleTextColor = Color(0xFFACACAC);
 const Color darkBackgroundTextColor = Color.fromARGB(255, 240, 240, 240);
 const Color lightBackgroundTextColor = Color.fromARGB(255, 10, 10, 10);
 const Color scaffoldBackgroundGlobalColor = Color.fromARGB(255, 36, 36, 36);
+const Color appbarBackgroundGlobalColor = Color.fromARGB(224, 36, 36, 36);
 
 final ThemeData factosThemeApp = ThemeData(
   scaffoldBackgroundColor: scaffoldBackgroundGlobalColor,

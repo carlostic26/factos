@@ -43,7 +43,7 @@ class LoadingScreen extends ConsumerWidget {
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
               child: LinearPercentIndicator(
                   alignment: MainAxisAlignment.center,
-                  width: width * 0.8,
+                  width: width * 0.65,
                   lineHeight: 7,
                   percent: 100 / 100,
                   animation: true,

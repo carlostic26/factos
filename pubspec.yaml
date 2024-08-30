@@ -18,6 +18,7 @@ dependencies:
   percent_indicator: ^4.2.3
   flutter_svg: ^2.0.10+1
   sqflite: ^2.0.2
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:

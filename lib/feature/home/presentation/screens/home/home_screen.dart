@@ -1,6 +1,7 @@
 import 'package:factos/config/styles/constants/theme_data.dart';
 import 'package:factos/feature/home/presentation/screens/home/widgets/drawer_widget.dart';
 import 'package:factos/feature/home/presentation/screens/home/widgets/facto_home_widget.dart';
+import 'package:factos/feature/home/presentation/screens/home/widgets/search_bar_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,32 +17,60 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    categorySelected = 'Lenguajes';
+    categorySelected = 'Tips';
   }
+
+  final Map<int, String> categories = {
+    1: 'Desarrollo Web',
+    2: 'Tips',
+    3: 'Desarrollo Móvil',
+    4: 'Habilidades',
+    5: 'Inteligencia artificial',
+    6: 'IoT',
+    7: 'Sugerencias',
+    8: 'Lenguajes',
+    9: 'Desarrollo de escritorio',
+    10: 'Motivacional',
+    11: 'Desarrollo de videojuegos',
+    12: 'Historia'
+  };
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
+      backgroundColor: scaffoldBackgroundGlobalColor,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: scaffoldBackgroundGlobalColor,
         centerTitle: true,
         title: const Text(
           'Factos',
-          style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontFamily: 'Inter', fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ),
-      body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              const Text(
+      body: Padding(
+        padding: const EdgeInsets.only(left: 20, top: 15, right: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Text(
                 'Explorar',
                 style: TextStyle(
                     height: 1.2,
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.bold,
-                    fontSize: 40),
+                    fontSize: 35),
               ),
-              const Text(
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Text(
                 'Busca cualquier facto por palabra clave',
                 style: TextStyle(
                   fontFamily: 'Inter',
@@ -49,167 +78,102 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 1.2,
                 ),
               ),
-              const SearchBarWidget(),
-              const SizedBox(
-                height: 30,
-              ),
-              Row(
-                children: [
-                  IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.tune,
-                        color: Colors.white,
-                      )),
-                  Expanded(
-                    child: SingleChildScrollView(
+            ),
+            SizedBox(
+              height: height * 0.015,
+            ),
+            const SearchBarWidget(),
+            SizedBox(
+              height: height * 0.02,
+            ),
+            Row(
+              children: [
+                IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      size: 16,
+                      Icons.tune,
+                      color: Colors.white,
+                    )),
+                Expanded(
+                  child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                        children: [
-                          Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 10),
-                              child: TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                  'Lenguajes',
-                                  style: TextStyle(
-                                    color: titleTextColor,
-                                    fontFamily: 'Inter',
-                                    fontWeight: categorySelected! == 'Lenguajes'
-                                        // ignore: dead_code
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
-                                  ),
-                                ),
-                              )),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Iot',
-                                style: TextStyle(
-                                  color: titleTextColor,
-                                  fontFamily: 'Inter',
-                                  fontWeight: categorySelected! == 'Lenguajes'
-                                      // ignore: dead_code
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                ),
+                        children: categories.entries.map((entry) {
+                          return TextButton(
+                            onPressed: () {
+                              setState(() {
+                                categorySelected = entry.value;
+                              });
+                            },
+                            child: Text(
+                              entry.value,
+                              style: TextStyle(
+                                color: titleTextColor,
+                                fontFamily: 'Inter',
+                                fontWeight: categorySelected == entry.value
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                                decoration: categorySelected == entry.value
+                                    ? TextDecoration.underline
+                                    : TextDecoration.none,
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Historia',
-                                style: TextStyle(
-                                  color: titleTextColor,
-                                  fontFamily: 'Inter',
-                                  fontWeight: categorySelected! == 'Lenguajes'
-                                      // ignore: dead_code
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'IA',
-                                style: TextStyle(
-                                  color: titleTextColor,
-                                  fontFamily: 'Inter',
-                                  fontWeight: categorySelected! == 'Lenguajes'
-                                      // ignore: dead_code
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                          );
+                        }).toList(),
+                      )),
+                ),
+              ],
+            ),
+            Expanded(
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                children: const [
+                  FactoHomeWidget(
+                    title: 'Titulo facto',
+                    description:
+                        'This is an image that provides texto from an error Image provider: AssetImage la (bundle: null, name: "") Image key: Asset Bundle Image Key( bundle: PlatformAsset Bundle#ad852(), name: "", scale : 1.0)',
+                    source: 'Harvard',
+                    imagePath: '',
+                  ),
+                  FactoHomeWidget(
+                    title: 'Titulo facto',
+                    description:
+                        'This is an image that provides texto from an error Image provider: AssetImage la (bundle: null, name: "") Image key: Asset Bundle Image Key( bundle: PlatformAsset Bundle#ad852(), name: "", scale : 1.0)',
+                    source: 'Harvard',
+                    imagePath: '',
+                  ),
+                  FactoHomeWidget(
+                    title: 'Titulo facto',
+                    description:
+                        'This is an image that provides texto from an error Image provider: AssetImage la (bundle: null, name: "") Image key: Asset Bundle Image Key( bundle: PlatformAsset Bundle#ad852(), name: "", scale : 1.0)',
+                    source: 'Harvard',
+                    imagePath: '',
+                  ),
+                  FactoHomeWidget(
+                    title: 'Titulo facto',
+                    description:
+                        'This is an image that provides texto from an error Image provider: AssetImage la (bundle: null, name: "") Image key: Asset Bundle Image Key( bundle: PlatformAsset Bundle#ad852(), name: "", scale : 1.0)',
+                    source: 'Harvard',
+                    imagePath: '',
+                  ),
+                  FactoHomeWidget(
+                    title: 'Titulo facto',
+                    description:
+                        'This is an image that provides texto from an error Image provider: AssetImage la (bundle: null, name: "") Image key: Asset Bundle Image Key( bundle: PlatformAsset Bundle#ad852(), name: "", scale : 1.0)',
+                    source: 'Harvard',
+                    imagePath: '',
                   ),
                 ],
               ),
-              const FactoHomeWidget(
-                title: 'Titulo facto',
-                description:
-                    'This is an image that provides texto from an error Image provider: AssetImage la (bundle: null, name: "") Image key: Asset Bundle Image Key( bundle: PlatformAsset Bundle#ad852(), name: "", scale : 1.0)',
-                source: 'Harvard',
-                imagePath: '',
-              ),
-              const FactoHomeWidget(
-                title: 'Titulo facto',
-                description:
-                    'This is an image that provides texto from an error Image provider: AssetImage la (bundle: null, name: "") Image key: Asset Bundle Image Key( bundle: PlatformAsset Bundle#ad852(), name: "", scale : 1.0)',
-                source: 'Harvard',
-                imagePath: '',
-              ),
-              const FactoHomeWidget(
-                title: 'Titulo facto',
-                description:
-                    'This is an image that provides texto from an error Image provider: AssetImage la (bundle: null, name: "") Image key: Asset Bundle Image Key( bundle: PlatformAsset Bundle#ad852(), name: "", scale : 1.0)',
-                source: 'Harvard',
-                imagePath: '',
-              ),
-              const FactoHomeWidget(
-                title: 'Titulo facto',
-                description:
-                    'This is an image that provides texto from an error Image provider: AssetImage la (bundle: null, name: "") Image key: Asset Bundle Image Key( bundle: PlatformAsset Bundle#ad852(), name: "", scale : 1.0)',
-                source: 'Harvard',
-                imagePath: '',
-              ),
-              const FactoHomeWidget(
-                title: 'Titulo facto',
-                description:
-                    'This is an image that provides texto from an error Image provider: AssetImage la (bundle: null, name: "") Image key: Asset Bundle Image Key( bundle: PlatformAsset Bundle#ad852(), name: "", scale : 1.0)',
-                source: 'Harvard',
-                imagePath: '',
-              ),
-            ],
-          )),
-      drawer: const DrawerFactos(),
-    );
-  }
-}
-
-class SearchBarWidget extends StatelessWidget {
-  const SearchBarWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey,
-        borderRadius: BorderRadius.circular(30.0),
+            )
+          ],
+        ),
       ),
-      child: Row(
-        children: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-          const Expanded(
-            child: TextField(
-              style: TextStyle(color: Colors.yellow),
-              decoration: InputDecoration(
-                hintText: 'python',
-                hintStyle: TextStyle(color: Colors.blueGrey),
-                border: InputBorder.none,
-              ),
-            ),
-          ),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.tune))
-        ],
+      drawer: DrawerFactosWidget(
+        context: context,
       ),
+      bottomNavigationBar: const SizedBox(height: 70, child: Placeholder()),
     );
   }
 }
