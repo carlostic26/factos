@@ -1,4 +1,6 @@
 import 'package:factos/config/styles/constants/theme_data.dart';
+import 'package:factos/feature/home/infraestucture/datasources/factos_local_datasource.dart';
+import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
 import 'package:factos/feature/home/presentation/screens/home/widgets/drawer_widget.dart';
 import 'package:factos/feature/home/presentation/screens/home/widgets/facto_home_widget.dart';
 import 'package:factos/feature/home/presentation/screens/home/widgets/search_bar_widget.dart';
@@ -13,11 +15,37 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String? categorySelected;
+  late SQLiteFactoLocalDatasourceImpl handler;
+
+  Future<List<FactoModel>>? _facto;
 
   @override
   void initState() {
     super.initState();
     categorySelected = 'Tips';
+    setCategory();
+  }
+
+  Future<List<FactoModel>> getFactos() async {
+    return await handler.getAllFactoList2();
+  }
+
+  Future<void> setCategory() async {
+    handler = SQLiteFactoLocalDatasourceImpl();
+
+    handler.initDb().whenComplete(() async {
+      List<FactoModel> list = await getFactos();
+      list.shuffle();
+      setState(() {
+        _facto = Future.value(list);
+
+        // Imprimir los datos en la consola
+        print('ESTE ES EL PRINT DE NUESTROS FACTOS:');
+        for (var facto in list) {
+          print(facto); // Ajusta según tu modelo
+        }
+      });
+    });
   }
 
   final Map<int, String> categories = {
