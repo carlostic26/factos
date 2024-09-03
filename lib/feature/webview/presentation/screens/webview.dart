@@ -8,6 +8,8 @@ class WebviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     const String url = 'https://www.google.com/';
     late WebViewController _controller;
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
 
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -17,22 +19,46 @@ class WebviewScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
-        title: Text('title'),
+        leading: SizedBox(
+          width: width * 0.08,
+          child: IconButton(
+              onPressed: () {}, icon: const Icon(Icons.arrow_back_ios)),
+        ),
+        title: const Text(
+          'Lenguajes - Un dia como hoy...',
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontFamily: 'Inter', fontSize: 16),
+        ),
         actions: [
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.copy),
+              SizedBox(
+                width: width * 0.08,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.copy,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: width * 0.08,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.share,
+                    color: Colors.white,
+                  ),
+                ),
               ),
               IconButton(
                 onPressed: () {},
-                icon: Icon(Icons.share),
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.public),
+                icon: const Icon(
+                  Icons.public,
+                  color: Colors.white,
+                ),
               ),
             ],
           )

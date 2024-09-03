@@ -1,13 +1,5 @@
-import 'package:factos/config/styles/constants/theme_data.dart';
-import 'package:factos/feature/home/presentation/provider/riverpod.dart';
 import 'package:factos/feature/home/presentation/screens/home/home_screen.dart';
-import 'package:factos/feature/launch/presentation/provider/riverpod.dart';
-import 'package:factos/feature/launch/presentation/screens/loading/widgets/counting_animation.dart';
-import 'package:factos/feature/launch/presentation/screens/welcome/welcome_screen.dart';
-import 'package:factos/feature/webview/presentation/screens/webview.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:factos/feature/launch/presentation/screens/loading/loading_barrel.dart';
 
 class LoadingScreen extends ConsumerWidget {
   const LoadingScreen({super.key});
@@ -86,7 +78,7 @@ class LoadingScreen extends ConsumerWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => const WebviewScreen()));
+                                  builder: (_) => const HomeScreen()));
                         }
                       : null,
                   style: ButtonStyle(

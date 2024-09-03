@@ -23,7 +23,7 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
     try {
       String path = await getDatabasesPath();
       return openDatabase(
-        join(path, 'facto_database_002.db'),
+        join(path, 'facto_database_003.db'),
         onCreate: (db, version) async {
           const String sql = ''
               'CREATE TABLE factos ('
@@ -59,19 +59,19 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
           /* '("Titulo...", "Historia", "En 1978 gracias a Fortran el hombre pudo llegar a luna.", "Harvard", "https://harvard.com"),' */
 
           const String addFacto = ''
-              'INSERT INTO factos(title, preference, category, language, description, nameFont, linkFont, linkImg) VALUES '
+              'INSERT INTO factos(id, title, preference, category, language, description, nameFont, linkFont, linkImg) VALUES '
               // Historia
-              '("El primer programa de Ada Lovelace", "Historia", "Desarrollo de escritorio", "none", "En 1843, Ada Lovelace escribió el primer algoritmo destinado a ser procesado por una máquina.", "Wikipedia", "https://es.wikipedia.org/wiki/Ada_Lovelace", "https://www.bing.com/th?id=OADD2.8108923022155_1AEMZEAKVPVGOR3O7Z&pid=21.2&c=17&roil=0.0217&roit=0.0223&roir=0.9767&roib=0.9777&w=300&h=157&dynsize=1&qlt=90"),'
+              '("El primer programa de Ada Lovelace", "Historia", "Desarrollo de escritorio", "none", "En 1843, Ada Lovelace escribió el primer algoritmo destinado a ser procesado por una máquina.", "Wikipedia", "https://es.wikipedia.org/wiki/Ada_Lovelace", "https://blogger.googleusercontent.com/img/a/AVvXsEh7U5j7BBJUcDc9ZHcHYkTo46oc378epjwGnsBmYUObolEIQeU-DmlyUCmJqUCYhor9rxldRZez6oaUyqVxUZsMDTxGv4a1EzOEMoJrFUmRxwPYwhCstxjqYT2RV9n1nenqSW9vBoWVRkGpdlGetoJbsdyT9CXluvaccJiZspSNUBx50lA4EtVcn0Gb"),'
               //
-              '("Nacimiento de FORTRAN", "Historia", "Desarrollo de escritorio", "none", "En 1957, IBM lanzó FORTRAN, el primer lenguaje de programación de alto nivel.", "IBM", "https://www.ibm.com/ibm/history/ibm100/us/en/icons/fortran/", ""),'
+              '("Nacimiento de FORTRAN", "Historia", "Desarrollo de escritorio", "none", "En 1957, IBM lanzó FORTRAN, el primer lenguaje de programación de alto nivel.", "IBM", "https://www.ibm.com/ibm/history/ibm100/us/en/icons/fortran/", "https://blogger.googleusercontent.com/img/a/AVvXsEjI52gomOrMi3JsI26CzB8mx0ZApmCm3PgmLcsV7LONoOPFu8OHRbgbm-Y1EPKySi8sCYgIdnevsrjGm4lOzuihzf7YKNI980vEZHUsz-G1YO0EiG6Vt_yGnHScJTHDvXS9LV83u6_uyIIYBC5vcnPaK2HIBqc_ooRcrjeqbrI85MlJKlzl_i-IofHk"),'
               //
-              '("Nacimiento de la World Wide Web", "Historia", "Informatica", "none", "Tim Berners-Lee inventó la World Wide Web en 1989 en el CERN, revolucionando la comunicación global.", "CERN", "https://home.cern/science/computing/birth-web", ""),'
+              '("Nacimiento de la World Wide Web", "Historia", "Informatica", "none", "Tim Berners-Lee inventó la World Wide Web en 1989 en el CERN, revolucionando la comunicación global.", "CERN", "https://home.cern/science/computing/birth-web", "https://blogger.googleusercontent.com/img/a/AVvXsEi8FmggW5L5UIWRUW5IGgFMdTOFJuF7B8rVRfYdWou_mogZNcndsgHNSCr_IwnEkgz4m7RCkQbI6S4wdJxM-h3j_56Ap_372lKr2Ag07BrN2LYdMjetWlxPOplDan03_njqKlhOBlIU0U6KAJRXO-4sf5zEX8LqNKEwRkHWwVguXChI0keyTCciqW_W"),'
               //
-              '("Creación del primer compilador", "Historia", "Desarrollo de software", "none", "Grace Hopper desarrolló el primer compilador A-0 en 1952, sentando las bases para los lenguajes de programación de alto nivel.", "Computer History Museum", "https://www.computerhistory.org/timeline/software-languages/", ""),'
+              '("Creación del primer compilador", "Historia", "Desarrollo de software", "none", "Grace Hopper desarrolló el primer compilador A-0 en 1952, sentando las bases para los lenguajes de programación de alto nivel.", "Computer History Museum", "https://www.computerhistory.org/timeline/software-languages/", "https://blogger.googleusercontent.com/img/a/AVvXsEi43UlVVhhMQW2vX6gZGFVfAApkzIDMrXhY8Mf1M31cdTVFR-bzKFw6pxYWV5ZNJkXGsAyIMb3yRcSdZpH1lym0SbwVOCCo8zA8-l-CrR4MsY3cErPZIJZfmsX4CBoMvvQAym3KPXwatXOt5L4JV2HIioV8N0uAkx4gXo-qX9PHRJjzjwdsv5DX50RB"),'
               //
-              '("El nacimiento de la programación", "Historia", "Desarrollo de software", "none", "En 1945, el ENIAC se convirtió en una de las primeras computadoras programables electrónicas de uso general.", "IBM", "https://www.ibm.com/history/eniac", ""),'
+              '("El nacimiento de la programación", "Historia", "Desarrollo de software", "none", "En 1945, el ENIAC se convirtió en una de las primeras computadoras programables electrónicas de uso general.", "IBM", "https://www.ibm.com/history/eniac", "https://blogger.googleusercontent.com/img/a/AVvXsEiVt5fOefXi19phzuiWequeCPfU1dEgGJcYGDsEqpCDRewqIpvBzR8EwDrB456mIdeQSd1KwBkgTVh44Hwh4NP2jiZoHTRfRivzYKe8SC0SFCSMr7JshIbeteynzo49sBnXpZyJ26Th2f_cLxcg6b3hDtcrZoCp3YTe7BebhfA-x4_UQQvFsZZ1kBPH"),'
               //
-              '("El primer lenguaje de programación", "Historia", "Lenguajes, Dessarrollo de software", "none", "En 1957, Fortran fue desarrollado por IBM como el primer lenguaje de programación de alto nivel.", "Computer History Museum", "https://www.computerhistory.org/blog/fortran-the-first-high-level-language/", ""),'
+              '("El primer lenguaje de programación", "Historia", "Lenguajes, Dessarrollo de software", "none", "En 1957, Fortran fue desarrollado por IBM como el primer lenguaje de programación de alto nivel.", "Computer History Museum", "https://www.computerhistory.org/blog/fortran-the-first-high-level-language/", "https://blogger.googleusercontent.com/img/a/AVvXsEh1-FhPxmZhPEJSPM_9o7vGnFmsyQtTi-F7q8zPGvfqIeF0BJp5hOYIl2-i8q-9bQxHhxqKknafbidlARZ5g_Mes2f2VtQRbqYE0-PRb_H128cB1L5oAUtL9fC4aFBRouaFS-woyA0OfW2Yg9I4Sik8hcxcFlvP7-KEVMn1uHpPXqixpeQ3lGLZWE2A"),'
               //
 
               // Conceptos

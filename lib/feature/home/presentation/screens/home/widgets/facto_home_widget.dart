@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 class FactoHomeWidget extends StatelessWidget {
   final String title;
   final String description;
-  final String source;
-  final String imagePath;
+  final String linkFont;
+  final String linkImg;
 
   const FactoHomeWidget({
     super.key,
     required this.title,
     required this.description,
-    required this.source,
-    required this.imagePath,
+    required this.linkFont,
+    required this.linkImg,
   });
 
   @override
@@ -40,8 +40,8 @@ class FactoHomeWidget extends StatelessWidget {
                         style: const TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.bold,
-                            fontSize: 25,
-                            height: 0.8),
+                            fontSize: 18,
+                            height: 0.9),
                       ),
                       const SizedBox(height: 8),
                       Text(
@@ -63,7 +63,7 @@ class FactoHomeWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              source,
+                              linkFont,
                               style: const TextStyle(
                                   fontFamily: 'Inter',
                                   fontWeight: FontWeight.bold,
@@ -127,17 +127,15 @@ class FactoHomeWidget extends StatelessWidget {
               ),
               const SizedBox(width: 2),
               SizedBox(
-                width: 150,
-                child: const Expanded(
-                  child: Center(child: Placeholder()),
-                  /* 
-                  Image.asset(
-                    'assets/images/emoti_informatico.png',
-                    //imagePath,
+                child: Center(
+                  child: Image.network(
+                    width: 150,
+                    height: 190,
+                    linkImg,
                     fit: BoxFit.cover,
-                  ), */
+                  ),
                 ),
-              ),
+              )
             ],
           ),
         ),

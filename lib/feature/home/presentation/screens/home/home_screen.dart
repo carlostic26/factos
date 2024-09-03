@@ -3,8 +3,9 @@ import 'package:factos/feature/home/infraestucture/datasources/factos_local_data
 import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
 import 'package:factos/feature/home/presentation/screens/home/widgets/drawer_widget.dart';
 import 'package:factos/feature/home/presentation/screens/home/widgets/facto_home_widget.dart';
-import 'package:factos/feature/home/presentation/screens/home/widgets/search_bar_widget.dart';
 import 'package:flutter/material.dart';
+
+import 'widgets/header_home_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -83,34 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Padding(
         padding: const EdgeInsets.only(left: 20, top: 15, right: 10),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 15),
-              child: Text(
-                'Explorar',
-                style: TextStyle(
-                    height: 1.2,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 35),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 15),
-              child: Text(
-                'Busca cualquier facto por palabra clave',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 12,
-                  height: 1.2,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: height * 0.015,
-            ),
-            const SearchBarWidget(),
+            HeaderWidget(height: height),
             SizedBox(
               height: height * 0.02,
             ),
@@ -154,6 +129,34 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             Expanded(
+              child: FutureBuilder<List<FactoModel>>(
+                  future: _facto,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<FactoModel>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      var itemFacto = snapshot.data ?? <FactoModel>[];
+
+                      return ListView.builder(
+                        itemCount: itemFacto.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return FactoHomeWidget(
+                              title: itemFacto[index].title,
+                              description: itemFacto[index].description,
+                              linkFont: itemFacto[index].linkFont,
+                              linkImg: itemFacto[index].linkImg);
+                        },
+                      );
+                    }
+                  }),
+            ),
+
+            /*   Expanded(
               child: ListView(
                 scrollDirection: Axis.vertical,
                 children: const [
@@ -195,6 +198,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             )
+          
+           */
           ],
         ),
       ),

@@ -1,12 +1,4 @@
-import 'package:factos/config/styles/constants/theme_data.dart';
-import 'package:factos/feature/home/presentation/provider/riverpod.dart';
-import 'package:factos/feature/home/presentation/screens/home/home_screen.dart';
-import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_first_page.dart';
-import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_fourth_widget.dart';
-import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_second_page.dart';
-import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_third_page.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'welcome_barrel.dart';
 
 class WelcomeScreen extends ConsumerWidget {
   const WelcomeScreen({super.key});
