@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class FactoHomeWidget extends StatelessWidget {
   final String title;
   final String description;
+  final String nameFont;
   final String linkFont;
   final String linkImg;
 
@@ -11,18 +12,22 @@ class FactoHomeWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.description,
+    required this.nameFont,
     required this.linkFont,
     required this.linkImg,
   });
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return Card(
       color: Colors.transparent,
-      elevation: 4,
-      margin: const EdgeInsets.all(8),
+      //elevation: 4,
+      margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(left: 12),
         child: IntrinsicHeight(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,18 +35,21 @@ class FactoHomeWidget extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 12),
+                  padding: const EdgeInsets.only(right: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            height: 0.9),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12),
+                        child: Text(
+                          title,
+                          style: const TextStyle(
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              height: 0.9),
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(
@@ -54,68 +62,80 @@ class FactoHomeWidget extends StatelessWidget {
                             height: 1.2),
                       ),
                       const Spacer(),
-                      const SizedBox(
-                        height: 14,
+                      SizedBox(
+                        height: height * 0.01,
                       ),
                       SizedBox(
-                        height: 18,
+                        height: height * 0.025,
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
-                              linkFont,
-                              style: const TextStyle(
+                            SizedBox(
+                              width: width * 0.24,
+                              child: Text(
+                                nameFont,
+                                style: const TextStyle(
                                   fontFamily: 'Inter',
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 10,
-                                  color: subtitleTextColor),
+                                  fontSize: 8,
+                                  color: subtitleTextColor,
+                                  height: 1,
+                                ),
+                                maxLines:
+                                    2, // Establece el máximo de líneas a 2
+                                overflow: TextOverflow
+                                    .ellipsis, // Mostrará los puntos suspensivos si aún se desborda
+                              ),
                             ),
                             Expanded(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  const Spacer(),
-                                  SizedBox(
-                                    width: 21,
-                                    child: IconButton(
-                                      padding: EdgeInsets.zero,
-                                      color: subtitleTextColor,
-                                      iconSize: 18,
-                                      icon: const Icon(Icons.visibility),
-                                      onPressed: () {},
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    const Spacer(),
+                                    SizedBox(
+                                      width: width * 0.05,
+                                      child: IconButton(
+                                        padding: EdgeInsets.zero,
+                                        color: subtitleTextColor,
+                                        iconSize: 18,
+                                        icon: const Icon(Icons.visibility),
+                                        onPressed: () {},
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 21,
-                                    child: IconButton(
-                                      padding: EdgeInsets.zero,
-                                      color: subtitleTextColor,
-                                      iconSize: 18,
-                                      icon: const Icon(Icons.share),
-                                      onPressed: () {},
+                                    SizedBox(
+                                      width: width * 0.05,
+                                      child: IconButton(
+                                        padding: EdgeInsets.zero,
+                                        color: subtitleTextColor,
+                                        iconSize: 18,
+                                        icon: const Icon(Icons.share),
+                                        onPressed: () {},
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 21,
-                                    child: IconButton(
-                                      padding: EdgeInsets.zero,
-                                      color: subtitleTextColor,
-                                      iconSize: 18,
-                                      icon: const Icon(Icons.bookmark_border),
-                                      onPressed: () {},
+                                    SizedBox(
+                                      width: width * 0.05,
+                                      child: IconButton(
+                                        padding: EdgeInsets.zero,
+                                        color: subtitleTextColor,
+                                        iconSize: 18,
+                                        icon: const Icon(Icons.bookmark_border),
+                                        onPressed: () {},
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 21,
-                                    child: IconButton(
-                                      padding: EdgeInsets.zero,
-                                      color: subtitleTextColor,
-                                      iconSize: 18,
-                                      icon: const Icon(Icons.delete),
-                                      onPressed: () {},
+                                    SizedBox(
+                                      width: width * 0.05,
+                                      child: IconButton(
+                                        padding: EdgeInsets.zero,
+                                        color: subtitleTextColor,
+                                        iconSize: 18,
+                                        icon: const Icon(Icons.delete),
+                                        onPressed: () {},
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ],
@@ -125,17 +145,37 @@ class FactoHomeWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 2),
               SizedBox(
-                child: Center(
+                width: width * 0.35,
+                height: height * 0.2,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(12),
+                    bottomRight: Radius.circular(12),
+                  ),
                   child: Image.network(
-                    width: 150,
-                    height: 190,
                     linkImg,
+                    width: width * 0.35,
+                    height: height * 0.2,
                     fit: BoxFit.cover,
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    (loadingProgress.expectedTotalBytes ?? 1)
+                                : null,
+                          ),
+                        );
+                      }
+                    },
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

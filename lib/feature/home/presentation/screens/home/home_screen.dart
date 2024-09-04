@@ -17,6 +17,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String? categorySelected;
   late SQLiteFactoLocalDatasourceImpl handler;
+  List<String> categoriesNames = [];
+
+  List<String> categoriesByDb = [];
 
   Future<List<FactoModel>>? _facto;
 
@@ -24,27 +27,54 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     categorySelected = 'Tips';
-    setCategory();
+    getAllFactosBd();
+
+    //getCategoryNames();
   }
 
-  Future<List<FactoModel>> getFactos() async {
-    return await handler.getAllFactoList2();
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    //getFactosByCategoryBd();
+  }
+/* 
+  Future<List<FactoModel>> conectionListFactosByCategory() async {
+    return await handler.getCategory(categorySelected);
   }
 
-  Future<void> setCategory() async {
+  Future<void> getFactosByCategoryBd() async {
     handler = SQLiteFactoLocalDatasourceImpl();
 
     handler.initDb().whenComplete(() async {
-      List<FactoModel> list = await getFactos();
-      list.shuffle();
+      List<FactoModel> factosByCategory = await conectionListFactosByCategory();
+      factosByCategory.shuffle();
       setState(() {
-        _facto = Future.value(list);
+        _facto = Future.value(factosByCategory);
+      });
+    });
+  } */
 
-        // Imprimir los datos en la consola
-        print('ESTE ES EL PRINT DE NUESTROS FACTOS:');
-        for (var facto in list) {
-          print(facto); // Ajusta según tu modelo
-        }
+  Future<List<FactoModel>> conectionAllFactos() async {
+    return await handler.getAllFactoList2();
+  }
+
+  Future<void> getAllFactosBd() async {
+    handler = SQLiteFactoLocalDatasourceImpl();
+
+    handler.initDb().whenComplete(() async {
+      List<FactoModel> listAllFactos = await conectionAllFactos();
+      listAllFactos.shuffle();
+      setState(() {
+        _facto = Future.value(listAllFactos);
+
+        // Filtrar y extraer categorías únicas que no contengan comas
+        categoriesByDb = listAllFactos
+            .map((facto) => facto.category)
+            .where((category) => !category.contains(','))
+            .toSet()
+            .toList();
+
+        print('Categorias de la bd:  $categoriesByDb');
       });
     });
   }
@@ -81,127 +111,82 @@ class _HomeScreenState extends State<HomeScreen> {
               fontFamily: 'Inter', fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20, top: 15, right: 10),
-        child: Column(
-          children: [
-            HeaderWidget(height: height),
-            SizedBox(
-              height: height * 0.02,
-            ),
-            Row(
-              children: [
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      size: 16,
-                      Icons.tune,
-                      color: Colors.white,
-                    )),
-                Expanded(
-                  child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: categories.entries.map((entry) {
-                          return TextButton(
-                            onPressed: () {
-                              setState(() {
-                                categorySelected = entry.value;
-                              });
-                            },
-                            child: Text(
-                              entry.value,
-                              style: TextStyle(
-                                color: titleTextColor,
-                                fontFamily: 'Inter',
-                                fontWeight: categorySelected == entry.value
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
-                                decoration: categorySelected == entry.value
-                                    ? TextDecoration.underline
-                                    : TextDecoration.none,
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      )),
-                ),
-              ],
-            ),
-            Expanded(
-              child: FutureBuilder<List<FactoModel>>(
-                  future: _facto,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<FactoModel>> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      var itemFacto = snapshot.data ?? <FactoModel>[];
-
-                      return ListView.builder(
-                        itemCount: itemFacto.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return FactoHomeWidget(
-                              title: itemFacto[index].title,
-                              description: itemFacto[index].description,
-                              linkFont: itemFacto[index].linkFont,
-                              linkImg: itemFacto[index].linkImg);
+      body: Column(
+        children: [
+          HeaderWidget(height: height),
+          SizedBox(
+            height: height * 0.02,
+          ),
+          //category controller
+          Row(
+            children: [
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    size: 16,
+                    Icons.tune,
+                    color: Colors.white,
+                  )),
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: categoriesByDb.map((category) {
+                      return TextButton(
+                        onPressed: () {
+                          setState(() {
+                            categorySelected = category;
+                          });
                         },
+                        child: Text(
+                          category,
+                          style: TextStyle(
+                            color: titleTextColor,
+                            fontFamily: 'Inter',
+                            fontWeight: categorySelected == category
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            decoration: categorySelected == category
+                                ? TextDecoration.underline
+                                : TextDecoration.none,
+                          ),
+                        ),
                       );
-                    }
-                  }),
-            ),
-
-            /*   Expanded(
-              child: ListView(
-                scrollDirection: Axis.vertical,
-                children: const [
-                  FactoHomeWidget(
-                    title: 'Titulo facto',
-                    description:
-                        'This is an image that provides texto from an error Image provider: AssetImage la (bundle: null, name: "") Image key: Asset Bundle Image Key( bundle: PlatformAsset Bundle#ad852(), name: "", scale : 1.0)',
-                    source: 'Harvard',
-                    imagePath: '',
+                    }).toList(),
                   ),
-                  FactoHomeWidget(
-                    title: 'Titulo facto',
-                    description:
-                        'This is an image that provides texto from an error Image provider: AssetImage la (bundle: null, name: "") Image key: Asset Bundle Image Key( bundle: PlatformAsset Bundle#ad852(), name: "", scale : 1.0)',
-                    source: 'Harvard',
-                    imagePath: '',
-                  ),
-                  FactoHomeWidget(
-                    title: 'Titulo facto',
-                    description:
-                        'This is an image that provides texto from an error Image provider: AssetImage la (bundle: null, name: "") Image key: Asset Bundle Image Key( bundle: PlatformAsset Bundle#ad852(), name: "", scale : 1.0)',
-                    source: 'Harvard',
-                    imagePath: '',
-                  ),
-                  FactoHomeWidget(
-                    title: 'Titulo facto',
-                    description:
-                        'This is an image that provides texto from an error Image provider: AssetImage la (bundle: null, name: "") Image key: Asset Bundle Image Key( bundle: PlatformAsset Bundle#ad852(), name: "", scale : 1.0)',
-                    source: 'Harvard',
-                    imagePath: '',
-                  ),
-                  FactoHomeWidget(
-                    title: 'Titulo facto',
-                    description:
-                        'This is an image that provides texto from an error Image provider: AssetImage la (bundle: null, name: "") Image key: Asset Bundle Image Key( bundle: PlatformAsset Bundle#ad852(), name: "", scale : 1.0)',
-                    source: 'Harvard',
-                    imagePath: '',
-                  ),
-                ],
+                ),
               ),
-            )
-          
-           */
-          ],
-        ),
+            ],
+          ),
+          Expanded(
+            child: FutureBuilder<List<FactoModel>>(
+                future: _facto,
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<FactoModel>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    var itemFacto = snapshot.data ?? <FactoModel>[];
+
+                    return ListView.builder(
+                      itemCount: itemFacto.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return FactoHomeWidget(
+                            title: itemFacto[index].title,
+                            description: itemFacto[index].description,
+                            nameFont: itemFacto[index].nameFont,
+                            linkFont: itemFacto[index].linkFont,
+                            linkImg: itemFacto[index].linkImg);
+                      },
+                    );
+                  }
+                }),
+          ),
+        ],
       ),
       drawer: DrawerFactosWidget(
         context: context,
