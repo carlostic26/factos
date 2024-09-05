@@ -20,6 +20,7 @@ dependencies:
   sqflite: ^2.0.2
   url_launcher: ^6.3.0
   webview_flutter: ^4.8.0
+  fluttertoast: ^8.2.8
 
 dev_dependencies:
   flutter_test:

@@ -1,14 +1,12 @@
 import 'package:factos/core/error/failures.dart';
 import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 abstract class FactoLocalDatasource {
   //repository
-  //Future<List<FactoModel>> getCategoryFacto(String category);
   Future<List<FactoModel>> getAllFactoList();
-  Future<FactoModel> getFacto(String description);
+  Future<List<FactoModel>> getListPreferenceFacto(category);
 }
 
 class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
@@ -24,7 +22,7 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
     try {
       String path = await getDatabasesPath();
       return openDatabase(
-        join(path, 'facto_database_005.db'),
+        join(path, 'facto_database_006.db'),
         onCreate: (db, version) async {
           const String sql = ''
               'CREATE TABLE factos ('
@@ -57,7 +55,7 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
 
           // tengo un script sql, que debe insertar: un titulo, cateogoria, descripcion corta de 30 palabras como maximo, nombre de fuente de informacion, y un enlace a dicha fuente. Crea 5 INSERTS de datos reales y verdaderos, 2 para categoria "Historia", y 3 para "Curiosidades"
 
-          /* '("Titulo...", "Historia", "En 1978 gracias a Fortran el hombre pudo llegar a luna.", "Harvard", "https://harvard.com"),' */
+          /* '("Titulo...", "Fundadores", "category", "none", "descrip", "namefont", "linkfont", "linkImg"),' */
 
           const String addFacto = ''
               'INSERT INTO factos(title, preference, category, language, description, nameFont, linkFont, linkImg) VALUES '
@@ -75,13 +73,17 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
               '("El primer lenguaje de programación", "Historia", "Lenguajes, Dessarrollo de software", "none", "En 1957, Fortran fue desarrollado por IBM como el primer lenguaje de programación de alto nivel.", "Computer History Museum", "https://www.computerhistory.org/blog/fortran-the-first-high-level-language/", "https://blogger.googleusercontent.com/img/a/AVvXsEh1-FhPxmZhPEJSPM_9o7vGnFmsyQtTi-F7q8zPGvfqIeF0BJp5hOYIl2-i8q-9bQxHhxqKknafbidlARZ5g_Mes2f2VtQRbqYE0-PRb_H128cB1L5oAUtL9fC4aFBRouaFS-woyA0OfW2Yg9I4Sik8hcxcFlvP7-KEVMn1uHpPXqixpeQ3lGLZWE2A"),'
               //
 
+              // Fundadores
+              '("El padre de la computación", "Fundadores", "Informatica", "none", "Alan Turing fue un matemático británico y es considerado el padre de la computación inteligencia artificial. Propuso la Prueba de Turing, un criterio para determinar si una máquina puede pensar, sentando las bases teóricas de la IA.", "Universidad de Cambridge", "https://www.cam.ac.uk/research/news/alan-turing-at-cambridge", "https://blogger.googleusercontent.com/img/a/AVvXsEgs6AXevJCxdsaPh53GJKVRYKKP52T_uH_BdKSBV9_xMLfR84_4PGWiIgsoYQgTmH2Pe3OEXuNTztDGgz9xeW7hU2up6oHfw_coNB8PfmWLSYbFz_TOTUpT8OK1mvy5GTuU04vEtzPaGw4vh9_OniUgBO7sVYFAdK3n11eZ4yBP81ZvCTBflwXeLzqI"),'
+              //
+              '("El arquitecto de la era digital", "Fundadores", "Informatica", "none", "Claude Shannon es considerado el fundador de la teoría de la información. Fue un matemático e ingeniero estadounidense y su trabajo sobre la aplicación del álgebra booleana a los circuitos eléctricos sentó las bases para el diseño de computadoras digitales modernas.", "Bell Labs", "https://www.bell-labs.com/claude-shannon-information-age/", "https://blogger.googleusercontent.com/img/a/AVvXsEixAmvQecKD2txt_12AhREvKq8SA7xAh8QKxpW106p7IxqOynNKfxRW7u5RQfzTtyNtnQercPvoWHVOLnJyL82nxkjEd4H-rhB_RHt9Q6uzt-0CDjl7Ze-g7ETc6oSaMCdoup798W7k3WvNtY30KJPBZcJtmiZPz5ty4Q2CI77xeawhpHA7Kg5m6vHT"),'
+              //
+
               // Conceptos
 
               // Tips
 
               // Motivacional
-
-              // Fundadores
 
               // Curiosidades
               '("Lenguaje esotérico Brainfuck", "Curiosidades", "Lenguajes", "Brainfuck", "Brainfuck es un lenguaje de programación esotérico con solo ocho comandos, diseñado para ser lo más difícil de programar posible.", "Wikipedia", "https://es.wikipedia.org/wiki/Brainfuck", "https://blogger.googleusercontent.com/img/a/AVvXsEh9rEkocL3u7EBCcjw0HdHIjt2bWG6Uqz5Boi-J9LXzh7mTz5MpqQvc8zPsiEVyZjc1lsJhgjC3lGTlAM_RmSUOuwf6F4bdR4E1gju4gtZKYSYf92ApV5gUCL5anWwjCr_G8igrZDXUrnMwCdCsdWglUP9ctJ1RBrAJUC8CGB60pM1zpJSaezkcC_Zl"),'
@@ -135,28 +137,7 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
     }
   }
 
-  @override
-  Future<FactoModel> getCategoryFacto(String category) async {
-    try {
-      final db = await database;
-      final maps = await db.query(
-        'factos',
-        where: 'category = ?',
-        whereArgs: [category],
-      );
-
-      if (maps.isNotEmpty) {
-        return FactoModel.fromJson(maps.first);
-      } else {
-        throw Exception('ID no encontrado');
-      }
-    } catch (e) {
-      //throw Exception('Error al obtener el Todo: $e');
-      debugPrint(e.toString());
-      throw LocalFailure();
-    }
-  }
-
+/* 
   @override
   Future<List<FactoModel>> getAllFactoList() async {
     try {
@@ -171,8 +152,9 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
       throw LocalFailure();
     }
   }
-
-  Future<List<FactoModel>> getAllFactoList2() async {
+ */
+  @override
+  Future<List<FactoModel>> getAllFactoList() async {
     final db = await initDb();
     final List<Map<String, dynamic>> queryResult =
         await db.rawQuery('SELECT * FROM factos');
@@ -184,10 +166,11 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
     return queryResult.map((e) => FactoModel.fromJson(e)).toList();
   }
 
-  Future<List<FactoModel>> getCategory(cat) async {
+  @override
+  Future<List<FactoModel>> getListPreferenceFacto(preference) async {
     final db = await initDb();
-    final List<Map<String, dynamic>> queryResult = await db
-        .rawQuery('SELECT * FROM factos WHERE category like ?', ['%$cat%']);
+    final List<Map<String, dynamic>> queryResult = await db.rawQuery(
+        'SELECT * FROM factos WHERE preference like ?', ['%$preference%']);
     Map<String, dynamic> result = {};
     for (var r in queryResult) {
       result.addAll(r);
@@ -206,11 +189,5 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
     }
 
     return queryResult.map((e) => FactoModel.fromJson(e)).toList();
-  }
-
-  @override
-  Future<FactoModel> getFacto(String description) {
-    // TODO: implement getFacto
-    throw UnimplementedError();
   }
 }

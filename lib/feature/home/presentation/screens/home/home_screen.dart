@@ -3,7 +3,9 @@ import 'package:factos/feature/home/infraestucture/datasources/factos_local_data
 import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
 import 'package:factos/feature/home/presentation/screens/home/widgets/drawer_widget.dart';
 import 'package:factos/feature/home/presentation/screens/home/widgets/facto_home_widget.dart';
+import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_category_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'widgets/header_home_widget.dart';
 
@@ -15,7 +17,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String? categorySelected;
+  String preferenceSelected = 'Historia';
   late SQLiteFactoLocalDatasourceImpl handler;
   List<String> categoriesNames = [];
 
@@ -26,39 +28,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    categorySelected = 'Tips';
-    getAllFactosBd();
+    //getAllFactosBd();
 
-    //getCategoryNames();
+    getCategoryFactosBd();
   }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    //getFactosByCategoryBd();
-  }
-/* 
-  Future<List<FactoModel>> conectionListFactosByCategory() async {
-    return await handler.getCategory(categorySelected);
-  }
-
-  Future<void> getFactosByCategoryBd() async {
-    handler = SQLiteFactoLocalDatasourceImpl();
-
-    handler.initDb().whenComplete(() async {
-      List<FactoModel> factosByCategory = await conectionListFactosByCategory();
-      factosByCategory.shuffle();
-      setState(() {
-        _facto = Future.value(factosByCategory);
-      });
-    });
-  } */
 
   Future<List<FactoModel>> conectionAllFactos() async {
-    return await handler.getAllFactoList2();
+    return await handler.getAllFactoList();
   }
 
-  Future<void> getAllFactosBd() async {
+/*   Future<void> getAllFactosBd() async {
     handler = SQLiteFactoLocalDatasourceImpl();
 
     handler.initDb().whenComplete(() async {
@@ -67,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         _facto = Future.value(listAllFactos);
 
-        // Filtrar y extraer categorías únicas que no contengan comas
         categoriesByDb = listAllFactos
             .map((facto) => facto.category)
             .where((category) => !category.contains(','))
@@ -78,21 +56,32 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     });
   }
+  */
+  Future<List<FactoModel>> conectionPreferenceFactos() async {
+    return await handler.getListPreferenceFacto(preferenceSelected);
+  }
 
-  final Map<int, String> categories = {
-    1: 'Desarrollo Web',
-    2: 'Tips',
-    3: 'Desarrollo Móvil',
-    4: 'Habilidades',
-    5: 'Inteligencia artificial',
-    6: 'IoT',
-    7: 'Sugerencias',
-    8: 'Lenguajes',
-    9: 'Desarrollo de escritorio',
-    10: 'Motivacional',
-    11: 'Desarrollo de videojuegos',
-    12: 'Historia'
-  };
+  Future<void> getCategoryFactosBd() async {
+    handler = SQLiteFactoLocalDatasourceImpl();
+
+    handler.initDb().whenComplete(() async {
+      List<FactoModel> listNamesPreferenceFactos = await conectionAllFactos();
+
+      List<FactoModel> listPreferenceFactos = await conectionPreferenceFactos();
+      listPreferenceFactos.shuffle();
+      setState(() {
+        _facto = Future.value(listPreferenceFactos);
+
+        categoriesByDb = listNamesPreferenceFactos
+            .map((facto) => facto.preference)
+            .where((category) => !category.contains(','))
+            .toSet()
+            .toList();
+
+        print('Categorias de la bd:  $categoriesByDb');
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +110,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             children: [
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showCustomPreferenceDialog(context);
+                  },
                   icon: const Icon(
                     size: 16,
                     Icons.tune,
@@ -131,22 +122,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: categoriesByDb.map((category) {
+                    children: categoriesByDb.map((preference) {
                       return TextButton(
                         onPressed: () {
                           setState(() {
-                            categorySelected = category;
+                            preferenceSelected = preference;
+                            print('MI PREFERENCIA ES: $preferenceSelected');
+                            Fluttertoast.showToast(
+                                gravity: ToastGravity.CENTER,
+                                msg: 'Categoria actual: $preferenceSelected');
+
+                            getCategoryFactosBd();
                           });
                         },
                         child: Text(
-                          category,
+                          preference,
                           style: TextStyle(
                             color: titleTextColor,
                             fontFamily: 'Inter',
-                            fontWeight: categorySelected == category
+                            fontWeight: preferenceSelected == preference
                                 ? FontWeight.bold
                                 : FontWeight.normal,
-                            decoration: categorySelected == category
+                            decoration: preferenceSelected == preference
                                 ? TextDecoration.underline
                                 : TextDecoration.none,
                           ),
@@ -159,6 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           Expanded(
+            //si preferenceSelected = 'Historia' entonces mostrar el _facto de historia, y asi con cada preference diferente
             child: FutureBuilder<List<FactoModel>>(
                 future: _facto,
                 builder: (BuildContext context,
@@ -192,6 +190,82 @@ class _HomeScreenState extends State<HomeScreen> {
         context: context,
       ),
       bottomNavigationBar: const SizedBox(height: 70, child: Placeholder()),
+    );
+  }
+
+  void showCustomPreferenceDialog(BuildContext context) {
+    // Lista de nombres de categorías
+    final preferences = [
+      'Desarrollo Web',
+      'Tips',
+      'Desarrollo Móvil',
+      'Habilidades',
+      'Inteligencia artificial',
+      'IoT',
+    ];
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: SingleChildScrollView(
+            child: Container(
+              decoration: BoxDecoration(
+                color: appbarBackgroundGlobalColor,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Selecciona tus preferencias',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Wrap(
+                    spacing: 1,
+                    runSpacing: 10,
+                    alignment: WrapAlignment.center,
+                    children: preferences.map((category) {
+                      return SizedBox(
+                        height: 10,
+                        width: 160,
+                        child: FactosCategoryWidget(
+                          categoryName: category,
+                          widgetSelected: true,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.black.withOpacity(0.8),
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      child: const Icon(
+                        Icons.done,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
