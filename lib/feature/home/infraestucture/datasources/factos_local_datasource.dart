@@ -1,5 +1,6 @@
 import 'package:factos/core/error/failures.dart';
 import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -164,6 +165,28 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
     }
 
     return queryResult.map((e) => FactoModel.fromJson(e)).toList();
+  }
+
+  Future<List<FactoModel>> getFactosListFromSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> titles = prefs.getStringList('titles') ?? [];
+
+    // Lista para almacenar los resultados
+    List<FactoModel> factosList = [];
+
+    final db = await initDb();
+
+    // Consultar la base de datos para cada título
+    for (String title in titles) {
+      final List<Map<String, dynamic>> queryResult = await db
+          .rawQuery('SELECT * FROM factos WHERE title LIKE ?', ['%$title%']);
+
+      // Convertir los resultados de la consulta a objetos FactoModel y añadirlos a la lista
+      factosList
+          .addAll(queryResult.map((e) => FactoModel.fromJson(e)).toList());
+    }
+
+    return factosList.reversed.toList();
   }
 
   @override

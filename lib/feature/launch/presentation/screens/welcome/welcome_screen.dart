@@ -1,3 +1,5 @@
+import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_intereses_fifth_widget.dart';
+
 import 'welcome_barrel.dart';
 
 class WelcomeScreen extends ConsumerWidget {
@@ -20,9 +22,10 @@ class WelcomeScreen extends ConsumerWidget {
               },
               children: const [
                 WelcomeFirstPage(),
-                WelcomeSecondPage(),
-                WelcomeThirdPage(),
-                WelcomeFourthPage(),
+                WelcomeFactoCardSecondPage(),
+                WelcomeStartThirdPage(),
+                WelcomePreferencesFourthPage(), // 3
+                WelcomeInteresesFifthPage(), // 4
               ],
             ),
           ),
@@ -30,7 +33,7 @@ class WelcomeScreen extends ConsumerWidget {
             alignment: Alignment.bottomRight,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 10, right: 10),
-              child: currentPage == 3
+              child: currentPage == 4
                   ? TextButton(
                       style: ButtonStyle(
                         backgroundColor:

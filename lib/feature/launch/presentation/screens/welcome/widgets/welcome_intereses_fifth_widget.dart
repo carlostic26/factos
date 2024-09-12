@@ -1,9 +1,9 @@
-import 'package:factos/config/styles/constants/theme_data.dart';
+import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_category_widget.dart';
 import 'package:flutter/material.dart';
 
-class WelcomeFourthPage extends StatelessWidget {
-  const WelcomeFourthPage({super.key});
+class WelcomeInteresesFifthPage extends StatelessWidget {
+  const WelcomeInteresesFifthPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +30,31 @@ class WelcomeFourthPage extends StatelessWidget {
     return Column(
       children: [
         const Padding(
-          padding: EdgeInsets.fromLTRB(8, 130, 8, 1),
+          padding: EdgeInsets.fromLTRB(35, 130, 8, 1),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Selecciona tus intereses',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: titleTextColor,
-                    fontSize: 18,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.bold)),
+            Row(
+              children: [
+                Text('Selecciona tus categorías',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        color: titleTextColor,
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.bold)),
+                Spacer(),
+                Padding(
+                  padding: EdgeInsets.only(right: 35),
+                  child: Text('2/2',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: titleTextColor,
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                      )),
+                ),
+              ],
+            ),
             Text('Elige almenos 3',
                 textAlign: TextAlign.left,
                 style: TextStyle(

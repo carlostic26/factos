@@ -1,6 +1,5 @@
 import 'package:riverpod/riverpod.dart';
-
-//final buttonState = StateProvider((ref) => false);
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ButtonStateNotifier extends StateNotifier<bool> {
   ButtonStateNotifier() : super(false);
@@ -25,3 +24,31 @@ class PageNotifier extends StateNotifier<int> {
 final pageProvider = StateNotifierProvider<PageNotifier, int>((ref) {
   return PageNotifier();
 });
+
+//final buttonSavedFactoState = StateProvider((ref) => false);
+
+final bookmarkedTitlesProvider =
+    StateNotifierProvider<BookmarkedTitlesNotifier, List<String>>((ref) {
+  return BookmarkedTitlesNotifier();
+});
+
+class BookmarkedTitlesNotifier extends StateNotifier<List<String>> {
+  BookmarkedTitlesNotifier() : super([]) {
+    _loadBookmarkedTitles();
+  }
+
+  Future<void> _loadBookmarkedTitles() async {
+    final prefs = await SharedPreferences.getInstance();
+    state = prefs.getStringList('titles') ?? [];
+  }
+
+  Future<void> toggleBookmark(String title) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (state.contains(title)) {
+      state = state.where((t) => t != title).toList();
+    } else {
+      state = [...state, title];
+    }
+    await prefs.setStringList('titles', state);
+  }
+}

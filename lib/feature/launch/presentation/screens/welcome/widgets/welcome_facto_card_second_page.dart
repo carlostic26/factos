@@ -1,9 +1,9 @@
-import 'package:factos/config/styles/constants/theme_data.dart';
+import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:factos/feature/home/presentation/common/widgets/facto_widget.dart';
 import 'package:flutter/material.dart';
 
-class WelcomeSecondPage extends StatelessWidget {
-  const WelcomeSecondPage({super.key});
+class WelcomeFactoCardSecondPage extends StatelessWidget {
+  const WelcomeFactoCardSecondPage({super.key});
 
   @override
   Widget build(BuildContext context) {

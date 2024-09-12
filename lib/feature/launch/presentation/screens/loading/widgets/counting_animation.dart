@@ -1,4 +1,4 @@
-import 'package:factos/config/styles/constants/theme_data.dart';
+import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:flutter/material.dart';
 
 class CountingAnimation extends StatefulWidget {

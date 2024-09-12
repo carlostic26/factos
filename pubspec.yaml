@@ -21,6 +21,7 @@ dependencies:
   url_launcher: ^6.3.0
   webview_flutter: ^4.8.0
   fluttertoast: ^8.2.8
+  shared_preferences: ^2.3.2
 
 dev_dependencies:
   flutter_test:

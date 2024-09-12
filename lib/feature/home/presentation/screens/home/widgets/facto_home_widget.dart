@@ -1,7 +1,10 @@
-import 'package:factos/config/styles/constants/theme_data.dart';
+import 'package:factos/core/config/styles/constants/theme_data.dart';
+import 'package:factos/feature/home/presentation/provider/riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class FactoHomeWidget extends StatelessWidget {
+class FactoHomeWidget extends ConsumerWidget {
   final String title;
   final String description;
   final String nameFont;
@@ -18,9 +21,14 @@ class FactoHomeWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+
+    //final buttonSave = ref.watch(buttonSavedFactoState);
+
+    final bookmarkedTitles = ref.watch(bookmarkedTitlesProvider);
+    final isBookmarked = bookmarkedTitles.contains(title);
 
     return Card(
       color: Colors.transparent,
@@ -81,10 +89,8 @@ class FactoHomeWidget extends StatelessWidget {
                                   color: subtitleTextColor,
                                   height: 1,
                                 ),
-                                maxLines:
-                                    2, // Establece el máximo de líneas a 2
-                                overflow: TextOverflow
-                                    .ellipsis, // Mostrará los puntos suspensivos si aún se desborda
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             Expanded(
@@ -120,8 +126,15 @@ class FactoHomeWidget extends StatelessWidget {
                                         padding: EdgeInsets.zero,
                                         color: subtitleTextColor,
                                         iconSize: 18,
-                                        icon: const Icon(Icons.bookmark_border),
-                                        onPressed: () {},
+                                        icon: Icon(isBookmarked
+                                            ? Icons.bookmark
+                                            : Icons.bookmark_border),
+                                        onPressed: () {
+                                          ref
+                                              .read(bookmarkedTitlesProvider
+                                                  .notifier)
+                                              .toggleBookmark(title);
+                                        },
                                       ),
                                     ),
                                     SizedBox(
@@ -181,5 +194,19 @@ class FactoHomeWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> saveTitleFacto(String title) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> titles = prefs.getStringList('titles') ?? [];
+
+    if (!titles.contains(title)) {
+      titles.add(title);
+      await prefs.setStringList('titles', titles);
+    }
+
+    List<String> titlesSaved = prefs.getStringList('titles') ?? [];
+    // ignore: avoid_print
+    print('LLAVES DE FACTOS DESPUES DE GUARDADAS: $titlesSaved');
   }
 }

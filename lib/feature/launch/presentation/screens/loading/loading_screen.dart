@@ -1,5 +1,6 @@
 import 'package:factos/feature/home/presentation/screens/home/home_screen.dart';
 import 'package:factos/feature/launch/presentation/screens/loading/loading_barrel.dart';
+import 'package:factos/feature/launch/presentation/screens/welcome/welcome_screen.dart';
 
 class LoadingScreen extends ConsumerWidget {
   const LoadingScreen({super.key});
@@ -78,7 +79,7 @@ class LoadingScreen extends ConsumerWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => const HomeScreen()));
+                                  builder: (_) => (const HomeScreen())));
                         }
                       : null,
                   style: ButtonStyle(

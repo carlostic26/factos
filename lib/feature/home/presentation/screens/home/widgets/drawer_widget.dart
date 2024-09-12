@@ -1,5 +1,6 @@
-import 'package:factos/config/styles/constants/theme_data.dart';
+import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:factos/feature/home/presentation/screens/home/home_screen.dart';
+import 'package:factos/feature/saved/presentation/screens/saved_factos.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -70,7 +71,10 @@ class DrawerFactosWidget extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.bookmark),
             title: const Text('Factos guardados'),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const SavedFactos()));
+            },
           ),
           ListTile(
             leading: const Icon(Icons.volunteer_activism),

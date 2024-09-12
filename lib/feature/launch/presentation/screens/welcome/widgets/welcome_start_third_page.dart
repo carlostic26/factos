@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class WelcomeThirdPage extends StatelessWidget {
-  const WelcomeThirdPage({super.key});
+class WelcomeStartThirdPage extends StatelessWidget {
+  const WelcomeStartThirdPage({super.key});
 
   @override
   Widget build(BuildContext context) {

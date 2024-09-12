@@ -1,4 +1,4 @@
-import 'package:factos/feature/home/presentation/screens/home/widgets/search_bar_widget.dart';
+import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:flutter/material.dart';
 
 class HeaderWidget extends StatelessWidget {
@@ -41,7 +41,37 @@ class HeaderWidget extends StatelessWidget {
           SizedBox(
             height: height * 0.015,
           ),
-          const SearchBarWidget(),
+          Container(
+            height: height * 0.05,
+            decoration: BoxDecoration(
+              color: searchFieldBackgroundColor,
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            child: Row(
+              children: [
+                IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      size: 28,
+                      Icons.search,
+                      color: Colors.grey,
+                    )),
+                const Expanded(
+                  child: TextField(
+                    style: TextStyle(color: Colors.yellow),
+                    decoration: InputDecoration(
+                      hintText: 'Python',
+                      hintStyle: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                          fontFamily: 'Inter'),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
