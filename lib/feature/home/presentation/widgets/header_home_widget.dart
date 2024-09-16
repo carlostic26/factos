@@ -1,16 +1,19 @@
 import 'package:factos/core/config/styles/constants/theme_data.dart';
+import 'package:factos/feature/search/presentation/provider/riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HeaderWidget extends StatelessWidget {
-  const HeaderWidget({
-    super.key,
-    required this.height,
-  });
+class HeaderWidget extends ConsumerWidget {
+  HeaderWidget({super.key, required this.height, required this.isResultSearch});
 
   final double height;
+  bool isResultSearch;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final searchState = ref.watch(searchProvider);
+    final searchFactos = ref.read(searchFactosProvider);
+
     return Padding(
       padding: const EdgeInsets.only(left: 20, top: 15, right: 10),
       child: Column(
@@ -50,16 +53,23 @@ class HeaderWidget extends StatelessWidget {
             child: Row(
               children: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      //TODO: Busca en la bd y retorna a la screnn search
+                    },
                     icon: const Icon(
                       size: 28,
                       Icons.search,
                       color: Colors.grey,
                     )),
-                const Expanded(
+                Expanded(
                   child: TextField(
-                    style: TextStyle(color: Colors.yellow),
-                    decoration: InputDecoration(
+                    onChanged: (value) {
+                      isResultSearch = true;
+                      searchFactos(value);
+                    },
+                    style: const TextStyle(
+                        color: Colors.white, fontFamily: 'Inter'),
+                    decoration: const InputDecoration(
                       hintText: 'Python',
                       hintStyle: TextStyle(
                           fontSize: 12,

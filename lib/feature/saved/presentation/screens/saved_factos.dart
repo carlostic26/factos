@@ -1,7 +1,7 @@
 import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:factos/feature/home/infraestucture/datasources/factos_local_datasource.dart';
 import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
-import 'package:factos/feature/home/presentation/screens/home/widgets/facto_home_widget.dart';
+import 'package:factos/feature/home/presentation/widgets/facto_home_widget.dart';
 import 'package:flutter/material.dart';
 
 class SavedFactos extends StatefulWidget {
@@ -14,6 +14,7 @@ class SavedFactos extends StatefulWidget {
 class _SavedFactosState extends State<SavedFactos> {
   late SQLiteFactoLocalDatasourceImpl handler;
   Future<List<FactoModel>>? _facto;
+  bool isFactos = false;
 
   @override
   void initState() {
@@ -35,6 +36,10 @@ class _SavedFactosState extends State<SavedFactos> {
 
       setState(() {
         _facto = Future.value(listSavedFactos);
+
+        if (_facto != null) {
+          isFactos = true;
+        }
       });
     });
   }
@@ -65,18 +70,27 @@ class _SavedFactosState extends State<SavedFactos> {
               } else {
                 var itemFacto = snapshot.data ?? <FactoModel>[];
 
-                return ListView.builder(
-                  itemCount: itemFacto.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return FactoHomeWidget(
-                      title: itemFacto[index].title,
-                      description: itemFacto[index].description,
-                      nameFont: itemFacto[index].nameFont,
-                      linkFont: itemFacto[index].linkFont,
-                      linkImg: itemFacto[index].linkImg,
-                    );
-                  },
-                );
+                if (itemFacto.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'Aun no tienes factos guardados',
+                      style: TextStyle(fontFamily: 'Inter'),
+                    ),
+                  );
+                } else {
+                  return ListView.builder(
+                    itemCount: itemFacto.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return FactoHomeWidget(
+                        title: itemFacto[index].title,
+                        description: itemFacto[index].description,
+                        nameFont: itemFacto[index].nameFont,
+                        linkFont: itemFacto[index].linkFont,
+                        linkImg: itemFacto[index].linkImg,
+                      );
+                    },
+                  );
+                }
               }
             }),
       ),

@@ -1,28 +1,32 @@
 import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:factos/feature/home/infraestucture/datasources/factos_local_datasource.dart';
 import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
-import 'package:factos/feature/home/presentation/screens/home/widgets/drawer_widget.dart';
-import 'package:factos/feature/home/presentation/screens/home/widgets/facto_home_widget.dart';
+import 'package:factos/core/common/drawer/presentation/screens/drawer_widget.dart';
+import 'package:factos/feature/home/presentation/widgets/facto_home_widget.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_filter_widget.dart';
+import 'package:factos/feature/search/presentation/provider/riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'widgets/header_home_widget.dart';
+import '../../widgets/header_home_widget.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends ConsumerStatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   String preferenceSelected = 'Historia';
   late SQLiteFactoLocalDatasourceImpl handler;
   List<String> categoriesNames = [];
   List<String> categoriesByDb = [];
 
   Future<List<FactoModel>>? _facto;
+
+  bool isResultSearch = false;
 
   @override
   void initState() {
@@ -87,6 +91,10 @@ class _HomeScreenState extends State<HomeScreen> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
+    final searchState = ref.watch(searchProvider);
+
+    bool isResultSearch = searchState.isLoading;
+
     return Scaffold(
       backgroundColor: scaffoldBackgroundGlobalColor,
       appBar: AppBar(
@@ -101,7 +109,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
-          HeaderWidget(height: height),
+          HeaderWidget(
+            height: height,
+            isResultSearch: isResultSearch,
+          ),
           SizedBox(
             height: height * 0.02,
           ),
@@ -125,11 +136,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       return TextButton(
                         onPressed: () {
                           setState(() {
-                            preferenceSelected = preference;
-                            print('MI PREFERENCIA ES: $preferenceSelected');
-                            Fluttertoast.showToast(
+                            /*               Fluttertoast.showToast(
                                 gravity: ToastGravity.CENTER,
-                                msg: 'Categoria actual: $preferenceSelected');
+                                msg: 'Categoria actual: $preferenceSelected'); */
 
                             getCategoryFactosBd();
                           });
@@ -156,33 +165,84 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Expanded(
             //si preferenceSelected = 'Historia' entonces mostrar el _facto de historia, y asi con cada preference diferente
-            child: FutureBuilder<List<FactoModel>>(
-                future: _facto,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<FactoModel>> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    var itemFacto = snapshot.data ?? <FactoModel>[];
+            child: isResultSearch
+                ? FutureBuilder<List<FactoModel>>(
+                    future: Future.value(searchState.searchResults),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<FactoModel>> snapshot) {
+                      if (searchState.isLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (searchState.error != null) {
+                        return Center(
+                            child: Text('Error: ${searchState.error}'));
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else {
+                        var itemFacto = snapshot.data ?? <FactoModel>[];
 
-                    return ListView.builder(
-                      itemCount: itemFacto.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return FactoHomeWidget(
-                          title: itemFacto[index].title,
-                          description: itemFacto[index].description,
-                          nameFont: itemFacto[index].nameFont,
-                          linkFont: itemFacto[index].linkFont,
-                          linkImg: itemFacto[index].linkImg,
+                        if (itemFacto.isEmpty) {
+                          return const Center(
+                            child: Text(
+                              'No se encontró ningún facto',
+                              style: TextStyle(fontFamily: 'Inter'),
+                            ),
+                          );
+                        } else {
+                          return ListView.builder(
+                            itemCount: itemFacto.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return FactoHomeWidget(
+                                title: itemFacto[index].title,
+                                description: itemFacto[index].description,
+                                nameFont: itemFacto[index].nameFont,
+                                linkFont: itemFacto[index].linkFont,
+                                linkImg: itemFacto[index].linkImg,
+                              );
+                            },
+                          );
+                        }
+                      }
+                    },
+                  )
+                : FutureBuilder<List<FactoModel>>(
+                    future: _facto,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<FactoModel>> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
                         );
-                      },
-                    );
-                  }
-                }),
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        var itemFacto = snapshot.data ?? <FactoModel>[];
+
+                        if (itemFacto.isEmpty) {
+                          return const Center(
+                            child: Text(
+                              'No se encontró ningun facto',
+                              style: TextStyle(fontFamily: 'Inter'),
+                            ),
+                          );
+                        } else {
+                          return ListView.builder(
+                            itemCount: itemFacto.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return FactoHomeWidget(
+                                title: itemFacto[index].title,
+                                description: itemFacto[index].description,
+                                nameFont: itemFacto[index].nameFont,
+                                linkFont: itemFacto[index].linkFont,
+                                linkImg: itemFacto[index].linkImg,
+                              );
+                            },
+                          );
+                        }
+                      }
+                    }),
           ),
         ],
       ),

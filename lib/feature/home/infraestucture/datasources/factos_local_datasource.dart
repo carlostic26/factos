@@ -121,8 +121,6 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
               //
               '("El lenguaje Whitespace", "Curiosidades", "Lenguajes", "Whitespace", "Whitespace es un lenguaje de programación que usa solo espacios, tabulaciones y saltos de línea.", "GeeksforGeeks", "https://www.geeksforgeeks.org/whitespace-programming-language/", "https://blogger.googleusercontent.com/img/a/AVvXsEi26ydQXOO0SnyUXdZDSMDHWEMotIaV6XAO3dhOv-HJBHDWePJ3hx1dsKDgW_TaSlS1zuuwqFYD8qiy-JddsKjr9CJNUOECudcl57yLpnTHtZJL3gvrusytt7bY0_07ZM9audO3U6uzsDDVLVV4aPM2hzBVDchNEX8Y7cpiSZu7MKM6OzzkI-BdR1tE"),'
               //
-              '("Python y su nombre peculiar", "Curiosidades", "Lenguajes", "Python", "El lenguaje Python fue nombrado por su creador, Guido van Rossum, en honor al grupo cómico Monty Python.", "Python", "https://docs.python.org/3/faq/general.html#why-is-it-called-python", "https://blogger.googleusercontent.com/img/a/AVvXsEgk6jykLU5PFL7FqNOD144433Hj8KwwKs0-16o_tCPjUDd-HWPZQFXYOpopephsyBzmqWPMUppHD3TrGAEMPwkVkAJlV8QeDMNH0DhyZi6DHOMxirkfRD4lRNj0TZskpgZ7Rxl4_DAxgq2AQ3Yaj447Iveiy5heMZqVgYaNQUUEspnhiHlDONYkTdET"),'
-              //
               '("Java y sus 3 mil millones de dispositivos", "Curiosidades", "Lenguajes", "Java", "Java se ejecuta en más de 3 mil millones de dispositivos, incluyendo smartphones, cajeros automáticos y electrodomésticos.", "Oracle", "https://www.oracle.com/java/technologies/", "https://blogger.googleusercontent.com/img/a/AVvXsEgXRAceKO3lMGRHFWb--JdLmFkTntkjYX1PGZ_w8vebT6xw0U9tA45yYYYxK0I6AunE_3dIIWcXywr7SWyDzDhCaOwkWgMp32D7y_xVhdsem2ro45uLKVxZDZnZsjtULejR-h14cPrW_90JkJvlXGAhSPEUiiqe8iwznazxyeRW_autSSQfa7dn5zMC"),'
               //
               '("El famoso Hello, World!", "Curiosidades", "Desarrollo de software", "C", "El mensaje Hello, World! fue popularizado por el libro de Brian Kernighan sobre C, mostrando un primer programa básico.", "Programming Historian", "https://programminghistorian.org/en/lessons/hello-world", "https://blogger.googleusercontent.com/img/a/AVvXsEjwen6811Ti-u4N9QVIMf04t9EgYo86fjajX1i2rg7YjmKsIUCsQdFPxw6AzmWkCmGFVUIKftLDIzGQ4DX7jQyDvyDIK7Nix3cBoZDrciHei_CWnBcjiY4bYZk19PwLPTW6pQTpTNlzI1N2dKu0cyrEh_EpPya1o15WGGMbPf_S69tAPa0RdOstJ-T9"),'
@@ -165,6 +163,22 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
     }
 
     return queryResult.map((e) => FactoModel.fromJson(e)).toList();
+  }
+
+  Future<List<FactoModel>> getFactosListByWord(word) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // Lista para almacenar los resultados
+    List<FactoModel> factosList = [];
+
+    final db = await initDb();
+
+    final List<Map<String, dynamic>> queryResult = await db
+        .rawQuery('SELECT * FROM factos WHERE title LIKE ?', ['%$word%']);
+
+    // Convertir los resultados de la consulta a objetos FactoModel y añadirlos a la lista
+    factosList.addAll(queryResult.map((e) => FactoModel.fromJson(e)).toList());
+
+    return factosList;
   }
 
   Future<List<FactoModel>> getFactosListFromSharedPreferences() async {
