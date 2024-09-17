@@ -1,6 +1,8 @@
 import 'package:riverpod/riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+final isSearchBar = StateProvider((ref) => false);
+
 class ButtonStateNotifier extends StateNotifier<bool> {
   ButtonStateNotifier() : super(false);
 

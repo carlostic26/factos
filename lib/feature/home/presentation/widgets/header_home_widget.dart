@@ -14,6 +14,8 @@ class HeaderWidget extends ConsumerWidget {
     final searchState = ref.watch(searchProvider);
     final searchFactos = ref.read(searchFactosProvider);
 
+    final isSearchBar = ref.watch(isSearchBarBoolean);
+
     return Padding(
       padding: const EdgeInsets.only(left: 20, top: 15, right: 10),
       child: Column(
@@ -53,9 +55,7 @@ class HeaderWidget extends ConsumerWidget {
             child: Row(
               children: [
                 IconButton(
-                    onPressed: () {
-                      //TODO: Busca en la bd y retorna a la screnn search
-                    },
+                    onPressed: () {},
                     icon: const Icon(
                       size: 28,
                       Icons.search,
@@ -64,6 +64,10 @@ class HeaderWidget extends ConsumerWidget {
                 Expanded(
                   child: TextField(
                     onChanged: (value) {
+                      if (value.isNotEmpty) {
+                        ref.read(isSearchBarBoolean.notifier).state = true;
+                      }
+
                       isResultSearch = true;
                       searchFactos(value);
                     },

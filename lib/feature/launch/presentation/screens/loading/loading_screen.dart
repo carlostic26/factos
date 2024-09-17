@@ -1,4 +1,4 @@
-import 'package:factos/feature/home/presentation/screens/home/home_screen.dart';
+import 'package:factos/feature/home/presentation/screens/home_screen.dart';
 import 'package:factos/feature/launch/presentation/screens/loading/loading_barrel.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/welcome_screen.dart';
 

@@ -1,6 +1,6 @@
 export 'package:factos/core/config/styles/constants/theme_data.dart';
 export 'package:factos/feature/home/presentation/provider/riverpod.dart';
-export 'package:factos/feature/home/presentation/screens/home/home_screen.dart';
+export 'package:factos/feature/home/presentation/screens/home_screen.dart';
 export 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_first_page.dart';
 export 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_preferences_fourth_widget.dart';
 export 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_facto_card_second_page.dart';

@@ -7,9 +7,8 @@ import 'package:factos/feature/launch/presentation/screens/welcome/widgets/facto
 import 'package:factos/feature/search/presentation/provider/riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../widgets/header_home_widget.dart';
+import '../widgets/header_home_widget.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -92,8 +91,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     double width = MediaQuery.of(context).size.width;
 
     final searchState = ref.watch(searchProvider);
-
     bool isResultSearch = searchState.isLoading;
+
+    final isSearchBar = ref.watch(isSearchBarBoolean);
 
     return Scaffold(
       backgroundColor: scaffoldBackgroundGlobalColor,
@@ -141,6 +141,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 msg: 'Categoria actual: $preferenceSelected'); */
 
                             getCategoryFactosBd();
+
+                            preferenceSelected = preference;
+
+                            print('PREFERENCE S: $preferenceSelected \n');
+                            print('PREFERENCE: $preference \n');
                           });
                         },
                         child: Text(
@@ -165,7 +170,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           Expanded(
             //si preferenceSelected = 'Historia' entonces mostrar el _facto de historia, y asi con cada preference diferente
-            child: isResultSearch
+            child: isSearchBar
                 ? FutureBuilder<List<FactoModel>>(
                     future: Future.value(searchState.searchResults),
                     builder: (BuildContext context,

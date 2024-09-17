@@ -1,5 +1,5 @@
 import 'package:factos/core/config/styles/constants/theme_data.dart';
-import 'package:factos/feature/home/presentation/screens/home/home_screen.dart';
+import 'package:factos/feature/home/presentation/screens/home_screen.dart';
 import 'package:factos/feature/saved/presentation/screens/saved_factos.dart';
 import 'package:factos/feature/search/presentation/screens/search_screen.dart';
 import 'package:flutter/material.dart';
