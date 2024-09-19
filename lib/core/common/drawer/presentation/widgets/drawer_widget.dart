@@ -1,5 +1,7 @@
+import 'package:factos/core/common/app_config.dart';
+import 'package:factos/core/common/drawer/presentation/screens/apoya_app.dart';
 import 'package:factos/core/config/styles/constants/theme_data.dart';
-import 'package:factos/feature/home/presentation/screens/home_screen.dart';
+import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_second_page_facto_card.dart';
 import 'package:factos/feature/saved/presentation/screens/saved_factos.dart';
 import 'package:factos/feature/search/presentation/screens/search_screen.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,8 @@ import 'package:url_launcher/url_launcher.dart';
 class DrawerFactosWidget extends StatelessWidget {
   BuildContext? context;
   DrawerFactosWidget({super.key, required context});
-  String flutterVersion = '3.22.1';
+
+  AppConfig infoApp = AppConfig();
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +36,17 @@ class DrawerFactosWidget extends StatelessWidget {
                   width: widthScreen * 0.18,
                 ),
                 const SizedBox(height: 2),
-                const Text(
-                  'Factos de Programación',
-                  style: TextStyle(
+                Text(
+                  infoApp.name,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Text(
-                  '1.0.1',
-                  style: TextStyle(
+                Text(
+                  infoApp.version,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 10,
                   ),
@@ -65,11 +68,6 @@ class DrawerFactosWidget extends StatelessWidget {
             onTap: () {},
           ),
           ListTile(
-            leading: const Icon(Icons.category),
-            title: const Text('Categorías'),
-            onTap: () {},
-          ),
-          ListTile(
             leading: const Icon(Icons.bookmark),
             title: const Text('Factos guardados'),
             onTap: () {
@@ -80,12 +78,36 @@ class DrawerFactosWidget extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.volunteer_activism),
             title: const Text('Apoya la app'),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => const ApoyaApp()));
+            },
           ),
           ListTile(
             leading: const Icon(Icons.help),
             title: const Text('¿Qué es un facto?'),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => Stack(
+                            children: [
+                              Container(
+                                color: appbarBackgroundGlobalColor,
+                              ),
+                              const WelcomeFactoCardSecondPage(),
+                              Positioned(
+                                  left: 6,
+                                  top: 18,
+                                  child: IconButton(
+                                      color: Colors.white,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(Icons.arrow_back))),
+                            ],
+                          )));
+            },
           ),
           SizedBox(
             height: heightScreen * 0.05,
@@ -104,7 +126,7 @@ class DrawerFactosWidget extends StatelessWidget {
             title: const Text('Info de la app'),
             onTap: () {
               dialogVersion(context, 'Información',
-                  'RecuDrive es una app desarrollada por TICnoticos para ayudar a los usuarios a recuperar sus archivos eliminados por error de la papelera de Google Drive.\n\nLa app es una guia donde se explica paso a paso que hacer para restablecer los archivos.\n\nVersión: $flutterVersion');
+                  '${infoApp.name} es una app desarrollada por TICnoticos para mostrar y evidenciar datos interesantes sobre el amplio mundo de la informática y la Programación. \n\nVersión: ${infoApp.version}');
             },
           ),
           ListTile(
@@ -124,11 +146,12 @@ class DrawerFactosWidget extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
+          backgroundColor: appbarBackgroundGlobalColor,
           title: Center(
             child: Text(
               title,
               style: const TextStyle(
-                color: Colors.blue,
+                color: Colors.white,
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -147,7 +170,7 @@ class DrawerFactosWidget extends StatelessWidget {
                   child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor:
-                            WidgetStateProperty.all<Color>(Colors.green),
+                            WidgetStateProperty.all<Color>(Colors.black12),
                       ),
                       child: const Text(
                         'Ok',
@@ -167,7 +190,7 @@ class DrawerFactosWidget extends StatelessWidget {
 
   void _launchUrlPolicyPrivacy() async {
     final Uri url = Uri.parse(
-        'https://www.termsfeed.com/live/62b727af-8d46-47c4-908f-3e7a8d053d07');
+        'https://www.privacypolicies.com/live/4417a2dc-ecb0-4001-98eb-87e74ecb3e23');
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {

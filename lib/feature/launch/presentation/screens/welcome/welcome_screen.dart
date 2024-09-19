@@ -1,4 +1,4 @@
-import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_intereses_fifth_widget.dart';
+import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_fifth_widget_intereses.dart';
 
 import 'welcome_barrel.dart';
 

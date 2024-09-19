@@ -27,7 +27,7 @@ class FactoWidget extends StatelessWidget {
               children: [
                 const Text(
                   textAlign: TextAlign.start,
-                  'Un dia como hoy...',
+                  'Un 23 de mayo...',
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -35,54 +35,58 @@ class FactoWidget extends StatelessWidget {
                       color: lightBackgroundTextColor),
                 ),
                 const Text(
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna ',
+                  'Un 23 de Mayo de 1995 fue lanzado Java. Desde entonces ha evolucionado en 23 versiones principales.',
                   style: TextStyle(
                       fontSize: 12,
                       color: lightBackgroundTextColor,
                       fontFamily: 'Inter'),
                 ),
                 const Text(
-                  'Lorem ipsum',
+                  'Java.com',
                   style: TextStyle(
                       fontSize: 8,
                       color: lightBackgroundTextColor,
                       fontFamily: 'Inter'),
                 ),
                 Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  child: Column(
                     children: [
-                      SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: IconButton(
-                            iconSize: 15,
-                            onPressed: () {},
-                            icon: const Icon(Icons.visibility)),
-                      ),
-                      SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: IconButton(
-                            iconSize: 15,
-                            onPressed: () {},
-                            icon: const Icon(Icons.share)),
-                      ),
-                      SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: IconButton(
-                            iconSize: 15,
-                            onPressed: () {},
-                            icon: const Icon(Icons.bookmark_border)),
-                      ),
-                      SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: IconButton(
-                            iconSize: 15,
-                            onPressed: () {},
-                            icon: const Icon(Icons.delete)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: IconButton(
+                                iconSize: 15,
+                                onPressed: () {},
+                                icon: const Icon(Icons.visibility)),
+                          ),
+                          SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: IconButton(
+                                iconSize: 15,
+                                onPressed: () {},
+                                icon: const Icon(Icons.share)),
+                          ),
+                          SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: IconButton(
+                                iconSize: 15,
+                                onPressed: () {},
+                                icon: const Icon(Icons.bookmark_border)),
+                          ),
+                          SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: IconButton(
+                                iconSize: 15,
+                                onPressed: () {},
+                                icon: const Icon(Icons.delete)),
+                          ),
+                        ],
                       ),
                     ],
                   ),

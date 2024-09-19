@@ -1,7 +1,7 @@
 import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:factos/feature/home/infraestucture/datasources/factos_local_datasource.dart';
 import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
-import 'package:factos/core/common/drawer/presentation/screens/drawer_widget.dart';
+import 'package:factos/core/common/drawer/presentation/widgets/drawer_widget.dart';
 import 'package:factos/feature/home/presentation/widgets/facto_home_widget.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_filter_widget.dart';
 import 'package:factos/feature/search/presentation/provider/riverpod.dart';
