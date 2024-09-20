@@ -1,3 +1,4 @@
+import 'package:factos/core/config/ads/ads_factos.dart';
 import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:factos/feature/home/infraestucture/datasources/factos_local_datasource.dart';
 import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
@@ -7,6 +8,7 @@ import 'package:factos/feature/launch/presentation/screens/welcome/widgets/facto
 import 'package:factos/feature/search/presentation/provider/riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../widgets/header_home_widget.dart';
 
@@ -18,6 +20,11 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  //initializing banner ad
+  BannerAd? _anchoredAdaptiveAd;
+  bool _isAdLoaded = false;
+  bool _isLoaded = false;
+
   String preferenceSelected = 'Historia';
   late SQLiteFactoLocalDatasourceImpl handler;
   List<String> categoriesNames = [];
@@ -30,10 +37,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    //getAllFactosBd();
-
     getCategoryFactosBd();
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadAdaptativeAd();
+  }
+
+  static const AdRequest request = AdRequest(
+      //keywords: ['',''],
+      //contentUrl: '',
+      //nonPersonalizedAds: false
+      );
 
   Future<List<FactoModel>> conectionAllFactos() async {
     return await handler.getAllFactoList();
@@ -83,6 +100,48 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         print('Categorias de la bd:  $categoriesByDb');
       });
     });
+  }
+
+  FactosAds ads = FactosAds();
+
+  Future<void> _loadAdaptativeAd() async {
+    if (_isAdLoaded) {
+      return;
+    }
+
+    final AnchoredAdaptiveBannerAdSize? size =
+        await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+            MediaQuery.of(context).size.width.truncate());
+
+    if (size == null) {
+      //print('Unable to get height of anchored banner.');
+      return;
+    }
+
+    BannerAd loadedAd = BannerAd(
+      adUnitId: ads.bannerAd,
+      size: size,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (Ad ad) {
+          // print('$ad loaded: ${ad.responseInfo}');
+          setState(() {
+            _anchoredAdaptiveAd = ad as BannerAd;
+            _isLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          // print('Anchored adaptive banner failedToLoad: $error');
+          ad.dispose();
+        },
+      ),
+    );
+
+    try {
+      await loadedAd.load();
+    } catch (e) {
+      loadedAd.dispose();
+    }
   }
 
   @override
@@ -169,7 +228,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ],
           ),
           Expanded(
-            //si preferenceSelected = 'Historia' entonces mostrar el _facto de historia, y asi con cada preference diferente
             child: isSearchBar
                 ? FutureBuilder<List<FactoModel>>(
                     future: Future.value(searchState.searchResults),
@@ -254,7 +312,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       drawer: DrawerFactosWidget(
         context: context,
       ),
-      bottomNavigationBar: const SizedBox(height: 70, child: Placeholder()),
+      bottomNavigationBar: _anchoredAdaptiveAd != null
+          ? Container(
+              color: Colors.transparent,
+              width: _anchoredAdaptiveAd?.size.width.toDouble(),
+              height: _anchoredAdaptiveAd?.size.height.toDouble(),
+              child: AdWidget(ad: _anchoredAdaptiveAd!),
+            )
+          : const SizedBox(),
     );
   }
 

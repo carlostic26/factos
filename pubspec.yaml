@@ -22,6 +22,7 @@ dependencies:
   webview_flutter: ^4.8.0
   fluttertoast: ^8.2.8
   shared_preferences: ^2.3.2
+  google_mobile_ads: ^4.0.0
 
 dev_dependencies:
   flutter_test:

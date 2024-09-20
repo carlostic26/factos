@@ -31,7 +31,7 @@ class DrawerFactosWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Image.asset(
-                  'assets/images/logo.png',
+                  'assets/images/logov3.png',
                   height: heightScreen * 0.08,
                   width: widthScreen * 0.18,
                 ),
@@ -65,7 +65,9 @@ class DrawerFactosWidget extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.home),
             title: const Text('Inicio'),
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context);
+            },
           ),
           ListTile(
             leading: const Icon(Icons.bookmark),

@@ -1,5 +1,6 @@
 import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:factos/feature/search/presentation/provider/riverpod.dart';
+import 'package:factos/feature/search/presentation/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -55,7 +56,12 @@ class HeaderWidget extends ConsumerWidget {
             child: Row(
               children: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const SearchScreen()));
+                    },
                     icon: const Icon(
                       size: 28,
                       Icons.search,

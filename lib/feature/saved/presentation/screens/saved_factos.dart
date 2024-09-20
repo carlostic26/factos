@@ -1,8 +1,10 @@
+import 'package:factos/core/config/ads/ads_factos.dart';
 import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:factos/feature/home/infraestucture/datasources/factos_local_datasource.dart';
 import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
 import 'package:factos/feature/home/presentation/widgets/facto_home_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class SavedFactos extends StatefulWidget {
   const SavedFactos({super.key});
@@ -12,16 +14,73 @@ class SavedFactos extends StatefulWidget {
 }
 
 class _SavedFactosState extends State<SavedFactos> {
+  //initializing banner ad
+  BannerAd? _anchoredAdaptiveAd;
+  bool _isAdLoaded = false;
+  bool _isLoaded = false;
+
   late SQLiteFactoLocalDatasourceImpl handler;
   Future<List<FactoModel>>? _facto;
   bool isFactos = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
     getSavedFactosFromSharedPreferences();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadAdaptativeAd();
+  }
+
+  FactosAds ads = FactosAds();
+
+  static const AdRequest request = AdRequest(
+      //keywords: ['',''],
+      //contentUrl: '',
+      //nonPersonalizedAds: false
+      );
+
+  Future<void> _loadAdaptativeAd() async {
+    if (_isAdLoaded) {
+      return;
+    }
+
+    final AnchoredAdaptiveBannerAdSize? size =
+        await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+            MediaQuery.of(context).size.width.truncate());
+
+    if (size == null) {
+      //print('Unable to get height of anchored banner.');
+      return;
+    }
+
+    BannerAd loadedAd = BannerAd(
+      adUnitId: ads.bannerAd,
+      size: size,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (Ad ad) {
+          // print('$ad loaded: ${ad.responseInfo}');
+          setState(() {
+            _anchoredAdaptiveAd = ad as BannerAd;
+            _isLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          // print('Anchored adaptive banner failedToLoad: $error');
+          ad.dispose();
+        },
+      ),
+    );
+
+    try {
+      await loadedAd.load();
+    } catch (e) {
+      loadedAd.dispose();
+    }
   }
 
   Future<List<FactoModel>> conectionSavedFactos() async {
@@ -94,7 +153,14 @@ class _SavedFactosState extends State<SavedFactos> {
               }
             }),
       ),
-      bottomNavigationBar: const SizedBox(height: 70, child: Placeholder()),
+      bottomNavigationBar: _anchoredAdaptiveAd != null
+          ? Container(
+              color: Colors.transparent,
+              width: _anchoredAdaptiveAd?.size.width.toDouble(),
+              height: _anchoredAdaptiveAd?.size.height.toDouble(),
+              child: AdWidget(ad: _anchoredAdaptiveAd!),
+            )
+          : const SizedBox(),
     );
   }
 }

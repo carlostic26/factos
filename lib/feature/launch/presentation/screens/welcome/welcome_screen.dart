@@ -1,4 +1,5 @@
 import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_fifth_widget_intereses.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'welcome_barrel.dart';
 
@@ -39,13 +40,17 @@ class WelcomeScreen extends ConsumerWidget {
                         backgroundColor:
                             WidgetStateProperty.all<Color>(buttonLigthColor),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (_) => const HomeScreen()));
 
-                        // TODO: Save preferences
+                        // TODO: Save preferences and categories
+
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        await prefs.setBool('firstWelcome', false);
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

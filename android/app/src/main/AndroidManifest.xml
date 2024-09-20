@@ -1,8 +1,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:label="factos"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        
+        <!-- change ID app  to test ID in the next line. actually is the real id: 433...-->
+        <!-- Sample AdMob app ID, test: ca-app-pub-3940256099942544~3347511713 || 
+        real: ca-app-pub-4336409771912215~4294421152 --> 
+        <meta-data 
+           android:name="com.google.android.gms.ads.APPLICATION_ID" 
+           android:value="ca-app-pub-3940256099942544~3347511713"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

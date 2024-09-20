@@ -1,6 +1,7 @@
 import 'package:factos/feature/home/presentation/screens/home_screen.dart';
 import 'package:factos/feature/launch/presentation/screens/loading/loading_barrel.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/welcome_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoadingScreen extends ConsumerWidget {
   const LoadingScreen({super.key});
@@ -28,10 +29,7 @@ class LoadingScreen extends ConsumerWidget {
             SizedBox(
                 height: height * 0.22,
                 width: width * 0.65,
-                child: Image.asset('assets/images/logo.png')),
-            const SizedBox(
-              height: 10,
-            ),
+                child: Image.asset('assets/images/logov3.png')),
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
@@ -76,10 +74,22 @@ class LoadingScreen extends ConsumerWidget {
                 child: TextButton(
                   onPressed: buttonContinue
                       ? () async {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => (const HomeScreen())));
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          bool firstWelcome =
+                              prefs.getBool('firstWelcome') ?? true;
+
+                          if (firstWelcome) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => (const WelcomeScreen())));
+                          } else {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => (const HomeScreen())));
+                          }
                         }
                       : null,
                   style: ButtonStyle(
