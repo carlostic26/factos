@@ -25,14 +25,11 @@ class FactoHomeWidget extends ConsumerWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    //final buttonSave = ref.watch(buttonSavedFactoState);
-
     final bookmarkedTitles = ref.watch(bookmarkedTitlesProvider);
     final isBookmarked = bookmarkedTitles.contains(title);
 
     return Card(
       color: Colors.transparent,
-      //elevation: 4,
       margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
       child: Padding(
         padding: const EdgeInsets.only(left: 12),
@@ -62,11 +59,11 @@ class FactoHomeWidget extends ConsumerWidget {
                       const SizedBox(height: 8),
                       Text(
                         description,
-                        maxLines: 6,
+                        maxLines: 7,
                         style: const TextStyle(
                             overflow: TextOverflow.ellipsis,
                             fontFamily: 'Inter',
-                            fontSize: 12,
+                            fontSize: 10,
                             height: 1.2),
                       ),
                       const Spacer(),
