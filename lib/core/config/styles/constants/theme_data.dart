@@ -11,7 +11,7 @@ const Color darkBackgroundTextColor = Color.fromARGB(255, 240, 240, 240);
 const Color lightBackgroundTextColor = Color.fromARGB(255, 10, 10, 10);
 const Color scaffoldBackgroundGlobalColor = Color.fromARGB(255, 36, 36, 36);
 const Color appbarBackgroundGlobalColor = Color.fromARGB(224, 36, 36, 36);
-const Color backgroundFilterDialog = Color.fromARGB(205, 87, 87, 87);
+const Color backgroundFilterDialog = Color.fromARGB(205, 39, 38, 38);
 
 final ThemeData factosThemeApp = ThemeData(
   scaffoldBackgroundColor: scaffoldBackgroundGlobalColor,

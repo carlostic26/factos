@@ -75,7 +75,7 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
               //
 
               // Fundadores
-              '("El cerebro detrás de las máquinas", "Fundadores", "Informatica", "none", "Ojo al dato: Alan Turing, un matemático británico con cerebro de otro planeta, es considerado el padre de la computación e inteligencia artificial. Este crack inventó la Prueba de Turing, básicamente un examen para ver si las máquinas pueden pensar. ¡Imagínate, le puso exámenes a las computadoras!", "Universidad de Cambridge", "https://www.cam.ac.uk/research/news/alan-turing-at-cambridge", "https://blogger.googleusercontent.com/img/a/AVvXsEgs6AXevJCxdsaPh53GJKVRYKKP52T_uH_BdKSBV9_xMLfR84_4PGWiIgsoYQgTmH2Pe3OEXuNTztDGgz9xeW7hU2up6oHfw_coNB8PfmWLSYbFz_TOTUpT8OK1mvy5GTuU04vEtzPaGw4vh9_OniUgBO7sVYFAdK3n11eZ4yBP81ZvCTBflwXeLzqI"),'
+              '("El cerebro detrás de las máquinas", "Fundadores", "Informatica", "none", "Un matemático británico con cerebro de otro planeta, es considerado el padre de la computación e inteligencia artificial. Este crack inventó la Prueba de Turing, básicamente un examen para ver si las máquinas pueden pensar. ¡Imagínate, le puso exámenes a las computadoras!", "Universidad de Cambridge", "https://www.cam.ac.uk/research/news/alan-turing-at-cambridge", "https://blogger.googleusercontent.com/img/a/AVvXsEgs6AXevJCxdsaPh53GJKVRYKKP52T_uH_BdKSBV9_xMLfR84_4PGWiIgsoYQgTmH2Pe3OEXuNTztDGgz9xeW7hU2up6oHfw_coNB8PfmWLSYbFz_TOTUpT8OK1mvy5GTuU04vEtzPaGw4vh9_OniUgBO7sVYFAdK3n11eZ4yBP81ZvCTBflwXeLzqI"),'
 //
               '("El man que digitalizó el mundo", "Fundadores", "Informatica", "none", "Esto te va a volar la cabeza: Claude Shannon, un matemático e ingeniero estadounidense, es el responsable de que puedas leer esto en tu pantalla. Este genio inventó la teoría de la información y aplicó el álgebra booleana a los circuitos eléctricos. Básicamente, convirtió el mundo en unos y ceros. ¡Un auténtico mago digital!", "Bell Labs", "https://www.bell-labs.com/claude-shannon-information-age/", "https://blogger.googleusercontent.com/img/a/AVvXsEixAmvQecKD2txt_12AhREvKq8SA7xAh8QKxpW106p7IxqOynNKfxRW7u5RQfzTtyNtnQercPvoWHVOLnJyL82nxkjEd4H-rhB_RHt9Q6uzt-0CDjl7Ze-g7ETc6oSaMCdoup798W7k3WvNtY30KJPBZcJtmiZPz5ty4Q2CI77xeawhpHA7Kg5m6vHT"),'
 //
@@ -85,13 +85,13 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
 //
               '("La recursividad", "Conceptos", "Programación", "none", "Es como esa muñeca rusa que tiene otra muñeca dentro, y esa tiene otra, y así sucesivamente. Es cuando una función se llama a sí misma. Suena a locura, pero es una forma elegante de resolver problemas complejos. ¡Es como si el código se multiplicara solo!", "Stanford Encyclopedia of Computer Science", "https://cs.stanford.edu/people/eroberts/courses/cs106b/chapters/05-recursion.pdf", "https://blogger.googleusercontent.com/img/a/AVvXsEjk7nrAmXWaIdG_3IXZrf1TVvEy4pbCohhOd6uiVSanoZQfy12woOFfHi3cOSWUlfQybTusIhdkgZk8OpsnLbfhkYL6zEzJlQwRvebJ0d8LlU2r8Ic_Rfmb13IH5lyV9oXTDNv88TVvWeFjtGJilqADmSqqTPHTC6Ln_ghcU9pZJRLoL0Tb9pT-wrgC"),'
 //
-              '("El temible NullPointerException", "Conceptos", "Programación", "Java", "Esto es una locura: el NullPointerException es como el coco de Java. Aparece cuando intentas usar algo que no existe, como buscar en un cajón vacío. Este error ha hecho llorar a más de un programador y ha sido la causa de incontables noches sin dormir. ¡Es el rey del caos en el código!", "Oracle Java Documentation", "https://docs.oracle.com/javase/8/docs/api/java/lang/NullPointerException.html", "https://blogger.googleusercontent.com/img/a/AVvXsEhh-mLIcRUuvpIIXHMDoiGzM3sWk8Bj9U23GBjsyQYBalUvOeDjHSWNMHPSyyhXkUoetaaujsZET8w47HkSzXoSIi3-g7Tok8jYotL5QouJ9i8N4B5qS9R-XXRXLKfiTlUzDz3GiVl_XPpeeIyQl8hibu_T9WAVtLhAXG4iVfERhNTcjPRgb3-fxTPv"),'
+              '("El temible NullPointerException", "Conceptos", "Programación", "Java", "El NullPointerException es como el coco de Java. Aparece cuando intentas usar algo que no existe, como buscar en un cajón vacío. Este error ha hecho llorar a más de un programador y ha sido la causa de incontables noches sin dormir.", "Oracle Java Documentation", "https://docs.oracle.com/javase/8/docs/api/java/lang/NullPointerException.html", "https://blogger.googleusercontent.com/img/a/AVvXsEhh-mLIcRUuvpIIXHMDoiGzM3sWk8Bj9U23GBjsyQYBalUvOeDjHSWNMHPSyyhXkUoetaaujsZET8w47HkSzXoSIi3-g7Tok8jYotL5QouJ9i8N4B5qS9R-XXRXLKfiTlUzDz3GiVl_XPpeeIyQl8hibu_T9WAVtLhAXG4iVfERhNTcjPRgb3-fxTPv"),'
 //
               '("El misterioso puntero", "Conceptos", "Programación", "C", "Un puntero mal usado puede hacer que tu programa explote como si hubiera pisado una mina. Los punteros en C son como las coordenadas de un tesoro en el mapa de la memoria. Te dicen exactamente dónde está guardado un dato. Son potentes, pero peligrosos.", "cppreference.com", "https://en.cppreference.com/w/c/language/pointer", "https://blogger.googleusercontent.com/img/a/AVvXsEgIKoll2KtwMVyvu-QhEpesevMFb1Yy6v8zP8TiAP6kwXPAgGI8exMMk_ckFTxag6-xKDChHKhls6017rnpy5_wOhexgfh2fF8GVbQuXZCFWdI-fc17KIJCUuxvBc8-OpmuIPOEZRS5JwHfpVn_fVTmsD-QR0PNgN6QDPwQcb6e__RHaPxJmF2LRdXd"),'
 //
               '("La bestia del multithreading", "Conceptos", "Programación", "none", "Ojo: el multithreading es como intentar hacer malabares mientras montas en monociclo. Permite que tu programa haga varias cosas a la vez, como un pulpo tocando varios instrumentos. Suena genial, pero puede causar dolores de cabeza épicos si los hilos se pelean por los mismos recursos. ¡Es el arte de mantener la paz en el caos!", "Python Software Foundation", "https://docs.python.org/3/library/threading.html", "https://blogger.googleusercontent.com/img/a/AVvXsEizWydOVIa4itpRM-1t2OgaZzNj7IZnjrH7rKeF550cwN58LExMn221osvW9bdqzEc5jWglaNFHFV7gjO2vaR95reOekVrq7koQYxN8NqYRAsVCt0Ggs9_7v2oIfiXUyY7LD2BsPIh_KVEKH7mqEjvEzatiI_K7cFtTVCZ-8VIVKzMLBJSlbCpgzSK9"),'
 //
-              '("El temido memory leak", "Conceptos", "Programación", "none", "Esto te va a volar la cabeza: el memory leak es como una gotera en tu programa. Poco a poco, va consumiendo la memoria de tu computadora hasta que no queda nada. Es silencioso, lento y mortal. Antes de que te des cuenta, tu programa está más hinchado que un globo a punto de explotar. ¡Es el vampiro del mundo de la programación!", "Microsoft Learn", "https://learn.microsoft.com/en-us/troubleshoot/developer/visualstudio/cpp/libraries/memory-leaks-crt-libraries", "https://blogger.googleusercontent.com/img/a/AVvXsEi3qwlPkZPAqg4maP8J-XadQ8f6gemPWxJPX4sVsoUWsXpUPT6z1dMAhzyMvtUdS4WyNVpR7VL2Ttq5Y7yru3J4K0gl7q5_0AQfH5xdN3-_UlT7qxqP6CShiQWvtjsgyKlTdPvaj0aGRcBYjztVvYOtMiiFG2CHzXDpp7ps0Z-8TL-2c7lM__grQtzP"),'
+              '("El temido memory leak", "Conceptos", "Programación", "none", "Es como una gotera en tu programa. Poco a poco, va consumiendo la memoria de tu computadora hasta que no queda nada. Es silencioso, lento y mortal. Antes de que te des cuenta, tu programa está más hinchado que un globo a punto de explotar.", "Microsoft Learn", "https://learn.microsoft.com/en-us/troubleshoot/developer/visualstudio/cpp/libraries/memory-leaks-crt-libraries", "https://blogger.googleusercontent.com/img/a/AVvXsEi3qwlPkZPAqg4maP8J-XadQ8f6gemPWxJPX4sVsoUWsXpUPT6z1dMAhzyMvtUdS4WyNVpR7VL2Ttq5Y7yru3J4K0gl7q5_0AQfH5xdN3-_UlT7qxqP6CShiQWvtjsgyKlTdPvaj0aGRcBYjztVvYOtMiiFG2CHzXDpp7ps0Z-8TL-2c7lM__grQtzP"),'
 //
               '("El enigmático lambda", "Conceptos", "Programación", "none", "Pilas con esta: las funciones lambda son pequeñas, anónimas y mortalmente eficientes. Aparecen de la nada, hacen su trabajo y desaparecen sin dejar rastro. Son tan cool que hasta tienen su propio símbolo: λ.", "W3Schools", "https://www.w3schools.com/python/python_lambda.asp", "https://blogger.googleusercontent.com/img/a/AVvXsEjRywPpbdOP3Zr49V2JClI2y68PQ9IMxi4v68bFQQEf_UJy7LAIR0XeXYjDhrhaPinlj6prlieeOiodfTuviq9szqPoADl9WcEWBjxhkpU3be5gsd1dnuIA7OB63lh6rc15qHEoJT0E2LEXQ-f9wCMDoj_DbaidetBg33bweo6xqVQldmOBgmiBJo1X"),'
 //
@@ -197,6 +197,21 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
     final db = await initDb();
     final List<Map<String, dynamic>> queryResult =
         await db.rawQuery('SELECT * FROM factos');
+    Map<String, dynamic> result = {};
+    for (var r in queryResult) {
+      result.addAll(r);
+    }
+
+    return queryResult.map((e) => FactoModel.fromJson(e)).toList();
+  }
+
+  @override
+  Future<List<FactoModel>> getFactoListFilter() async {
+    //TODO: Llamar shp y obtener la lista string de las preferencias seleccionadas por el usuario
+    // dicha lista se usará en el siguiente select
+    final db = await initDb();
+    final List<Map<String, dynamic>> queryResult =
+        await db.rawQuery('SELECT * FROM factos'); //[pref1, pref2, pref3]
     Map<String, dynamic> result = {};
     for (var r in queryResult) {
       result.addAll(r);

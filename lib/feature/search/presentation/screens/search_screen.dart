@@ -1,3 +1,4 @@
+import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
 import 'package:factos/feature/home/presentation/widgets/facto_home_widget.dart';
 import 'package:factos/feature/search/presentation/provider/riverpod.dart';
@@ -23,7 +24,9 @@ class SearchScreen extends ConsumerWidget {
     ref.read(adProvider.notifier).loadAdaptativeAd(context);
 
     return Scaffold(
+      backgroundColor: scaffoldBackgroundGlobalColor,
       appBar: AppBar(
+        backgroundColor: scaffoldBackgroundGlobalColor,
         title: TextField(
           controller: textEditingController,
           decoration: const InputDecoration(
@@ -91,6 +94,7 @@ class SearchScreen extends ConsumerWidget {
                             nameFont: itemFacto[index].nameFont,
                             linkFont: itemFacto[index].linkFont,
                             linkImg: itemFacto[index].linkImg,
+                            homeContext: context,
                           );
                         },
                       );

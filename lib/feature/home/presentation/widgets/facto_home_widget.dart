@@ -1,5 +1,6 @@
 import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:factos/feature/home/presentation/provider/riverpod.dart';
+import 'package:factos/feature/saved/presentation/screens/saved_factos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,6 +11,7 @@ class FactoHomeWidget extends ConsumerWidget {
   final String nameFont;
   final String linkFont;
   final String linkImg;
+  final BuildContext? homeContext;
 
   const FactoHomeWidget({
     super.key,
@@ -18,6 +20,7 @@ class FactoHomeWidget extends ConsumerWidget {
     required this.nameFont,
     required this.linkFont,
     required this.linkImg,
+    this.homeContext,
   });
 
   @override
@@ -131,6 +134,11 @@ class FactoHomeWidget extends ConsumerWidget {
                                               .read(bookmarkedTitlesProvider
                                                   .notifier)
                                               .toggleBookmark(title);
+
+                                          if (!isBookmarked) {
+                                            _showSavedFactoSnackBar(
+                                                homeContext!);
+                                          }
                                         },
                                       ),
                                     ),
@@ -205,5 +213,35 @@ class FactoHomeWidget extends ConsumerWidget {
     List<String> titlesSaved = prefs.getStringList('titles') ?? [];
     // ignore: avoid_print
     print('LLAVES DE FACTOS DESPUES DE GUARDADAS: $titlesSaved');
+  }
+
+  void _showSavedFactoSnackBar(BuildContext homeContext) {
+    final snackBar = SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text('Facto guardado'),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                homeContext,
+                MaterialPageRoute(
+                    builder: (homeContext) => const SavedFactos()),
+              );
+            },
+            child: const Text(
+              'Ver factos',
+              style: TextStyle(
+                color: Colors.blue,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+        ],
+      ),
+      duration: const Duration(seconds: 3),
+    );
+
+    ScaffoldMessenger.of(homeContext).showSnackBar(snackBar);
   }
 }
