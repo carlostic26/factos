@@ -5,7 +5,6 @@ import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
 import 'package:factos/core/common/drawer/presentation/widgets/drawer_widget.dart';
 import 'package:factos/feature/home/presentation/widgets/facto_home_widget.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_filter_widget.dart';
-import 'package:factos/feature/saved/presentation/screens/saved_factos.dart';
 import 'package:factos/feature/search/presentation/provider/riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

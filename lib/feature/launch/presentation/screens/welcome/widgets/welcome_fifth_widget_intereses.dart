@@ -1,26 +1,32 @@
-import 'package:factos/core/config/styles/constants/theme_data.dart';
-import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_category_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:factos/feature/launch/presentation/provider/riverpod.dart';
+import 'package:factos/feature/launch/presentation/screens/loading/loading_barrel.dart';
+import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_filter_widget.dart';
 
-class WelcomeInteresesFifthPage extends StatelessWidget {
+class WelcomeInteresesFifthPage extends ConsumerWidget {
   const WelcomeInteresesFifthPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentPage = ref.watch(pageProvider);
+
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+
+    final selectedCategories = ref.watch(categoriesProvider);
+
+    //TODO: Recibr las categorias con un provider de riverpod en lugar de la lista de abajo
 
     // Lista de nombres de categorías
     final categories = [
       'Desarrollo Web',
-      'Tips',
-      'Tips',
       'Desarrollo Móvil',
-      'Habilidades',
       'Inteligencia artificial',
       'IoT',
-      'Sugerencias',
-      'Lenguajes',
+      'Desarrollo de escritorio',
+      'Desarrollo de videojuegos',
+      'Desarrollo Móvil',
+      'Inteligencia artificial',
+      'IoT',
       'Desarrollo de escritorio',
       'Motivacional',
       'Desarrollo de videojuegos',
@@ -67,19 +73,99 @@ class WelcomeInteresesFifthPage extends StatelessWidget {
           height: height * 0.02,
         ),
         Expanded(
-          child: Center(
-            child: Wrap(
-              spacing: 3,
-              runSpacing: 28,
-              alignment: WrapAlignment.center,
-              children: categories.map((category) {
-                return FactosCategoryWidget(
-                  categoryName: category,
-                  widgetSelected: true,
-                );
-              }).toList(),
-            ),
+          child: PageView.builder(
+            itemCount: (categories.length / 25).ceil(),
+            itemBuilder: (context, index) {
+              return buildPreferencePage(categories, index, height, ref);
+            },
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildProgressIndicator(int totalItems, int currentPage) {
+    int totalPages = (totalItems / 7).ceil();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(totalPages, (index) {
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 2),
+          width: 30,
+          height: 5,
+          decoration: BoxDecoration(
+            color: index == currentPage ? Colors.white : Colors.grey,
+            borderRadius: BorderRadius.circular(5),
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget buildPreferencePage(
+      List<String> categories, int pageIndex, double height, WidgetRef ref) {
+    int start = pageIndex * 25;
+    int end = (start + 25 < categories.length) ? start + 25 : categories.length;
+
+    final listSelectedCategories = ref.watch(listCategoryProvider);
+
+    return Column(
+      children: [
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          alignment: WrapAlignment.start,
+          children: categories.getRange(start, end).map((category) {
+            int index = categories.indexOf(category);
+            return GestureDetector(
+              onTap: () {
+                ref.read(categoriesProvider.notifier).togglePreference(index);
+
+                print(
+                    'NUMERO DE CATEGORIAS SELECCIONADAS: ${listSelectedCategories.length}');
+              },
+              child: SizedBox(
+                height: height * 0.05,
+                child: FactosFilterWidget(
+                  categoryName: category,
+                  widgetSelected: ref.watch(categoriesProvider)[index],
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget buildCategoriaPage(List<String> categorias, int pageIndex,
+      double height, StateSetter setState, List<bool> selectedCategorias) {
+    int start = pageIndex * 7;
+    int end = (start + 7 < categorias.length) ? start + 7 : categorias.length;
+
+    return Column(
+      children: [
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          alignment: WrapAlignment.start,
+          children: categorias.getRange(start, end).map((category) {
+            int index = categorias.indexOf(category);
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedCategorias[index] = !selectedCategorias[index];
+                });
+              },
+              child: SizedBox(
+                height: height * 0.04,
+                child: FactosFilterWidget(
+                  categoryName: category,
+                  widgetSelected: selectedCategorias[index],
+                ),
+              ),
+            );
+          }).toList(),
         ),
       ],
     );

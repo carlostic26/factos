@@ -1,4 +1,6 @@
+import 'package:factos/feature/launch/presentation/provider/riverpod.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_fifth_widget_intereses.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'welcome_barrel.dart';
@@ -10,6 +12,8 @@ class WelcomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pageController = PageController();
     final currentPage = ref.watch(pageProvider);
+
+    final listSelectedPreferences = ref.watch(listPreferencesProvider);
 
     return Scaffold(
       backgroundColor: scaffoldBackgroundGlobalColor,
@@ -25,8 +29,8 @@ class WelcomeScreen extends ConsumerWidget {
                 WelcomeFirstPage(),
                 WelcomeFactoCardSecondPage(),
                 WelcomeStartThirdPage(),
-                WelcomePreferencesFourthPage(), // 3
-                WelcomeInteresesFifthPage(), // 4
+                WelcomePreferencesFourthPage(),
+                WelcomeInteresesFifthPage(),
               ],
             ),
           ),
@@ -46,10 +50,22 @@ class WelcomeScreen extends ConsumerWidget {
                             MaterialPageRoute(
                                 builder: (_) => const HomeScreen()));
 
-                        // TODO: Save preferences and categories
-
-                        SharedPreferences prefs =
+                        final SharedPreferences prefs =
                             await SharedPreferences.getInstance();
+
+                        //Guardamos la lista blanca de preferencias
+                        await prefs.setStringList('selectedPreferencesSaved',
+                            listSelectedPreferences);
+
+                        /*
+                            
+                    Future<List<String>> loadPreferences() async {
+                      final SharedPreferences prefs = await SharedPreferences.getInstance();
+                      return prefs.getStringList('selectedPreferences') ?? []; // Devuelve una lista vacía si no hay preferencias guardadas
+                    }
+
+                            */
+
                         await prefs.setBool('firstWelcome', false);
 
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -66,6 +82,15 @@ class WelcomeScreen extends ConsumerWidget {
                   : IconButton(
                       iconSize: 30,
                       onPressed: () {
+                        if (currentPage == 3 &&
+                            listSelectedPreferences.length + 1 < 5) {
+                          Fluttertoast.showToast(
+                            msg: "Selecciona al menos 5",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                          );
+                        }
+
                         pageController.nextPage(
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,

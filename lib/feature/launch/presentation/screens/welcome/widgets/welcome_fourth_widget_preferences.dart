@@ -1,6 +1,7 @@
 import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:factos/feature/home/presentation/provider/riverpod.dart';
-import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_category_widget.dart';
+import 'package:factos/feature/launch/presentation/provider/riverpod.dart';
+import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_filter_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,13 +16,25 @@ class WelcomePreferencesFourthPage extends ConsumerWidget {
     double width = MediaQuery.of(context).size.width;
 
     // Rescatar la lista depreferencias de la bd
-    final categories = [
+    final preferences = [
       'Sugerencias',
       'Lenguajes',
       'Desarrollo de escritorio',
       'Motivacional',
       'Desarrollo de videojuegos',
       'Historia',
+      'Ciencia',
+      'Tecnología',
+      'Arte',
+      'Música',
+      'Deportes',
+      'ABCD',
+      'EFGH',
+      'IJKLM',
+      'NOPQ',
+      'RSTU',
+      'VWX',
+      'YZ',
     ];
 
     return Column(
@@ -53,7 +66,7 @@ class WelcomePreferencesFourthPage extends ConsumerWidget {
                 ),
               ],
             ),
-            Text('Elige almenos 3',
+            Text('Elige almenos 5',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 11,
@@ -65,19 +78,107 @@ class WelcomePreferencesFourthPage extends ConsumerWidget {
           height: height * 0.02,
         ),
         Expanded(
-          child: Center(
-            child: Wrap(
-              spacing: 3,
-              runSpacing: 28,
-              alignment: WrapAlignment.center,
-              children: categories.map((category) {
-                return FactosCategoryWidget(
-                  categoryName: category,
-                  widgetSelected: true,
-                );
-              }).toList(),
-            ),
+          child: PageView.builder(
+            itemCount: (preferences.length / 25).ceil(),
+            itemBuilder: (context, index) {
+              return buildPreferencePage(preferences, index, height, ref);
+            },
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildProgressIndicator(int totalItems, int currentPage) {
+    int totalPages = (totalItems / 7).ceil();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(totalPages, (index) {
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 2),
+          width: 30,
+          height: 5,
+          decoration: BoxDecoration(
+            color: index == currentPage ? Colors.white : Colors.grey,
+            borderRadius: BorderRadius.circular(5),
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget buildPreferencePage(
+      List<String> preferences, int pageIndex, double height, WidgetRef ref) {
+    int start = pageIndex * 25;
+    int end =
+        (start + 25 < preferences.length) ? start + 25 : preferences.length;
+
+    final listSelectedPreferences = ref.watch(listPreferencesProvider);
+
+    return Column(
+      children: [
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          alignment: WrapAlignment.start,
+          children: preferences.getRange(start, end).map((namePreference) {
+            int index = preferences.indexOf(namePreference);
+            return GestureDetector(
+              onTap: () {
+                ref.read(preferencesProvider.notifier).togglePreference(index);
+
+                ref
+                    .read(listPreferencesProvider.notifier)
+                    .togglePreference(namePreference);
+
+                print(
+                    'Preferencias seleccionadas: ${listSelectedPreferences.join(', ')}');
+
+                print(
+                    'NUMERO DE PREFERENCIAS SELECCIONADAS: ${listSelectedPreferences.length + 1}');
+              },
+              child: SizedBox(
+                height: height * 0.05,
+                child: FactosFilterWidget(
+                  categoryName: namePreference,
+                  widgetSelected: ref.watch(preferencesProvider)[index],
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget buildCategoriaPage(List<String> categorias, int pageIndex,
+      double height, StateSetter setState, List<bool> selectedCategorias) {
+    int start = pageIndex * 7;
+    int end = (start + 7 < categorias.length) ? start + 7 : categorias.length;
+
+    return Column(
+      children: [
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          alignment: WrapAlignment.start,
+          children: categorias.getRange(start, end).map((category) {
+            int index = categorias.indexOf(category);
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedCategorias[index] = !selectedCategorias[index];
+                });
+              },
+              child: SizedBox(
+                height: height * 0.04,
+                child: FactosFilterWidget(
+                  categoryName: category,
+                  widgetSelected: selectedCategorias[index],
+                ),
+              ),
+            );
+          }).toList(),
         ),
       ],
     );

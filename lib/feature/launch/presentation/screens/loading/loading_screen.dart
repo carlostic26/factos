@@ -1,4 +1,5 @@
 import 'package:factos/feature/home/presentation/screens/home_screen.dart';
+import 'package:factos/feature/launch/presentation/provider/riverpod.dart';
 import 'package:factos/feature/launch/presentation/screens/loading/loading_barrel.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/welcome_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +19,8 @@ class LoadingScreen extends ConsumerWidget {
       ref.read(buttonState.notifier).enableButton();
       isLoaded = true;
     });
+
+    final factosCountAsync = ref.watch(maxFactosState);
 
     return Scaffold(
       body: Container(
@@ -42,10 +45,10 @@ class LoadingScreen extends ConsumerWidget {
                   animationDuration: 10000,
                   progressColor: Colors.blueGrey),
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   "Recopilando  ",
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -53,8 +56,16 @@ class LoadingScreen extends ConsumerWidget {
                       fontSize: 12,
                       fontFamily: 'Inter_ExtraLight.ttf'),
                 ),
-                CountingAnimation(endCount: 1225),
-                Text(
+                factosCountAsync.when(
+                  data: (count) => CountingAnimation(endCount: count),
+                  error: (error, stackTrace) => ErrorDisplay(
+                      error: error,
+                      onRetry: () {
+                        ref.read(maxFactosState.notifier).updateFactosCount();
+                      }),
+                  loading: () => LoadingDisplay(),
+                ),
+                const Text(
                   " factos...",
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -109,6 +120,57 @@ class LoadingScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ErrorDisplay extends StatelessWidget {
+  final Object error;
+  final VoidCallback onRetry;
+
+  const ErrorDisplay({Key? key, required this.error, required this.onRetry})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(Icons.error_outline, color: Colors.red, size: 60),
+        const SizedBox(height: 16),
+        Text(
+          '...',
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          error.toString(),
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        const SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: onRetry,
+          child: const Text('...'),
+        ),
+      ],
+    );
+  }
+}
+
+class LoadingDisplay extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const CircularProgressIndicator(),
+        const SizedBox(height: 16),
+        Text(
+          'Cargando conteo de factos...',
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+      ],
     );
   }
 }

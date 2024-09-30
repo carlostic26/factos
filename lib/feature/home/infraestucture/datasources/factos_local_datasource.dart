@@ -1,4 +1,3 @@
-import 'package:factos/core/error/failures.dart';
 import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
@@ -8,6 +7,7 @@ abstract class FactoLocalDatasource {
   //repository
   Future<List<FactoModel>> getAllFactoList();
   Future<List<FactoModel>> getListPreferenceFacto(category);
+  Future<int> countFactos();
 }
 
 class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
@@ -57,6 +57,9 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
           // tengo un script sql, que debe insertar: un titulo, cateogoria, descripcion corta de 30 palabras como maximo, nombre de fuente de informacion, y un enlace a dicha fuente. Crea 5 INSERTS de datos reales y verdaderos, 2 para categoria "Historia", y 3 para "Curiosidades"
 
           /* '("Titulo...", "Fundadores", "category", "none", "descrip", "namefont", "linkfont", "linkImg"),' */
+
+//prefenrecia: Historia
+//categoria: Desarrollo de esritorio
 
           const String addFacto = ''
               'INSERT INTO factos(title, preference, category, language, description, nameFont, linkFont, linkImg) VALUES '
@@ -205,7 +208,12 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
     return queryResult.map((e) => FactoModel.fromJson(e)).toList();
   }
 
-  @override
+  Future<int> countFactos() async {
+    final db = await initDb();
+    final result = await db.rawQuery('SELECT COUNT(*) as count FROM factos');
+    return Sqflite.firstIntValue(result) ?? 0;
+  }
+
   Future<List<FactoModel>> getFactoListFilter() async {
     //TODO: Llamar shp y obtener la lista string de las preferencias seleccionadas por el usuario
     // dicha lista se usará en el siguiente select
