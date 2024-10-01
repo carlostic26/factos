@@ -30,7 +30,7 @@ class WelcomeScreen extends ConsumerWidget {
                 WelcomeFactoCardSecondPage(),
                 WelcomeStartThirdPage(),
                 WelcomePreferencesFourthPage(),
-                WelcomeInteresesFifthPage(),
+                WelcomeCategoryFifthPage(),
               ],
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:factos/feature/launch/presentation/provider/interests_user_provider.dart';
 import 'package:factos/feature/launch/presentation/provider/riverpod.dart';
 import 'package:factos/feature/launch/presentation/screens/loading/loading_barrel.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_filter_widget.dart';
@@ -14,24 +15,18 @@ class WelcomeInteresesFifthPage extends ConsumerWidget {
 
     final selectedCategories = ref.watch(categoriesProvider);
 
-    //TODO: Recibr las categorias con un provider de riverpod en lugar de la lista de abajo
+    // ignore: unused_local_variable
+    List<String> categoryList = [];
 
-    // Lista de nombres de categorías
-    final categories = [
-      'Desarrollo Web',
-      'Desarrollo Móvil',
-      'Inteligencia artificial',
-      'IoT',
-      'Desarrollo de escritorio',
-      'Desarrollo de videojuegos',
-      'Desarrollo Móvil',
-      'Inteligencia artificial',
-      'IoT',
-      'Desarrollo de escritorio',
-      'Motivacional',
-      'Desarrollo de videojuegos',
-      'Historia',
-    ];
+    final categoriesAsyncValue = ref.watch(categoriesFactoProvider);
+
+    Future<void> loadCategories() async {
+      final categoriesAsyncValue = ref.read(categoriesProvider.notifier);
+
+      categoryList = categoriesAsyncValue as List<String>;
+    }
+
+    loadCategories();
 
     return Column(
       children: [
@@ -72,14 +67,20 @@ class WelcomeInteresesFifthPage extends ConsumerWidget {
         SizedBox(
           height: height * 0.02,
         ),
-        Expanded(
-          child: PageView.builder(
-            itemCount: (categories.length / 25).ceil(),
-            itemBuilder: (context, index) {
-              return buildPreferencePage(categories, index, height, ref);
-            },
-          ),
-        ),
+        categoriesAsyncValue.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (err, stack) => Center(child: Text('Error: $err')),
+            data: (categoryList) {
+              return Expanded(
+                child: PageView.builder(
+                  itemCount: (categoryList.length / 25).ceil(),
+                  itemBuilder: (context, index) {
+                    return buildPreferencePage(
+                        categoryList, index, height, ref);
+                  },
+                ),
+              );
+            }),
       ],
     );
   }

@@ -1,5 +1,6 @@
 import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:factos/feature/home/presentation/provider/riverpod.dart';
+import 'package:factos/feature/launch/presentation/provider/interests_user_provider.dart';
 import 'package:factos/feature/launch/presentation/provider/riverpod.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_filter_widget.dart';
 import 'package:flutter/material.dart';
@@ -15,27 +16,20 @@ class WelcomePreferencesFourthPage extends ConsumerWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    // Rescatar la lista depreferencias de la bd
-    final preferences = [
-      'Sugerencias',
-      'Lenguajes',
-      'Desarrollo de escritorio',
-      'Motivacional',
-      'Desarrollo de videojuegos',
-      'Historia',
-      'Ciencia',
-      'Tecnología',
-      'Arte',
-      'Música',
-      'Deportes',
-      'ABCD',
-      'EFGH',
-      'IJKLM',
-      'NOPQ',
-      'RSTU',
-      'VWX',
-      'YZ',
-    ];
+    final selectedPreferences = ref.watch(preferencesProvider);
+
+    // ignore: unused_local_variable
+    List<String> preferenceList = [];
+
+    final preferenceAsyncValue = ref.watch(preferenceFactoProvider);
+
+    Future<void> loadCategories() async {
+      final preferenceAsyncValue = ref.read(preferencesProvider.notifier);
+
+      preferenceList = preferenceAsyncValue as List<String>;
+    }
+
+    loadCategories();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,14 +71,20 @@ class WelcomePreferencesFourthPage extends ConsumerWidget {
         SizedBox(
           height: height * 0.02,
         ),
-        Expanded(
-          child: PageView.builder(
-            itemCount: (preferences.length / 25).ceil(),
-            itemBuilder: (context, index) {
-              return buildPreferencePage(preferences, index, height, ref);
-            },
-          ),
-        ),
+        preferenceAsyncValue.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (err, stack) => Center(child: Text('Error: $err')),
+            data: (preferenceList) {
+              return Expanded(
+                child: PageView.builder(
+                  itemCount: (preferenceList.length / 25).ceil(),
+                  itemBuilder: (context, index) {
+                    return buildPreferencePage(
+                        preferenceList, index, height, ref);
+                  },
+                ),
+              );
+            }),
       ],
     );
   }

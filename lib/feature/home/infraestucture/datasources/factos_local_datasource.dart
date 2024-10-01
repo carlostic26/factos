@@ -8,6 +8,8 @@ abstract class FactoLocalDatasource {
   Future<List<FactoModel>> getAllFactoList();
   Future<List<FactoModel>> getListPreferenceFacto(category);
   Future<int> countFactos();
+  Future<List<String>> getAllPreferenceFacto();
+  Future<List<String>> getAllCategoryFacto();
 }
 
 class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
@@ -23,7 +25,7 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
     try {
       String path = await getDatabasesPath();
       return openDatabase(
-        join(path, 'facto_database_007.db'),
+        join(path, 'facto_database_008.db'),
         onCreate: (db, version) async {
           const String sql = ''
               'CREATE TABLE factos ('
@@ -74,7 +76,7 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
               //
               '("El dinosaurio de las computadoras", "Historia", "Desarrollo de software", "none", "Ojo: en 1945, nació ENIAC, una de las primeras bestias programables electrónicas. Esta mole ocupaba una habitación entera y pesaba 27 toneladas. ¡Y tú quejándote de tu portátil de 2 kilos!", "IBM", "https://www.ibm.com/history/eniac", "https://blogger.googleusercontent.com/img/a/AVvXsEiVt5fOefXi19phzuiWequeCPfU1dEgGJcYGDsEqpCDRewqIpvBzR8EwDrB456mIdeQSd1KwBkgTVh44Hwh4NP2jiZoHTRfRivzYKe8SC0SFCSMr7JshIbeteynzo49sBnXpZyJ26Th2f_cLxcg6b3hDtcrZoCp3YTe7BebhfA-x4_UQQvFsZZ1kBPH"),'
               //
-              '("El lenguaje que cambió el juego", "Historia", "Lenguajes, Dessarrollo de software", "none", "Esto es una locura: en 1957, los genios de IBM crearon Fortran, el primer lenguaje de programación de alto nivel. Antes de esto, programar era como hablar con la máquina en su idioma. Fortran fue como inventar el esperanto para computadoras. ¡Un game changer total!", "Computer History Museum", "https://www.computerhistory.org/blog/fortran-the-first-high-level-language/", "https://blogger.googleusercontent.com/img/a/AVvXsEh1-FhPxmZhPEJSPM_9o7vGnFmsyQtTi-F7q8zPGvfqIeF0BJp5hOYIl2-i8q-9bQxHhxqKknafbidlARZ5g_Mes2f2VtQRbqYE0-PRb_H128cB1L5oAUtL9fC4aFBRouaFS-woyA0OfW2Yg9I4Sik8hcxcFlvP7-KEVMn1uHpPXqixpeQ3lGLZWE2A"),'
+              '("El lenguaje que cambió el juego", "Historia", "Lenguajes, Desarrollo de software", "none", "Esto es una locura: en 1957, los genios de IBM crearon Fortran, el primer lenguaje de programación de alto nivel. Antes de esto, programar era como hablar con la máquina en su idioma. Fortran fue como inventar el esperanto para computadoras. ¡Un game changer total!", "Computer History Museum", "https://www.computerhistory.org/blog/fortran-the-first-high-level-language/", "https://blogger.googleusercontent.com/img/a/AVvXsEh1-FhPxmZhPEJSPM_9o7vGnFmsyQtTi-F7q8zPGvfqIeF0BJp5hOYIl2-i8q-9bQxHhxqKknafbidlARZ5g_Mes2f2VtQRbqYE0-PRb_H128cB1L5oAUtL9fC4aFBRouaFS-woyA0OfW2Yg9I4Sik8hcxcFlvP7-KEVMn1uHpPXqixpeQ3lGLZWE2A"),'
               //
 
               // Fundadores
@@ -212,6 +214,37 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
     final db = await initDb();
     final result = await db.rawQuery('SELECT COUNT(*) as count FROM factos');
     return Sqflite.firstIntValue(result) ?? 0;
+  }
+
+  Future<List<String>> getAllPreferenceFacto() async {
+    final db = await initDb();
+    final List<Map<String, dynamic>> queryResult =
+        await db.rawQuery('SELECT preference FROM factos');
+
+    return queryResult
+        .map((map) => map['preference'] as String)
+        .toSet() // Convierte a Set para eliminar duplicados
+        .toList() // Convierte de vuelta a List
+      ..sort(); // ordena la lista alfabéticamente
+  }
+
+  Future<List<String>> getAllCategoryFacto() async {
+    final db = await initDb();
+    final List<Map<String, dynamic>> queryResult =
+        await db.rawQuery('SELECT category FROM factos');
+
+    return queryResult
+        .map((map) => map['category'] as String)
+        .expand((category) =>
+            category.split(',')) // Divide las preferencias con comas
+        .map((word) =>
+            word.trim()) // Elimina espacios en blanco al inicio y final
+        .where((word) =>
+            word.isNotEmpty &&
+            !word.contains(',')) // Filtra palabras vacías y con comas
+        .toSet() // Convierte a Set para eliminar duplicados
+        .toList() // Convierte de vuelta a List
+      ..sort(); // Ordena la lista alfabéticamente
   }
 
   Future<List<FactoModel>> getFactoListFilter() async {
