@@ -35,8 +35,8 @@ class MaxFactosNotifier extends AsyncNotifier<int> {
 }
 
 // Proveedor para las preferencias
-class listPreferencesNotifier extends StateNotifier<List<String>> {
-  listPreferencesNotifier() : super([]);
+class ListPreferencesNotifier extends StateNotifier<List<String>> {
+  ListPreferencesNotifier() : super([]);
 
   // Método para agregar o eliminar preferencias
   void togglePreference(String preference) {
@@ -52,13 +52,15 @@ class listPreferencesNotifier extends StateNotifier<List<String>> {
 
 // Proveedor para las preferencias
 final listPreferencesProvider =
-    StateNotifierProvider<listPreferencesNotifier, List<String>>((ref) {
-  return listPreferencesNotifier();
+    StateNotifierProvider<ListPreferencesNotifier, List<String>>((ref) {
+  return ListPreferencesNotifier();
 });
 
-// Proveedor para las categorias
-class listCategoryNotifier extends StateNotifier<List<String>> {
-  listCategoryNotifier() : super([]);
+//-------------------------------
+
+// Provider de Categorias
+class ListCategoriesProvider extends StateNotifier<List<String>> {
+  ListCategoriesProvider() : super([]);
 
   // Método para agregar o eliminar preferencias
   void toggleCategory(String category) {
@@ -72,10 +74,10 @@ class listCategoryNotifier extends StateNotifier<List<String>> {
   }
 }
 
-// Proveedor para las preferencias
+// Proveedor para las categorias
 final listCategoryProvider =
-    StateNotifierProvider<listCategoryNotifier, List<String>>((ref) {
-  return listCategoryNotifier();
+    StateNotifierProvider<ListCategoriesProvider, List<String>>((ref) {
+  return ListCategoriesProvider();
 });
 
 //-------
@@ -127,7 +129,7 @@ class CategoriesNotifier extends StateNotifier<List<bool>> {
   }
 }
 
-final categoriesProvider =
+final categoriesProviderDatabase =
     StateNotifierProvider<CategoriesNotifier, List<bool>>((ref) {
   return CategoriesNotifier();
 });

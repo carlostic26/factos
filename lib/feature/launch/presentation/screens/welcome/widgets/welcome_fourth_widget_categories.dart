@@ -1,10 +1,11 @@
+import 'package:factos/feature/launch/presentation/provider/count_category_selected_provider.dart';
 import 'package:factos/feature/launch/presentation/provider/interests_user_provider.dart';
 import 'package:factos/feature/launch/presentation/provider/riverpod.dart';
 import 'package:factos/feature/launch/presentation/screens/loading/loading_barrel.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_filter_widget.dart';
 
-class WelcomeInteresesFifthPage extends ConsumerWidget {
-  const WelcomeInteresesFifthPage({super.key});
+class WelcomeCategoryFourthPage extends ConsumerWidget {
+  const WelcomeCategoryFourthPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -13,7 +14,7 @@ class WelcomeInteresesFifthPage extends ConsumerWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    final selectedCategories = ref.watch(categoriesProvider);
+    //final selectedCategories = ref.watch(categoriesProvider);
 
     // ignore: unused_local_variable
     List<String> categoryList = [];
@@ -21,7 +22,8 @@ class WelcomeInteresesFifthPage extends ConsumerWidget {
     final categoriesAsyncValue = ref.watch(categoriesFactoProvider);
 
     Future<void> loadCategories() async {
-      final categoriesAsyncValue = ref.read(categoriesProvider.notifier);
+      final categoriesAsyncValue =
+          ref.read(categoriesProviderDatabase.notifier);
 
       categoryList = categoriesAsyncValue as List<String>;
     }
@@ -46,7 +48,7 @@ class WelcomeInteresesFifthPage extends ConsumerWidget {
                 Spacer(),
                 Padding(
                   padding: EdgeInsets.only(right: 35),
-                  child: Text('2/2',
+                  child: Text('1/2',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         color: titleTextColor,
@@ -103,12 +105,14 @@ class WelcomeInteresesFifthPage extends ConsumerWidget {
     );
   }
 
-  Widget buildPreferencePage(
-      List<String> categories, int pageIndex, double height, WidgetRef ref) {
+  Widget buildPreferencePage(List<String> categoryListDatabase, int pageIndex,
+      double height, WidgetRef ref) {
     int start = pageIndex * 25;
-    int end = (start + 25 < categories.length) ? start + 25 : categories.length;
+    int end = (start + 25 < categoryListDatabase.length)
+        ? start + 25
+        : categoryListDatabase.length;
 
-    final listSelectedCategories = ref.watch(listCategoryProvider);
+    // final numCategoriesSelected = ;
 
     return Column(
       children: [
@@ -116,20 +120,28 @@ class WelcomeInteresesFifthPage extends ConsumerWidget {
           spacing: 10,
           runSpacing: 10,
           alignment: WrapAlignment.start,
-          children: categories.getRange(start, end).map((category) {
-            int index = categories.indexOf(category);
+          children: categoryListDatabase.getRange(start, end).map((category) {
+            int index = categoryListDatabase.indexOf(category);
             return GestureDetector(
               onTap: () {
-                ref.read(categoriesProvider.notifier).togglePreference(index);
+                ref
+                    .read(categoriesProviderDatabase.notifier)
+                    .togglePreference(index);
+
+                ref
+                    .read(countCategorySelected.notifier)
+                    .update((state) => state + 1);
+
+                final numSelectedCategories = ref.watch(countCategorySelected);
 
                 print(
-                    'NUMERO DE CATEGORIAS SELECCIONADAS: ${listSelectedCategories.length}');
+                    '4th page NUM CATE SELECCIONADAS: $numSelectedCategories');
               },
               child: SizedBox(
                 height: height * 0.05,
                 child: FactosFilterWidget(
                   categoryName: category,
-                  widgetSelected: ref.watch(categoriesProvider)[index],
+                  widgetSelected: ref.watch(categoriesProviderDatabase)[index],
                 ),
               ),
             );

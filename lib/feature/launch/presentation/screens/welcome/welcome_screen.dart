@@ -1,5 +1,5 @@
 import 'package:factos/feature/launch/presentation/provider/riverpod.dart';
-import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_fifth_widget_intereses.dart';
+import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_fifth_widget_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,6 +14,7 @@ class WelcomeScreen extends ConsumerWidget {
     final currentPage = ref.watch(pageProvider);
 
     final listSelectedPreferences = ref.watch(listPreferencesProvider);
+    final listSelectedCategories = ref.watch(listCategoryProvider);
 
     return Scaffold(
       backgroundColor: scaffoldBackgroundGlobalColor,
@@ -29,8 +30,8 @@ class WelcomeScreen extends ConsumerWidget {
                 WelcomeFirstPage(),
                 WelcomeFactoCardSecondPage(),
                 WelcomeStartThirdPage(),
-                WelcomePreferencesFourthPage(),
-                WelcomeCategoryFifthPage(),
+                WelcomeCategoryFourthPage(),
+                WelcomePreferencesFifthPage(),
               ],
             ),
           ),
@@ -83,6 +84,15 @@ class WelcomeScreen extends ConsumerWidget {
                       iconSize: 30,
                       onPressed: () {
                         if (currentPage == 3 &&
+                            listSelectedCategories.length + 1 < 3) {
+                          Fluttertoast.showToast(
+                            msg: "Selecciona al menos 3",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                          );
+                        }
+
+                        if (currentPage == 4 &&
                             listSelectedPreferences.length + 1 < 5) {
                           Fluttertoast.showToast(
                             msg: "Selecciona al menos 5",

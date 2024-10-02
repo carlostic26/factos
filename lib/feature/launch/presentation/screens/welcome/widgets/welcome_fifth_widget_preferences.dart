@@ -6,8 +6,8 @@ import 'package:factos/feature/launch/presentation/screens/welcome/widgets/facto
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class WelcomePreferencesFourthPage extends ConsumerWidget {
-  const WelcomePreferencesFourthPage({super.key});
+class WelcomePreferencesFifthPage extends ConsumerWidget {
+  const WelcomePreferencesFifthPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -50,7 +50,7 @@ class WelcomePreferencesFourthPage extends ConsumerWidget {
                 Spacer(),
                 Padding(
                   padding: EdgeInsets.only(right: 35),
-                  child: Text('1/2',
+                  child: Text('2/2',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         color: titleTextColor,

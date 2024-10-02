@@ -2,7 +2,7 @@ export 'package:factos/core/config/styles/constants/theme_data.dart';
 export 'package:factos/feature/home/presentation/provider/riverpod.dart';
 export 'package:factos/feature/home/presentation/screens/home_screen.dart';
 export 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_first_page.dart';
-export 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_fourth_widget_preferences.dart';
+export 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_fourth_widget_categories.dart';
 export 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_second_page_facto_card.dart';
 export 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_third_page_start.dart';
 export 'package:flutter/material.dart';
