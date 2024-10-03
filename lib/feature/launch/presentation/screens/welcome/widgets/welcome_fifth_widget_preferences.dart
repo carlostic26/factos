@@ -1,7 +1,8 @@
 import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:factos/feature/home/presentation/provider/riverpod.dart';
+
 import 'package:factos/feature/launch/presentation/provider/interests_user_provider.dart';
-import 'package:factos/feature/launch/presentation/provider/riverpod.dart';
+import 'package:factos/feature/launch/presentation/provider/preference_selected_provider.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_filter_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,20 +17,21 @@ class WelcomePreferencesFifthPage extends ConsumerWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    final selectedPreferences = ref.watch(preferencesProvider);
+    //final selectedPreferences = ref.watch(preferencesProviderDatabase);
 
     // ignore: unused_local_variable
     List<String> preferenceList = [];
 
     final preferenceAsyncValue = ref.watch(preferenceFactoProvider);
 
-    Future<void> loadCategories() async {
-      final preferenceAsyncValue = ref.read(preferencesProvider.notifier);
+    Future<void> loadPreferences() async {
+      final preferenceAsyncValue =
+          ref.read(preferencesProviderDatabase.notifier);
 
       preferenceList = preferenceAsyncValue as List<String>;
     }
 
-    loadCategories();
+    loadPreferences();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,13 +109,12 @@ class WelcomePreferencesFifthPage extends ConsumerWidget {
     );
   }
 
-  Widget buildPreferencePage(
-      List<String> preferences, int pageIndex, double height, WidgetRef ref) {
+  Widget buildPreferencePage(List<String> preferencesListDatabase,
+      int pageIndex, double height, WidgetRef ref) {
     int start = pageIndex * 25;
-    int end =
-        (start + 25 < preferences.length) ? start + 25 : preferences.length;
-
-    final listSelectedPreferences = ref.watch(listPreferencesProvider);
+    int end = (start + 25 < preferencesListDatabase.length)
+        ? start + 25
+        : preferencesListDatabase.length;
 
     return Column(
       children: [
@@ -121,27 +122,33 @@ class WelcomePreferencesFifthPage extends ConsumerWidget {
           spacing: 10,
           runSpacing: 10,
           alignment: WrapAlignment.start,
-          children: preferences.getRange(start, end).map((namePreference) {
-            int index = preferences.indexOf(namePreference);
+          children: preferencesListDatabase
+              .getRange(start, end)
+              .map((namePreference) {
+            int index = preferencesListDatabase.indexOf(namePreference);
             return GestureDetector(
               onTap: () {
-                ref.read(preferencesProvider.notifier).togglePreference(index);
-
                 ref
-                    .read(listPreferencesProvider.notifier)
-                    .togglePreference(namePreference);
+                    .read(preferencesProviderDatabase.notifier)
+                    .togglePreferenceFromDb(index);
+
+                //este ref envia las preferencias que el usuario vaya eligiendo a la lista blanca
+                ref
+                    .read(listPreferencesProviderToSharedPreferences.notifier)
+                    .togglePreferenceToSharedPreferences(namePreference);
+
+                final countListPreferences = ref
+                    .watch(listPreferencesProviderToSharedPreferences)
+                    .length;
 
                 print(
-                    'Preferencias seleccionadas: ${listSelectedPreferences.join(', ')}');
-
-                print(
-                    'NUMERO DE PREFERENCIAS SELECCIONADAS: ${listSelectedPreferences.length + 1}');
+                    'CONTADOR DE PREFERENCIAS SELECCIONADAS: $countListPreferences');
               },
               child: SizedBox(
                 height: height * 0.05,
                 child: FactosFilterWidget(
                   categoryName: namePreference,
-                  widgetSelected: ref.watch(preferencesProvider)[index],
+                  widgetSelected: ref.watch(preferencesProviderDatabase)[index],
                 ),
               ),
             );

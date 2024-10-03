@@ -34,54 +34,6 @@ class MaxFactosNotifier extends AsyncNotifier<int> {
   }
 }
 
-// Proveedor para las preferencias
-class ListPreferencesNotifier extends StateNotifier<List<String>> {
-  ListPreferencesNotifier() : super([]);
-
-  // Método para agregar o eliminar preferencias
-  void togglePreference(String preference) {
-    if (state.contains(preference)) {
-      // Si ya existe, eliminarla
-      state = state.where((p) => p != preference).toList();
-    } else {
-      // Si no existe, agregarla
-      state = [...state, preference];
-    }
-  }
-}
-
-// Proveedor para las preferencias
-final listPreferencesProvider =
-    StateNotifierProvider<ListPreferencesNotifier, List<String>>((ref) {
-  return ListPreferencesNotifier();
-});
-
-//-------------------------------
-
-// Provider de Categorias
-class ListCategoriesProvider extends StateNotifier<List<String>> {
-  ListCategoriesProvider() : super([]);
-
-  // Método para agregar o eliminar preferencias
-  void toggleCategory(String category) {
-    if (state.contains(category)) {
-      // Si ya existe, eliminarla
-      state = state.where((p) => p != category).toList();
-    } else {
-      // Si no existe, agregarla
-      state = [...state, category];
-    }
-  }
-}
-
-// Proveedor para las categorias
-final listCategoryProvider =
-    StateNotifierProvider<ListCategoriesProvider, List<String>>((ref) {
-  return ListCategoriesProvider();
-});
-
-//-------
-
 final animationControllerProvider = Provider.autoDispose((ref) {
   final controller = AnimationController(
     duration: const Duration(seconds: 9),
@@ -105,31 +57,3 @@ final animationValueProvider = Provider.family.autoDispose((ref, int endCount) {
 });
 
 final textColorProvider = Provider((ref) => Colors.white);
-
-class PreferencesNotifier extends StateNotifier<List<bool>> {
-  PreferencesNotifier() : super(List.generate(18, (index) => false));
-
-  void togglePreference(int index) {
-    state[index] = !state[index];
-    state = List.from(state);
-  }
-}
-
-final preferencesProvider =
-    StateNotifierProvider<PreferencesNotifier, List<bool>>((ref) {
-  return PreferencesNotifier();
-});
-
-class CategoriesNotifier extends StateNotifier<List<bool>> {
-  CategoriesNotifier() : super(List.generate(18, (index) => false));
-
-  void togglePreference(int index) {
-    state[index] = !state[index];
-    state = List.from(state);
-  }
-}
-
-final categoriesProviderDatabase =
-    StateNotifierProvider<CategoriesNotifier, List<bool>>((ref) {
-  return CategoriesNotifier();
-});

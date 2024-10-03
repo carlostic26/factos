@@ -1,6 +1,5 @@
-import 'package:factos/feature/launch/presentation/provider/count_category_selected_provider.dart';
+import 'package:factos/feature/launch/presentation/provider/category_selected_provider.dart';
 import 'package:factos/feature/launch/presentation/provider/interests_user_provider.dart';
-import 'package:factos/feature/launch/presentation/provider/riverpod.dart';
 import 'package:factos/feature/launch/presentation/screens/loading/loading_barrel.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_filter_widget.dart';
 
@@ -9,15 +8,10 @@ class WelcomeCategoryFourthPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentPage = ref.watch(pageProvider);
-
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-
-    //final selectedCategories = ref.watch(categoriesProvider);
 
     // ignore: unused_local_variable
-    List<String> categoryList = [];
+    List<String> categoryListFromDatabase = [];
 
     final categoriesAsyncValue = ref.watch(categoriesFactoProvider);
 
@@ -25,7 +19,7 @@ class WelcomeCategoryFourthPage extends ConsumerWidget {
       final categoriesAsyncValue =
           ref.read(categoriesProviderDatabase.notifier);
 
-      categoryList = categoriesAsyncValue as List<String>;
+      categoryListFromDatabase = categoriesAsyncValue as List<String>;
     }
 
     loadCategories();
@@ -112,35 +106,36 @@ class WelcomeCategoryFourthPage extends ConsumerWidget {
         ? start + 25
         : categoryListDatabase.length;
 
-    // final numCategoriesSelected = ;
-
     return Column(
       children: [
         Wrap(
           spacing: 10,
           runSpacing: 10,
           alignment: WrapAlignment.start,
-          children: categoryListDatabase.getRange(start, end).map((category) {
-            int index = categoryListDatabase.indexOf(category);
+          children:
+              categoryListDatabase.getRange(start, end).map((nameCategory) {
+            int index = categoryListDatabase.indexOf(nameCategory);
             return GestureDetector(
               onTap: () {
                 ref
                     .read(categoriesProviderDatabase.notifier)
-                    .togglePreference(index);
+                    .toggleCategoryFromDb(index);
 
+                //este ref envia las categorias que el usuario vaya eligiendo a la lista blanca
                 ref
-                    .read(countCategorySelected.notifier)
-                    .update((state) => state + 1);
+                    .read(listCategoryProviderToSharedPreferences.notifier)
+                    .toggleCategoryToSharedPreferences(nameCategory);
 
-                final numSelectedCategories = ref.watch(countCategorySelected);
+                final countListCategories =
+                    ref.watch(listCategoryProviderToSharedPreferences);
 
                 print(
-                    '4th page NUM CATE SELECCIONADAS: $numSelectedCategories');
+                    'CONTADOR DE CATEGORIAS SELECCIONADAS: $countListCategories');
               },
               child: SizedBox(
                 height: height * 0.05,
                 child: FactosFilterWidget(
-                  categoryName: category,
+                  categoryName: nameCategory,
                   widgetSelected: ref.watch(categoriesProviderDatabase)[index],
                 ),
               ),
