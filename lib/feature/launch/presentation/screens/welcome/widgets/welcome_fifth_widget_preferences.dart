@@ -1,6 +1,5 @@
 import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:factos/feature/home/presentation/provider/riverpod.dart';
-
 import 'package:factos/feature/launch/presentation/provider/interests_user_provider.dart';
 import 'package:factos/feature/launch/presentation/provider/preference_selected_provider.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_filter_widget.dart';

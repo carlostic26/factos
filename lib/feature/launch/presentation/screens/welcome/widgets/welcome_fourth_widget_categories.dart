@@ -3,11 +3,42 @@ import 'package:factos/feature/launch/presentation/provider/interests_user_provi
 import 'package:factos/feature/launch/presentation/screens/loading/loading_barrel.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_filter_widget.dart';
 
-class WelcomeCategoryFourthPage extends ConsumerWidget {
+class WelcomeCategoryFourthPage extends ConsumerStatefulWidget {
   const WelcomeCategoryFourthPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _WelcomeCategoryFourthPageState createState() =>
+      _WelcomeCategoryFourthPageState();
+}
+
+class _WelcomeCategoryFourthPageState
+    extends ConsumerState<WelcomeCategoryFourthPage> {
+  List<String> categoryListFromDatabase = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadCategories();
+  }
+
+  Future<void> loadCategories() async {
+    // Cargar las categorías desde la base de datos
+    final categories = await ref.read(categoriesFactoProvider.future);
+    categoryListFromDatabase = categories;
+
+    // Cargar la lista blanca desde SharedPreferences
+    await ref
+        .read(listCategoryProviderToSharedPreferences.notifier)
+        .loadFromSharedPreferences();
+
+    // Actualizar el estado basado en las categorías guardadas en SharedPreferences
+    await ref
+        .read(categoriesProviderDatabase.notifier)
+        .loadStateFromSharedPreferences(categoryListFromDatabase);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
 
     // ignore: unused_local_variable
@@ -25,40 +56,43 @@ class WelcomeCategoryFourthPage extends ConsumerWidget {
     loadCategories();
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Padding(
           padding: EdgeInsets.fromLTRB(35, 130, 8, 1),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Row(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Selecciona tus categorías',
+                Row(
+                  children: [
+                    Text('Selecciona tus categorías',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: titleTextColor,
+                            fontSize: 16,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.bold)),
+                    Spacer(),
+                    Padding(
+                      padding: EdgeInsets.only(right: 35),
+                      child: Text('1/2',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: titleTextColor,
+                            fontSize: 16,
+                            fontFamily: 'Inter',
+                          )),
+                    ),
+                  ],
+                ),
+                Text('Elige almenos 3',
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                        color: titleTextColor,
-                        fontSize: 16,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.bold)),
-                Spacer(),
-                Padding(
-                  padding: EdgeInsets.only(right: 35),
-                  child: Text('1/2',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: titleTextColor,
-                        fontSize: 16,
-                        fontFamily: 'Inter',
-                      )),
-                ),
-              ],
-            ),
-            Text('Elige almenos 3',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontFamily: 'Inter',
-                )),
-          ]),
+                      fontSize: 12,
+                      fontFamily: 'Inter',
+                    )),
+              ]),
         ),
         SizedBox(
           height: height * 0.02,
@@ -71,8 +105,7 @@ class WelcomeCategoryFourthPage extends ConsumerWidget {
                 child: PageView.builder(
                   itemCount: (categoryList.length / 25).ceil(),
                   itemBuilder: (context, index) {
-                    return buildPreferencePage(
-                        categoryList, index, height, ref);
+                    return buildCategoryPage(categoryList, index, height, ref);
                   },
                 ),
               );
@@ -99,7 +132,7 @@ class WelcomeCategoryFourthPage extends ConsumerWidget {
     );
   }
 
-  Widget buildPreferencePage(List<String> categoryListDatabase, int pageIndex,
+  Widget buildCategoryPage(List<String> categoryListDatabase, int pageIndex,
       double height, WidgetRef ref) {
     int start = pageIndex * 25;
     int end = (start + 25 < categoryListDatabase.length)
@@ -124,7 +157,7 @@ class WelcomeCategoryFourthPage extends ConsumerWidget {
                 //este ref envia las categorias que el usuario vaya eligiendo a la lista blanca
                 ref
                     .read(listCategoryProviderToSharedPreferences.notifier)
-                    .toggleCategoryToSharedPreferences(nameCategory);
+                    .addCategoryToWhiteList(nameCategory);
 
                 final countListCategories =
                     ref.watch(listCategoryProviderToSharedPreferences);
@@ -137,39 +170,6 @@ class WelcomeCategoryFourthPage extends ConsumerWidget {
                 child: FactosFilterWidget(
                   categoryName: nameCategory,
                   widgetSelected: ref.watch(categoriesProviderDatabase)[index],
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-
-  Widget buildCategoriaPage(List<String> categorias, int pageIndex,
-      double height, StateSetter setState, List<bool> selectedCategorias) {
-    int start = pageIndex * 7;
-    int end = (start + 7 < categorias.length) ? start + 7 : categorias.length;
-
-    return Column(
-      children: [
-        Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          alignment: WrapAlignment.start,
-          children: categorias.getRange(start, end).map((category) {
-            int index = categorias.indexOf(category);
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  selectedCategorias[index] = !selectedCategorias[index];
-                });
-              },
-              child: SizedBox(
-                height: height * 0.04,
-                child: FactosFilterWidget(
-                  categoryName: category,
-                  widgetSelected: selectedCategorias[index],
                 ),
               ),
             );
