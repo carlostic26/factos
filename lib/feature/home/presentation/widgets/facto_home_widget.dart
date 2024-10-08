@@ -32,6 +32,26 @@ class FactoHomeWidget extends ConsumerWidget {
     final bookmarkedTitles = ref.watch(bookmarkedTitlesProvider);
     final isBookmarked = bookmarkedTitles.contains(title);
 
+    void handleClick(String value) {
+      switch (value) {
+        case 'Abrir con el navegador':
+          //launchUrlFacto(urlSourceFacto!);
+          break;
+        case 'Guardar Facto':
+          //guardarFacto(ref, context);
+          break;
+        case 'Copiar enlace':
+          //copyLink();
+          break;
+        case 'Compartir mediante...':
+          //shareUrl();
+          break;
+        case 'Reportar fallo':
+          //showDialogToReportProblem(context);
+          break;
+      }
+    }
+
     return Card(
       color: Colors.transparent,
       margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
@@ -122,16 +142,6 @@ class FactoHomeWidget extends ConsumerWidget {
                                         },
                                       ),
                                     ),
-                                    /*      SizedBox(
-                                      width: width * 0.05,
-                                      child: IconButton(
-                                        padding: EdgeInsets.zero,
-                                        color: subtitleTextColor,
-                                        iconSize: 18,
-                                        icon: const Icon(Icons.share),
-                                        onPressed: () {},
-                                      ),
-                                    ), */
                                     SizedBox(
                                       width: width * 0.05,
                                       child: IconButton(
@@ -148,7 +158,7 @@ class FactoHomeWidget extends ConsumerWidget {
                                               .toggleBookmark(title);
 
                                           if (!isBookmarked) {
-                                            _showSavedFactoSnackBar(
+                                            showSavedFactoSnackBar(
                                                 homeContext!);
                                           }
                                         },
@@ -161,7 +171,38 @@ class FactoHomeWidget extends ConsumerWidget {
                                         color: subtitleTextColor,
                                         iconSize: 18,
                                         icon: const Icon(Icons.more_vert),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          CustomPopupMenuButton(
+                                            width: width,
+                                            handleClick: handleClick,
+                                            subtitleTextColor: Colors.white,
+                                          );
+                                          /*           PopupMenuButton<String>(
+                                            icon: const Icon(
+                                              Icons.more_vert,
+                                              color: Colors.white,
+                                            ),
+                                            iconSize: 20,
+                                            onSelected: handleClick,
+                                            itemBuilder: (homeContext) {
+                                              return {
+                                                'Revisar fuente',
+                                                'Guardar',
+                                                'Compartir mediante...',
+                                                'Dejar de ver'
+                                              }.map((String choice) {
+                                                return PopupMenuItem<String>(
+                                                  value: choice,
+                                                  child: Text(
+                                                    choice,
+                                                    style: const TextStyle(
+                                                        color: Colors.black),
+                                                  ),
+                                                );
+                                              }).toList();
+                                            },
+                                          ); */
+                                        },
                                       ),
                                     ),
                                   ],
@@ -227,7 +268,7 @@ class FactoHomeWidget extends ConsumerWidget {
     print('LLAVES DE FACTOS DESPUES DE GUARDADAS: $titlesSaved');
   }
 
-  void _showSavedFactoSnackBar(BuildContext homeContext) {
+  void showSavedFactoSnackBar(BuildContext homeContext) {
     final snackBar = SnackBar(
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -255,5 +296,49 @@ class FactoHomeWidget extends ConsumerWidget {
     );
 
     ScaffoldMessenger.of(homeContext).showSnackBar(snackBar);
+  }
+}
+
+class CustomPopupMenuButton extends StatelessWidget {
+  final double width;
+  final Function(String) handleClick;
+  final Color subtitleTextColor;
+
+  const CustomPopupMenuButton({
+    Key? key,
+    required this.width,
+    required this.handleClick,
+    required this.subtitleTextColor,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width * 0.05,
+      child: PopupMenuButton<String>(
+        icon: Icon(
+          Icons.more_vert,
+          color: subtitleTextColor,
+          size: 18,
+        ),
+        onSelected: handleClick,
+        itemBuilder: (BuildContext context) {
+          return {
+            'Revisar fuente',
+            'Guardar',
+            'Compartir mediante...',
+            'Dejar de ver'
+          }.map((String choice) {
+            return PopupMenuItem<String>(
+              value: choice,
+              child: Text(
+                choice,
+                style: const TextStyle(color: Colors.black),
+              ),
+            );
+          }).toList();
+        },
+      ),
+    );
   }
 }

@@ -36,6 +36,7 @@ class WelcomeScreen extends ConsumerWidget {
         children: [
           Expanded(
             child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
               controller: pageController,
               onPageChanged: (int page) {
                 ref.read(pageProvider.notifier).setPage(page);

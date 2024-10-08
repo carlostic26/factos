@@ -1,6 +1,6 @@
-import 'package:factos/feature/home/presentation/screens/home_screen.dart';
 import 'package:factos/feature/launch/presentation/screens/loading/loading_barrel.dart';
-import 'package:flutter/material.dart';
+import 'package:factos/feature/saved/presentation/screens/saved_factos.dart';
+import 'package:factos/feature/webview/presentation/providers/loading_state_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mailto/mailto.dart';
@@ -8,27 +8,27 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class WebviewScreen extends StatelessWidget {
-  String? titleFacto;
-  String? descriptionFacto;
-  String? urlSourceFacto;
-  WebviewScreen(
-      {super.key,
-      required this.titleFacto,
-      required this.descriptionFacto,
-      this.urlSourceFacto});
+class WebviewScreen extends ConsumerWidget {
+  final String? titleFacto;
+  final String? descriptionFacto;
+  final String? urlSourceFacto;
+
+  WebviewScreen({
+    super.key,
+    required this.titleFacto,
+    required this.descriptionFacto,
+    this.urlSourceFacto,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    late WebViewController _controller;
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bookmarkedTitles = ref.watch(bookmarkedTitlesProvider);
+    final isBookmarked = bookmarkedTitles.contains(titleFacto);
 
-    _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setUserAgent(
-          'Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36')
-      ..loadRequest(Uri.parse(urlSourceFacto!));
+    final isLoading = ref.watch(loadingProvider);
+    final controller =
+        ref.watch(webViewControllerProvider(urlSourceFacto ?? ''));
+    double width = MediaQuery.of(context).size.width;
 
     void handleClick(String value) {
       switch (value) {
@@ -36,13 +36,13 @@ class WebviewScreen extends StatelessWidget {
           launchUrlFacto(urlSourceFacto!);
           break;
         case 'Guardar Facto':
-          //guardarFacto();
+          guardarFacto(ref, context);
           break;
         case 'Copiar enlace':
-          copiarEnlace();
+          copyLink();
           break;
         case 'Compartir mediante...':
-          compartirUrl();
+          shareUrl();
           break;
         case 'Reportar fallo':
           showDialogToReportProblem(context);
@@ -55,15 +55,19 @@ class WebviewScreen extends StatelessWidget {
         leading: SizedBox(
           width: width * 0.08,
           child: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.arrow_back_ios)),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back_ios),
+          ),
         ),
         title: Text(
-          '$titleFacto',
+          titleFacto ?? '',
           style: const TextStyle(
-              fontWeight: FontWeight.bold, fontFamily: 'Inter', fontSize: 16),
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Inter',
+            fontSize: 16,
+          ),
         ),
         actions: [
           PopupMenuButton<String>(
@@ -82,9 +86,6 @@ class WebviewScreen extends StatelessWidget {
                 'Reportar fallo'
               }.map((String choice) {
                 return PopupMenuItem<String>(
-                  textStyle: const TextStyle(
-                    color: Colors.black,
-                  ),
                   value: choice,
                   child: Text(
                     choice,
@@ -96,13 +97,28 @@ class WebviewScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: WebViewWidget(
-        controller: _controller,
+      body: Stack(
+        children: [
+          WebViewWidget(
+            controller: controller,
+          ),
+          if (isLoading)
+            Expanded(
+              child: Container(
+                color: Colors.black87,
+                child: const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
 
-  void copiarEnlace() {
+  void copyLink() {
     Clipboard.setData(ClipboardData(text: urlSourceFacto!));
     Fluttertoast.showToast(
       msg: "Enlace copiado",
@@ -111,7 +127,7 @@ class WebviewScreen extends StatelessWidget {
     );
   }
 
-  void compartirUrl() {
+  void shareUrl() {
     Share.share(
         '$descriptionFacto \n\nDescubre este y otros factos más usando la App Factos de Programación. Enlace a PlayStore aquí: url ');
   }
@@ -121,13 +137,11 @@ class WebviewScreen extends StatelessWidget {
   late bool valPagCaida2 = false;
   late bool valPagCaida3 = false;
   late bool valPagCaida4 = false;
-  late bool valPagCaida5 = false;
 
-  bool errorLinkCaido = false,
-      errorNoAds = false,
-      errorCursoIncorrecto = false,
-      errorNoPlayVideo = false,
-      errorPideCobro = false;
+  bool errorNoCarga = false,
+      errorNoEsElFacto = false,
+      errorWebCaida = false,
+      errorFaltanElementos = false;
 
   showDialogToReportProblem(BuildContext context) {
     showDialog(
@@ -137,7 +151,11 @@ class WebviewScreen extends StatelessWidget {
             return SimpleDialog(children: [
               const Text(
                 "¿Qué ha ocurrido?\n",
-                style: TextStyle(color: Colors.blue, fontSize: 20.0),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20.0,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
@@ -145,82 +163,92 @@ class WebviewScreen extends StatelessWidget {
               ),
               CheckboxListTile(
                   title: const Text(
-                    "La página web no carga.",
-                    style: TextStyle(fontSize: 15.0),
+                    "La web no carga",
+                    style: TextStyle(
+                        fontSize: 15.0,
+                        fontFamily: 'Inter',
+                        color: lightBackgroundTextColor),
                   ),
                   value: (valPagCaida1),
                   onChanged: (val) => setState(() {
-                        if (!errorLinkCaido) {
-                          messageMail[0] = ("\n- La página web no carga.\n");
-                          errorLinkCaido = true;
+                        if (!errorNoCarga) {
+                          messageMail[0] = ("\n- La web no carga\n");
+                          errorNoCarga = true;
                         } else {
                           messageMail[0] = "";
-                          errorLinkCaido = false;
+                          errorNoCarga = false;
                         }
-                        valPagCaida1 = valPagCaida1;
+                        valPagCaida1 = val!;
                       })),
               CheckboxListTile(
                   title: const Text(
-                    "La página no corresponde al Facto.",
-                    style: TextStyle(fontSize: 15.0),
+                    "La web no corresponde al Facto",
+                    style: TextStyle(
+                        fontSize: 15.0,
+                        fontFamily: 'Inter',
+                        color: lightBackgroundTextColor),
+                  ),
+                  value: (valPagCaida2),
+                  onChanged: (val) => setState(() {
+                        if (!errorNoEsElFacto) {
+                          messageMail[1] =
+                              ("\n- La web no corresponde al Facto.");
+                          errorNoEsElFacto = true;
+                        } else {
+                          messageMail[1] = "";
+                          errorNoEsElFacto = false;
+                        }
+                        valPagCaida2 = val!;
+                      })),
+              CheckboxListTile(
+                  title: const Text(
+                    "Página caida",
+                    style: TextStyle(
+                        fontSize: 15.0,
+                        fontFamily: 'Inter',
+                        color: lightBackgroundTextColor),
                   ),
                   value: (valPagCaida3),
                   onChanged: (val) => setState(() {
-                        if (!errorNoPlayVideo) {
-                          messageMail[2] =
-                              ("\n- La página no corresponde al Facto.");
-                          errorNoPlayVideo = true;
+                        if (!errorWebCaida) {
+                          messageMail[2] = ("\n- Página caida.\n");
+                          errorWebCaida = true;
                         } else {
                           messageMail[2] = "";
-                          errorNoPlayVideo = false;
+                          errorWebCaida = false;
                         }
                         valPagCaida3 = val!;
                       })),
               CheckboxListTile(
                   title: const Text(
-                    "Página caida.",
-                    style: TextStyle(fontSize: 15.0),
+                    "No se aprecian algunos elementos",
+                    style: TextStyle(
+                        fontSize: 15.0,
+                        fontFamily: 'Inter',
+                        color: lightBackgroundTextColor),
                   ),
                   value: (valPagCaida4),
                   onChanged: (val) => setState(() {
-                        if (!errorCursoIncorrecto) {
-                          messageMail[3] = ("\n- Página caida.\n");
-                          errorCursoIncorrecto = true;
+                        if (!errorFaltanElementos) {
+                          messageMail[3] =
+                              ("\n- No se aprecian algunos elementos");
+                          errorFaltanElementos = true;
                         } else {
                           messageMail[3] = "";
-                          errorCursoIncorrecto = false;
+                          errorFaltanElementos = false;
                         }
                         valPagCaida4 = val!;
-                      })),
-              CheckboxListTile(
-                  title: const Text(
-                    "No se aprecian algunos elementos.",
-                    style: TextStyle(fontSize: 15.0),
-                  ),
-                  value: (valPagCaida5),
-                  onChanged: (val) => setState(() {
-                        if (!errorPideCobro) {
-                          messageMail[4] =
-                              ("\n- No se aprecian algunos elementos.");
-                          errorPideCobro = true;
-                        } else {
-                          messageMail[4] = "";
-                          errorPideCobro = false;
-                        }
-                        valPagCaida5 = val!;
                       })),
               Container(
                 alignment: Alignment.topCenter,
                 padding: const EdgeInsets.symmetric(horizontal: 5.0),
                 child: ElevatedButton(
                     style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all<Color>(
+                          lightBackgroundTextColor),
                       shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
-                          side: const BorderSide(
-                            color: Colors.blueAccent,
-                            width: 2.0,
-                          ),
                         ),
                       ),
                     ),
@@ -239,27 +267,60 @@ class WebviewScreen extends StatelessWidget {
 
   Future _mailto() async {
     final mailtoLink = Mailto(
-      to: ['ticnoticos@gmail.com'],
-      cc: [''],
-      subject: 'Factos - Reporte de fallo',
-      // ignore: prefer_interpolation_to_compose_strings
-      body: "Quiero reportar un fallo de la app Factos: \n\n $titleFacto" +
-          messageMail[0] +
-          messageMail[1] +
-          messageMail[2] +
-          messageMail[3] +
-          messageMail[4],
-    );
+        to: ['ticnoticos@gmail.com'],
+        cc: [''],
+        subject: 'Factos - Reporte de fallo',
+        body:
+            // ignore: prefer_interpolation_to_compose_strings
+            "Quiero reportar un fallo de la app Factos en $titleFacto  \n\n " +
+                messageMail[0] +
+                messageMail[1] +
+                messageMail[2] +
+                messageMail[3]);
 
-    launchUrlFacto(mailtoLink as String);
-  }
-
-  void launchUrlFacto(String urlFacto) async {
-    final Uri url = Uri.parse(urlFacto.toString());
+    final Uri url = Uri.parse(mailtoLink.toString());
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  void launchUrlFacto(String urlFacto) async {}
+
+  void guardarFacto(WidgetRef ref, context) {
+    ref.read(bookmarkedTitlesProvider.notifier).toggleBookmark(titleFacto!);
+
+    showSavedFactoSnackBar(context);
+  }
+
+  void showSavedFactoSnackBar(BuildContext homeContext) {
+    final snackBar = SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text('Facto guardado'),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                homeContext,
+                MaterialPageRoute(
+                    builder: (homeContext) => const SavedFactos()),
+              );
+            },
+            child: const Text(
+              'Ver factos',
+              style: TextStyle(
+                color: Colors.blue,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+        ],
+      ),
+      duration: const Duration(seconds: 3),
+    );
+
+    ScaffoldMessenger.of(homeContext).showSnackBar(snackBar);
   }
 }

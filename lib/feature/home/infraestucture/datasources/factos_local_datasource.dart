@@ -25,7 +25,7 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
     try {
       String path = await getDatabasesPath();
       return openDatabase(
-        join(path, 'facto_database_008.db'),
+        join(path, 'facto_database_009.db'),
         onCreate: (db, version) async {
           const String sql = ''
               'CREATE TABLE factos ('

@@ -3,6 +3,7 @@ import 'package:factos/feature/launch/presentation/provider/preference_selected_
 import 'package:factos/feature/launch/presentation/screens/loading/loading_barrel.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_fifth_widget_preferences.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_fourth_widget_categories.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomInterestDialog extends ConsumerWidget {
@@ -113,6 +114,7 @@ class _CustomPreferenceDialogContentState
               children: [
                 Expanded(
                   child: PageView(
+                    physics: const NeverScrollableScrollPhysics(),
                     controller: _pageController,
                     onPageChanged: (index) {
                       setState(() {
@@ -136,32 +138,38 @@ class _CustomPreferenceDialogContentState
           left: width * 0.4,
           child: TextButton(
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              backgroundColor: WidgetStateProperty.all<Color>(Colors.white),
             ),
             onPressed: () async {
-              if (currentPage == 0) {
+              // si es primera pagina
+              if (currentPage == 0 &&
+                  listSelectedCategoriesToSharedPreferences.length > 2) {
                 _pageController.nextPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
                 );
-              } else {
-                final SharedPreferences prefs =
-                    await SharedPreferences.getInstance();
-
-                //Guardamos la lista blanca de preferencias
-                await prefs.setStringList('selectedPreferencesSaved',
-                    listSelectedPreferencesToSharedPreferences);
-
-                await prefs.setStringList('selectedCategoriesSaved',
-                    listSelectedCategoriesToSharedPreferences);
-
-                scaffoldMessenger.showSnackBar(
-                  const SnackBar(
-                    content: Text('Intereses guardados'),
-                  ),
+              } else if (currentPage == 0) {
+                Fluttertoast.showToast(
+                  msg: "Selecciona al menos 3",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
                 );
+              }
 
+              //si es segunda pagina
+              if (currentPage == 1 &&
+                  listSelectedPreferencesToSharedPreferences.length > 4) {
+                savePreferences(
+                    listSelectedPreferencesToSharedPreferences,
+                    listSelectedCategoriesToSharedPreferences,
+                    scaffoldMessenger);
                 Navigator.pop(context);
+              } else if (currentPage == 1) {
+                Fluttertoast.showToast(
+                  msg: "Selecciona al menos 5",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                );
               }
             },
             child: Text(
@@ -171,6 +179,24 @@ class _CustomPreferenceDialogContentState
           ),
         ),
       ],
+    );
+  }
+
+  void savePreferences(listSelectedPreferencesToSharedPreferences,
+      listSelectedCategoriesToSharedPreferences, scaffoldMessenger) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    //Guardamos la lista blanca de preferencias
+    await prefs.setStringList(
+        'selectedPreferencesSaved', listSelectedPreferencesToSharedPreferences);
+
+    await prefs.setStringList(
+        'selectedCategoriesSaved', listSelectedCategoriesToSharedPreferences);
+
+    scaffoldMessenger.showSnackBar(
+      const SnackBar(
+        content: Text('Intereses guardados'),
+      ),
     );
   }
 }
