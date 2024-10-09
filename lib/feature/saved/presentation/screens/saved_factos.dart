@@ -107,52 +107,71 @@ class _SavedFactosState extends State<SavedFactos> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: scaffoldBackgroundGlobalColor,
-      appBar: AppBar(
+      /*    appBar: AppBar(
         title: const Text(
           'Guardados',
           style: TextStyle(
               fontFamily: 'Inter', fontWeight: FontWeight.bold, fontSize: 16),
         ),
         centerTitle: true,
-      ),
-      body: Expanded(
-        child: FutureBuilder<List<FactoModel>>(
-            future: _facto,
-            builder: (BuildContext context,
-                AsyncSnapshot<List<FactoModel>> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                var itemFacto = snapshot.data ?? <FactoModel>[];
-
-                if (itemFacto.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      'Aun no tienes factos guardados',
-                      style: TextStyle(fontFamily: 'Inter'),
-                    ),
-                  );
+      ), */
+      body: CustomScrollView(
+        slivers: [
+          const SliverAppBar(
+            title: Text(
+              'Guardados',
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+            centerTitle: true,
+            pinned: true,
+            floating: false,
+            backgroundColor: scaffoldBackgroundGlobalColor,
+            foregroundColor: Colors.white,
+          ),
+          SliverToBoxAdapter(
+            child: FutureBuilder<List<FactoModel>>(
+              future: _facto,
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<FactoModel>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
                 } else {
-                  return ListView.builder(
-                    itemCount: itemFacto.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return FactoHomeWidget(
-                        title: itemFacto[index].title,
-                        description: itemFacto[index].description,
-                        nameFont: itemFacto[index].nameFont,
-                        linkFont: itemFacto[index].linkFont,
-                        linkImg: itemFacto[index].linkImg,
-                        homeContext: context,
-                      );
-                    },
-                  );
+                  var itemFacto = snapshot.data ?? <FactoModel>[];
+                  if (itemFacto.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        'Aun no tienes factos guardados',
+                        style: TextStyle(fontFamily: 'Inter'),
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: itemFacto.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return FactoHomeWidget(
+                          title: itemFacto[index].title,
+                          description: itemFacto[index].description,
+                          nameFont: itemFacto[index].nameFont,
+                          linkFont: itemFacto[index].linkFont,
+                          linkImg: itemFacto[index].linkImg,
+                          homeContext: context,
+                        );
+                      },
+                    );
+                  }
                 }
-              }
-            }),
+              },
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: _anchoredAdaptiveAd != null
           ? Container(

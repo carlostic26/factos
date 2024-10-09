@@ -108,16 +108,15 @@ class _ApoyaAppState extends State<ApoyaApp> {
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 10,
-            ),
             const Text(
               'Con tu ayuda podemos aumentar la cantidad de Factos de Programación para que te enteres de todos los datos relacionados a tu sector Tech. Te tomará solo unos segundos.',
               style: TextStyle(fontFamily: 'Inter'),
             ),
             const SizedBox(
-              height: 80,
+              height: 10,
             ),
             isRewardedShowed
                 ? SizedBox(
@@ -127,7 +126,7 @@ class _ApoyaAppState extends State<ApoyaApp> {
                         fit: BoxFit.fill,
                         'https://media3.giphy.com/media/FPF3LQS9qAYxyEHSql/200w.gif?cid=6c09b952ljxvmu5lsaiztlds24oqfakwbouu3wyovgu2gcxz&ep=v1_videos_related&rid=200w.gif&ct=v'),
                   )
-                : SizedBox(),
+                : const SizedBox(),
             const SizedBox(
               height: 50,
             ),

@@ -61,6 +61,23 @@ class _CustomPreferenceDialogContentState
     });
   }
 
+  // Future<void> loadCategories() async {
+  //   final categoriesNotifier = ref.read(categoriesProviderDatabase.notifier);
+  //   List<bool> categories =
+  //       categoriesNotifier.state; // Asumiendo que el estado es List<bool>
+
+  //   // Convertir List<bool> a List<String>
+  //   List<String> categoryStrings = categories.asMap().entries.map((entry) {
+  //     int index = entry.key;
+  //     bool value = entry.value;
+  //     return "Categoría ${index + 1}: ${value ? 'Sí' : 'No'}";
+  //   }).toList();
+
+  //   setState(() {
+  //     categoryListFromDatabase = categoryStrings;
+  //   });
+  // }
+
   Widget buildProgressIndicator() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),

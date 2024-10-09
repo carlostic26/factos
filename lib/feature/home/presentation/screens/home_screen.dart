@@ -4,12 +4,10 @@ import 'package:factos/feature/home/infraestucture/datasources/factos_local_data
 import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
 import 'package:factos/core/common/drawer/presentation/widgets/drawer_widget.dart';
 import 'package:factos/feature/home/presentation/widgets/custom_interest_dialog.dart';
-import 'package:factos/feature/home/presentation/widgets/facto_home_widget.dart';
-import 'package:factos/feature/launch/presentation/provider/category_selected_provider.dart';
+import 'package:factos/feature/home/presentation/widgets/home_searched_bar_factos_widget.dart';
+import 'package:factos/feature/home/presentation/widgets/preference_list_factos_widget.dart';
 import 'package:factos/feature/launch/presentation/provider/interests_user_provider.dart';
-import 'package:factos/feature/launch/presentation/screens/welcome/widgets/factos_filter_widget.dart';
-import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_fifth_widget_preferences.dart';
-import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_fourth_widget_categories.dart';
+import 'package:factos/feature/launch/presentation/provider/preference_selected_provider.dart';
 import 'package:factos/feature/search/presentation/provider/riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -61,26 +59,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return await handler.getAllFactoList();
   }
 
-/*   Future<void> getAllFactosBd() async {
-    handler = SQLiteFactoLocalDatasourceImpl();
-
-    handler.initDb().whenComplete(() async {
-      List<FactoModel> listAllFactos = await conectionAllFactos();
-      listAllFactos.shuffle();
-      setState(() {
-        _facto = Future.value(listAllFactos);
-
-        categoriesByDb = listAllFactos
-            .map((facto) => facto.category)
-            .where((category) => !category.contains(','))
-            .toSet()
-            .toList();
-
-        print('Categorias de la bd:  $categoriesByDb');
-      });
-    });
-  }
-  */
   Future<List<FactoModel>> conectionPreferenceFactos() async {
     return await handler.getListPreferenceFacto(preferenceSelected);
   }
@@ -159,6 +137,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     final isSearchBar = ref.watch(isSearchBarBoolean);
 
+    final pageHomePreferenceController = PageController();
+
+    final countListPreferences =
+        ref.watch(listPreferencesProviderToSharedPreferences).length;
+
+    bool pageChanged = false;
+
+    print('HOME CONTADOR DE PREFERENCIAS SELECCIONADAS: $countListPreferences');
+
     return Scaffold(
       backgroundColor: scaffoldBackgroundGlobalColor,
       appBar: AppBar(
@@ -201,11 +188,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         onPressed: () {
                           setState(() {
                             getCategoryFactosBd();
-
                             preferenceSelected = preference;
-
-                            print('PREFERENCE S: $preferenceSelected \n');
-                            print('PREFERENCE: $preference \n');
                           });
                         },
                         child: Text(
@@ -230,85 +213,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           Expanded(
             child: isSearchBar
-                ? FutureBuilder<List<FactoModel>>(
-                    future: Future.value(searchState.searchResults),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<FactoModel>> snapshot) {
-                      if (searchState.isLoading) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (searchState.error != null) {
-                        return Center(
-                            child: Text('Error: ${searchState.error}'));
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else {
-                        var itemFacto = snapshot.data ?? <FactoModel>[];
+                ? searchedBarFactos(searchState: searchState)
+                : Expanded(
+                    child: PageView(
+                        controller: pageHomePreferenceController,
+                        onPageChanged: (int page) {
+                          pageChanged = true;
+                          getCategoryFactosBd();
+                          preferenceSelected = categoriesByDb[page];
+                        },
+                        children: [
+                          preferencesListFactos(facto: _facto),
+                          for (int i = 0; i < categoriesByDb.length; i++)
+                            preferencesListFactos(facto: _facto),
+                        ]),
+                  ),
 
-                        if (itemFacto.isEmpty) {
-                          return const Center(
-                            child: Text(
-                              'No se encontró ningún facto',
-                              style: TextStyle(fontFamily: 'Inter'),
-                            ),
-                          );
-                        } else {
-                          return ListView.builder(
-                            itemCount: itemFacto.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return FactoHomeWidget(
-                                title: itemFacto[index].title,
-                                description: itemFacto[index].description,
-                                nameFont: itemFacto[index].nameFont,
-                                linkFont: itemFacto[index].linkFont,
-                                linkImg: itemFacto[index].linkImg,
-                                homeContext: context,
-                              );
-                            },
-                          );
-                        }
-                      }
-                    },
-                  )
-                : FutureBuilder<List<FactoModel>>(
-                    future: _facto,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<FactoModel>> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else {
-                        var itemFacto = snapshot.data ?? <FactoModel>[];
-
-                        if (itemFacto.isEmpty) {
-                          return const Center(
-                            child: Text(
-                              'No se encontró ningun facto',
-                              style: TextStyle(fontFamily: 'Inter'),
-                            ),
-                          );
-                        } else {
-                          return ListView.builder(
-                            itemCount: itemFacto.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return FactoHomeWidget(
-                                title: itemFacto[index].title,
-                                description: itemFacto[index].description,
-                                nameFont: itemFacto[index].nameFont,
-                                linkFont: itemFacto[index].linkFont,
-                                linkImg: itemFacto[index].linkImg,
-                                homeContext: context,
-                              );
-                            },
-                          );
-                        }
-                      }
-                    }),
+            //preferencesListFactos(facto: _facto),
           ),
         ],
       ),
@@ -323,6 +244,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: AdWidget(ad: _anchoredAdaptiveAd!),
             )
           : const SizedBox(),
+    );
+  }
+
+  void buildWaitingPage(pageChanged) {
+    if (!pageChanged) {}
+  }
+
+  PageController nextPage(pageController) {
+    return pageController.nextPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
     );
   }
 }
