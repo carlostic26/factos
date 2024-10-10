@@ -6,7 +6,6 @@ import 'package:factos/core/common/drawer/presentation/widgets/drawer_widget.dar
 import 'package:factos/feature/home/presentation/widgets/custom_interest_dialog.dart';
 import 'package:factos/feature/home/presentation/widgets/home_searched_bar_factos_widget.dart';
 import 'package:factos/feature/home/presentation/widgets/preference_list_factos_widget.dart';
-import 'package:factos/feature/launch/presentation/provider/interests_user_provider.dart';
 import 'package:factos/feature/launch/presentation/provider/preference_selected_provider.dart';
 import 'package:factos/feature/search/presentation/provider/riverpod.dart';
 import 'package:flutter/material.dart';

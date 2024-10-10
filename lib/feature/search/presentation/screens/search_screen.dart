@@ -95,6 +95,7 @@ class SearchScreen extends ConsumerWidget {
                             linkFont: itemFacto[index].linkFont,
                             linkImg: itemFacto[index].linkImg,
                             homeContext: context,
+                            facto: itemFacto[index],
                           );
                         },
                       );

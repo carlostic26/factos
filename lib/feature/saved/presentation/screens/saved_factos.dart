@@ -163,6 +163,7 @@ class _SavedFactosState extends State<SavedFactos> {
                           linkFont: itemFacto[index].linkFont,
                           linkImg: itemFacto[index].linkImg,
                           homeContext: context,
+                          facto: itemFacto[index],
                         );
                       },
                     );

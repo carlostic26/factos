@@ -1,5 +1,4 @@
 import 'package:factos/core/config/ads/ads_factos.dart';
-import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';

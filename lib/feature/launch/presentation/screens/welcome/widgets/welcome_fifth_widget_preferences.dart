@@ -6,28 +6,53 @@ import 'package:factos/feature/launch/presentation/screens/welcome/widgets/facto
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class WelcomePreferencesFifthPage extends ConsumerWidget {
+class WelcomePreferencesFifthPage extends ConsumerStatefulWidget {
   const WelcomePreferencesFifthPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final currentPage = ref.watch(pageProvider);
+  _WelcomePreferencesFifthPage createState() => _WelcomePreferencesFifthPage();
+}
 
+class _WelcomePreferencesFifthPage
+    extends ConsumerState<WelcomePreferencesFifthPage> {
+  List<String> preferencesListFromDatabase = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadPreferences();
+  }
+
+  Future<void> loadPreferences() async {
+    // Cargar las preferencias desde la base de datos
+    final preferences = await ref.read(preferencesFactoProvider.future);
+    preferencesListFromDatabase = preferences;
+
+    // Cargar la lista blanca desde SharedPreferences
+    await ref
+        .read(listPreferencesProviderToSharedPreferences.notifier)
+        .loadPreferencesFromSharedPreferences();
+
+    // Actualizar el estado basado en las preferencias guardadas en SharedPreferences
+    await ref
+        .read(preferencesProviderDatabase.notifier)
+        .loadPreferenceStateFromSharedPreferences(preferencesListFromDatabase);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-
-    //final selectedPreferences = ref.watch(preferencesProviderDatabase);
 
     // ignore: unused_local_variable
-    List<String> preferenceList = [];
+    List<String> preferenceListFromDatabase = [];
 
-    final preferenceAsyncValue = ref.watch(preferenceFactoProvider);
+    final preferenceAsyncValue = ref.watch(preferencesFactoProvider);
 
     Future<void> loadPreferences() async {
       final preferenceAsyncValue =
           ref.read(preferencesProviderDatabase.notifier);
 
-      preferenceList = preferenceAsyncValue as List<String>;
+      preferenceListFromDatabase = preferenceAsyncValue as List<String>;
     }
 
     loadPreferences();
@@ -134,7 +159,7 @@ class WelcomePreferencesFifthPage extends ConsumerWidget {
                 //este ref envia las preferencias que el usuario vaya eligiendo a la lista blanca
                 ref
                     .read(listPreferencesProviderToSharedPreferences.notifier)
-                    .togglePreferenceToSharedPreferences(namePreference);
+                    .addPreferenceToWhiteList(namePreference);
 
                 final countListPreferences = ref
                     .watch(listPreferencesProviderToSharedPreferences)
@@ -156,7 +181,7 @@ class WelcomePreferencesFifthPage extends ConsumerWidget {
       ],
     );
   }
-
+/* 
   Widget buildCategoriaPage(List<String> categorias, int pageIndex,
       double height, StateSetter setState, List<bool> selectedCategorias) {
     int start = pageIndex * 7;
@@ -188,5 +213,5 @@ class WelcomePreferencesFifthPage extends ConsumerWidget {
         ),
       ],
     );
-  }
+  } */
 }

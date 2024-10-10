@@ -1,52 +1,6 @@
 import 'package:riverpod/riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/* // Provider que trae la lista de categorias de la base de datos
-class CategoriesNotifier extends StateNotifier<List<bool>> {
-  CategoriesNotifier() : super(List.generate(18, (index) => false));
-
-  void toggleCategoryFromDb(int index) {
-    state[index] = !state[index];
-    state = List.from(state);
-  }
-}
-
-final categoriesProviderDatabase =
-    StateNotifierProvider<CategoriesNotifier, List<bool>>((ref) {
-  return CategoriesNotifier();
-});
-
-//----------------------------------------------
-
-// Provider de Categorias para shared preferences
-class ListCategoriesProvider extends StateNotifier<List<String>> {
-  ListCategoriesProvider() : super([]);
-
-  // Método para agregar o eliminar categorias
-  void addCategoryToWhiteList(String category) {
-    if (state.contains(category)) {
-      // Si ya existe, eliminarla
-      state = state.where((p) => p != category).toList();
-    } else {
-      // Si no existe, agregarla
-      state = [...state, category];
-    }
-  }
-
-  
-}
-
-// Proveedor para las categorias para shared preferences
-final listCategoryProviderToSharedPreferences =
-    StateNotifierProvider<ListCategoriesProvider, List<String>>((ref) {
-  return ListCategoriesProvider();
-});
-
- */
-
-import 'package:riverpod/riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 // Provider que trae la lista de categorias de la base de datos
 class CategoriesNotifier extends StateNotifier<List<bool>> {
   CategoriesNotifier() : super(List.generate(18, (index) => false));
@@ -57,7 +11,7 @@ class CategoriesNotifier extends StateNotifier<List<bool>> {
   }
 
   // Método para cargar el estado desde SharedPreferences
-  Future<void> loadStateFromSharedPreferences(
+  Future<void> loadCategoryStateFromSharedPreferences(
       List<String> categoriesFromDb) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> categoriesFromShp =
@@ -103,7 +57,7 @@ class ListCategoriesProvider extends StateNotifier<List<String>> {
   }
 
   // Cargar la lista desde SharedPreferences
-  Future<void> loadFromSharedPreferences() async {
+  Future<void> loadCategoriesFromSharedPreferences() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     state = prefs.getStringList('selectedCategoriesSaved') ?? [];
   }

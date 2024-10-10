@@ -106,6 +106,7 @@ class _CustomPreferenceDialogContentState
 
     final listSelectedCategoriesToSharedPreferences =
         ref.watch(listCategoryProviderToSharedPreferences);
+
     final listSelectedPreferencesToSharedPreferences =
         ref.watch(listPreferencesProviderToSharedPreferences);
 

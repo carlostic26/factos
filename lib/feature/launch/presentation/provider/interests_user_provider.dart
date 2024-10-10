@@ -5,7 +5,7 @@ final factoLocalDatasourceProvider = Provider<FactoLocalDatasource>((ref) {
   return SQLiteFactoLocalDatasourceImpl();
 });
 
-final preferenceFactoProvider = FutureProvider<List<String>>((ref) async {
+final preferencesFactoProvider = FutureProvider<List<String>>((ref) async {
   final dataSource = ref.watch(factoLocalDatasourceProvider);
   return await dataSource.getAllPreferenceFacto();
 });

@@ -11,13 +11,13 @@ import 'package:webview_flutter/webview_flutter.dart';
 class WebviewScreen extends ConsumerWidget {
   final String? titleFacto;
   final String? descriptionFacto;
-  final String? urlSourceFacto;
+  final String urlSourceFacto;
 
   WebviewScreen({
     super.key,
     required this.titleFacto,
     required this.descriptionFacto,
-    this.urlSourceFacto,
+    required this.urlSourceFacto,
   });
 
   @override
@@ -286,7 +286,13 @@ class WebviewScreen extends ConsumerWidget {
     }
   }
 
-  void launchUrlFacto(String urlFacto) async {}
+  void launchUrlFacto(String urlFacto) async {
+    if (await canLaunchUrl(Uri.parse(urlFacto))) {
+      await launchUrl(Uri.parse(urlFacto));
+    } else {
+      throw 'Could not launch $urlFacto';
+    }
+  }
 
   void guardarFacto(WidgetRef ref, context) {
     ref.read(bookmarkedTitlesProvider.notifier).toggleBookmark(titleFacto!);

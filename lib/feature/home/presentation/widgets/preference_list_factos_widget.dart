@@ -43,6 +43,7 @@ class preferencesListFactos extends StatelessWidget {
                     linkFont: itemFacto[index].linkFont,
                     linkImg: itemFacto[index].linkImg,
                     homeContext: context,
+                    facto: itemFacto[index],
                   );
                 },
               );

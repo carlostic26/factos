@@ -1,5 +1,7 @@
 import 'package:factos/core/config/styles/constants/theme_data.dart';
+import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
 import 'package:factos/feature/home/presentation/provider/riverpod.dart';
+import 'package:factos/feature/home/presentation/widgets/custom_popup_menu_widget.dart';
 import 'package:factos/feature/saved/presentation/screens/saved_factos.dart';
 import 'package:factos/feature/webview/presentation/screens/webview.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,8 @@ class FactoHomeWidget extends ConsumerWidget {
   final String linkImg;
   final BuildContext? homeContext;
 
+  final FactoModel facto;
+
   const FactoHomeWidget({
     super.key,
     required this.title,
@@ -21,6 +25,7 @@ class FactoHomeWidget extends ConsumerWidget {
     required this.nameFont,
     required this.linkFont,
     required this.linkImg,
+    required this.facto,
     this.homeContext,
   });
 
@@ -34,19 +39,17 @@ class FactoHomeWidget extends ConsumerWidget {
 
     void handleClick(String value) {
       switch (value) {
-        case 'Abrir con el navegador':
-          //launchUrlFacto(urlSourceFacto!);
+        case 'Revisar fuente':
+          openWebviewUrlFacto(
+              facto.linkFont, context, facto.title, facto.description);
           break;
-        case 'Guardar Facto':
-          //guardarFacto(ref, context);
-          break;
-        case 'Copiar enlace':
-          //copyLink();
+        case 'Guardar':
+          saveFacto(ref, isBookmarked);
           break;
         case 'Compartir mediante...':
           //shareUrl();
           break;
-        case 'Reportar fallo':
+        case 'Dejar de ver':
           //showDialogToReportProblem(context);
           break;
       }
@@ -152,58 +155,14 @@ class FactoHomeWidget extends ConsumerWidget {
                                             ? Icons.bookmark
                                             : Icons.bookmark_border),
                                         onPressed: () {
-                                          ref
-                                              .read(bookmarkedTitlesProvider
-                                                  .notifier)
-                                              .toggleBookmark(title);
-
-                                          if (!isBookmarked) {
-                                            showSavedFactoSnackBar(
-                                                homeContext!);
-                                          }
+                                          saveFacto(ref, isBookmarked);
                                         },
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: width * 0.05,
-                                      child: IconButton(
-                                        padding: EdgeInsets.zero,
-                                        color: subtitleTextColor,
-                                        iconSize: 18,
-                                        icon: const Icon(Icons.more_vert),
-                                        onPressed: () {
-                                          CustomPopupMenuButton(
-                                            width: width,
-                                            handleClick: handleClick,
-                                            subtitleTextColor: Colors.white,
-                                          );
-                                          /*           PopupMenuButton<String>(
-                                            icon: const Icon(
-                                              Icons.more_vert,
-                                              color: Colors.white,
-                                            ),
-                                            iconSize: 20,
-                                            onSelected: handleClick,
-                                            itemBuilder: (homeContext) {
-                                              return {
-                                                'Revisar fuente',
-                                                'Guardar',
-                                                'Compartir mediante...',
-                                                'Dejar de ver'
-                                              }.map((String choice) {
-                                                return PopupMenuItem<String>(
-                                                  value: choice,
-                                                  child: Text(
-                                                    choice,
-                                                    style: const TextStyle(
-                                                        color: Colors.black),
-                                                  ),
-                                                );
-                                              }).toList();
-                                            },
-                                          ); */
-                                        },
-                                      ),
+                                    CustomPopupMenuButton(
+                                      width: width,
+                                      handleClick: handleClick,
+                                      subtitleTextColor: subtitleTextColor,
                                     ),
                                   ],
                                 ),
@@ -268,6 +227,14 @@ class FactoHomeWidget extends ConsumerWidget {
     print('LLAVES DE FACTOS DESPUES DE GUARDADAS: $titlesSaved');
   }
 
+  void saveFacto(ref, isBookmarked) {
+    ref.read(bookmarkedTitlesProvider.notifier).toggleBookmark(title);
+
+    if (!isBookmarked) {
+      showSavedFactoSnackBar(homeContext!);
+    }
+  }
+
   void showSavedFactoSnackBar(BuildContext homeContext) {
     final snackBar = SnackBar(
       content: Row(
@@ -297,48 +264,16 @@ class FactoHomeWidget extends ConsumerWidget {
 
     ScaffoldMessenger.of(homeContext).showSnackBar(snackBar);
   }
-}
 
-class CustomPopupMenuButton extends StatelessWidget {
-  final double width;
-  final Function(String) handleClick;
-  final Color subtitleTextColor;
-
-  const CustomPopupMenuButton({
-    Key? key,
-    required this.width,
-    required this.handleClick,
-    required this.subtitleTextColor,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: width * 0.05,
-      child: PopupMenuButton<String>(
-        icon: Icon(
-          Icons.more_vert,
-          color: subtitleTextColor,
-          size: 18,
-        ),
-        onSelected: handleClick,
-        itemBuilder: (BuildContext context) {
-          return {
-            'Revisar fuente',
-            'Guardar',
-            'Compartir mediante...',
-            'Dejar de ver'
-          }.map((String choice) {
-            return PopupMenuItem<String>(
-              value: choice,
-              child: Text(
-                choice,
-                style: const TextStyle(color: Colors.black),
-              ),
-            );
-          }).toList();
-        },
-      ),
+  void openWebviewUrlFacto(String linkFont, context, title, description) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (homeContext) => WebviewScreen(
+                titleFacto: title,
+                descriptionFacto: description,
+                urlSourceFacto: linkFont,
+              )),
     );
   }
 }

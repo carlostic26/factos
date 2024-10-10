@@ -29,12 +29,12 @@ class _WelcomeCategoryFourthPageState
     // Cargar la lista blanca desde SharedPreferences
     await ref
         .read(listCategoryProviderToSharedPreferences.notifier)
-        .loadFromSharedPreferences();
+        .loadCategoriesFromSharedPreferences();
 
     // Actualizar el estado basado en las categorías guardadas en SharedPreferences
     await ref
         .read(categoriesProviderDatabase.notifier)
-        .loadStateFromSharedPreferences(categoryListFromDatabase);
+        .loadCategoryStateFromSharedPreferences(categoryListFromDatabase);
   }
 
   @override
