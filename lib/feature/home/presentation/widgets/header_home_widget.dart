@@ -72,6 +72,8 @@ class HeaderWidget extends ConsumerWidget {
                     onChanged: (value) {
                       if (value.isNotEmpty) {
                         ref.read(isSearchBarBoolean.notifier).state = true;
+                        ref.read(titleSearchedFactoProvider.notifier).state =
+                            value;
                       }
 
                       isResultSearch = true;

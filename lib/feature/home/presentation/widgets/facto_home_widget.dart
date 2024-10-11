@@ -6,6 +6,7 @@ import 'package:factos/feature/saved/presentation/screens/saved_factos.dart';
 import 'package:factos/feature/webview/presentation/screens/webview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FactoHomeWidget extends ConsumerWidget {
@@ -47,7 +48,7 @@ class FactoHomeWidget extends ConsumerWidget {
           saveFacto(ref, isBookmarked);
           break;
         case 'Compartir mediante...':
-          //shareUrl();
+          shareUrl(facto.description);
           break;
         case 'Dejar de ver':
           //showDialogToReportProblem(context);
@@ -275,5 +276,10 @@ class FactoHomeWidget extends ConsumerWidget {
                 urlSourceFacto: linkFont,
               )),
     );
+  }
+  
+  void shareUrl(descriptionFacto) {
+    Share.share(
+        '$descriptionFacto \n\nDescubre este y otros factos más usando la App Factos de Programación. Enlace a PlayStore aquí: url ');
   }
 }

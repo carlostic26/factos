@@ -1,6 +1,5 @@
 import 'package:factos/feature/home/infraestucture/datasources/factos_local_datasource.dart';
 import 'package:factos/feature/launch/presentation/screens/welcome/welcome_barrel.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
 
 // Estado para la búsqueda
@@ -46,6 +45,7 @@ class SearchNotifier extends StateNotifier<SearchState> {
 }
 
 final isSearchBarBoolean = StateProvider((ref) => false);
+final titleSearchedFactoProvider = StateProvider((ref) => 'none');
 
 final isClosedSearchBarScreen = StateProvider((ref) => false);
 

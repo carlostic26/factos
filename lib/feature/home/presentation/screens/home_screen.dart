@@ -11,11 +11,12 @@ import 'package:factos/feature/search/presentation/provider/riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/header_home_widget.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
@@ -30,7 +31,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   String preferenceSelected = 'Historia';
   late SQLiteFactoLocalDatasourceImpl handler;
   List<String> categoriesNames = [];
-  List<String> categoriesByDb = [];
+  List<String> preferencesByDb = [];
 
   Future<List<FactoModel>>? _facto;
 
@@ -39,7 +40,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    getCategoryFactosBd();
+    getPreferencesFactosBd();
   }
 
   @override
@@ -62,25 +63,72 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return await handler.getListPreferenceFacto(preferenceSelected);
   }
 
-  Future<void> getCategoryFactosBd() async {
+  Future<List<FactoModel>> conectionSearchedFactos(title) async {
+    return await handler.getFactosListByWord(title);
+  }
+
+  Future<void> getPreferencesFactosBd() async {
     handler = SQLiteFactoLocalDatasourceImpl();
 
     handler.initDb().whenComplete(() async {
       List<FactoModel> listNamesPreferenceFactos = await conectionAllFactos();
 
       List<FactoModel> listPreferenceFactos = await conectionPreferenceFactos();
-      listPreferenceFactos.shuffle();
+
       setState(() {
         _facto = Future.value(listPreferenceFactos);
 
-        categoriesByDb = listNamesPreferenceFactos
+        preferencesByDb = listNamesPreferenceFactos
             .map((facto) => facto.preference)
             .where((category) => !category.contains(','))
             .toSet()
             .toList();
 
-        print('Categorias de la bd:  $categoriesByDb');
+        print('Preferencias de la bd:  $preferencesByDb');
       });
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      int? pagesChanged = prefs.getInt('counterChangePage');
+
+      prefs.setInt('counterChangePage', pagesChanged! + 1);
+
+      if (pagesChanged > 3) {
+        listPreferenceFactos.shuffle();
+        prefs.setInt('counterChangePage', 0);
+      }
+    });
+  }
+
+  Future<void> getPreferencesBySearchBarFactosBd(title) async {
+    handler = SQLiteFactoLocalDatasourceImpl();
+
+    handler.initDb().whenComplete(() async {
+      List<FactoModel> listNamesPreferenceFactos =
+          await conectionSearchedFactos(title);
+
+      List<FactoModel> listPreferenceFactos = await conectionPreferenceFactos();
+
+      setState(() {
+        _facto = Future.value(listPreferenceFactos);
+
+        preferencesByDb = listNamesPreferenceFactos
+            .map((facto) => facto.preference)
+            .where((category) => !category.contains(','))
+            .toSet()
+            .toList();
+
+        print('Preferencias de la bd:  $preferencesByDb');
+      });
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      int? pagesChanged = prefs.getInt('counterChangePage');
+
+      prefs.setInt('counterChangePage', pagesChanged! + 1);
+
+      if (pagesChanged > 3) {
+        listPreferenceFactos.shuffle();
+        prefs.setInt('counterChangePage', 0);
+      }
     });
   }
 
@@ -182,11 +230,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: categoriesByDb.map((preference) {
+                    children: preferencesByDb.map((preference) {
                       return TextButton(
                         onPressed: () {
                           setState(() {
-                            getCategoryFactosBd();
+                            getPreferencesFactosBd();
+
                             preferenceSelected = preference;
                           });
                         },
@@ -213,17 +262,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           Expanded(
             child: isSearchBar
                 ? searchedBarFactos(searchState: searchState)
+
+                /*    Expanded(
+                    child: PageView(
+                        controller: pageHomePreferenceController,
+                        onPageChanged: (int page) {
+                          pageChanged = true;
+
+                          String title = ref.watch(titleSearchedFactoProvider);
+                          getPreferencesBySearchBarFactosBd(title);
+                          preferenceSelected = preferencesByDb[page];
+                        },
+                        children: [
+                          preferencesListFactos(facto: _facto),
+                          for (int i = 0; i < preferencesByDb.length; i++)
+                            preferencesListFactos(facto: _facto),
+                        ]),
+                  ) */
                 : Expanded(
                     child: PageView(
                         controller: pageHomePreferenceController,
                         onPageChanged: (int page) {
                           pageChanged = true;
-                          getCategoryFactosBd();
-                          preferenceSelected = categoriesByDb[page];
+                          getPreferencesFactosBd();
+                          preferenceSelected = preferencesByDb[page];
                         },
                         children: [
                           preferencesListFactos(facto: _facto),
-                          for (int i = 0; i < categoriesByDb.length; i++)
+                          for (int i = 0; i < preferencesByDb.length; i++)
                             preferencesListFactos(facto: _facto),
                         ]),
                   ),
