@@ -32,7 +32,7 @@ class LoadingScreen extends ConsumerWidget {
             SizedBox(
                 height: height * 0.22,
                 width: width * 0.65,
-                child: Image.asset('assets/images/logov3.png')),
+                child: Image.asset('assets/images/logo.png')),
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),

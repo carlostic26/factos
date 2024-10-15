@@ -31,7 +31,7 @@ class DrawerFactosWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Image.asset(
-                  'assets/images/logov3.png',
+                  'assets/images/logo.png',
                   height: heightScreen * 0.08,
                   width: widthScreen * 0.18,
                 ),

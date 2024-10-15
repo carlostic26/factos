@@ -14,6 +14,7 @@ abstract class FactoLocalDatasource {
 
 class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
   Database? _database;
+  int dbVersion = 13;
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -25,7 +26,7 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
     try {
       String path = await getDatabasesPath();
       return openDatabase(
-        join(path, 'facto_database_013.db'),
+        join(path, 'facto_database_$dbVersion.db'),
         onCreate: (db, version) async {
           const String sql = ''
               'CREATE TABLE factos ('
@@ -207,6 +208,8 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
               '("El origen accidental de JavaScript", "Curiosidades", "Tecnologias", "JavaScript", "JavaScript fue creado en solo 10 días por Brendan Eich en 1995, originalmente llamado Mocha.", "Mozilla", "https://developer.mozilla.org/en-US/docs/Web/JavaScript/About_JavaScript", "https://blogger.googleusercontent.com/img/a/AVvXsEg2nabFJ05Gtuuqj8ZMUgKuBMBMAZvVH13ViGBhRpj3frDrJ4_oORNZ3eCgIKu3Tzx-wX8pqn4UAI1u1uXBD794Xa8PHo8ji4OcnTSnmzoOLyh8s5sg6Ihr8FblQ-rw0gd-UkOhdxLl6xHic722ObFQ9FZR5RSJDlZitL-ApjfXqVXjkMAsNs3coR8y")';
 
           await db.execute(addFacto);
+
+          deleteOldDatabases();
         },
         version: 1,
       );
@@ -215,41 +218,38 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
     }
   }
 
-/* 
-  @override
-  Future<List<FactoModel>> getAllFactoList() async {
-    try {
-      final db = await database;
-      final List<Map<String, dynamic>> maps = await db.query('factos');
-
-      return List.generate(maps.length, (i) {
-        return FactoModel.fromJson(maps[i]);
-      });
-    } catch (e) {
-      debugPrint(e.toString());
-      throw LocalFailure();
+  Future<void> deleteOldDatabases() async {
+    for (int i = 1; i < dbVersion; i++) {
+      String dbName = 'facto_database_$i.db';
+      await deleteDatabase(dbName);
     }
   }
- */
+
   @override
   Future<List<FactoModel>> getAllFactoList() async {
     final db = await initDb();
     final List<Map<String, dynamic>> queryResult =
         await db.rawQuery('SELECT * FROM factos');
-    Map<String, dynamic> result = {};
-    for (var r in queryResult) {
-      result.addAll(r);
-    }
 
-    return queryResult.map((e) => FactoModel.fromJson(e)).toList();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> blackList = prefs.getStringList('blackListFactos') ?? [];
+
+    List<FactoModel> allFactos = queryResult
+        .map((e) => FactoModel.fromJson(e))
+        .where((facto) => !blackList.contains(facto.title))
+        .toList();
+
+    return allFactos;
   }
 
+  @override
   Future<int> countFactos() async {
     final db = await initDb();
     final result = await db.rawQuery('SELECT COUNT(*) as count FROM factos');
     return Sqflite.firstIntValue(result) ?? 0;
   }
 
+  @override
   Future<List<String>> getAllPreferenceFacto() async {
     final db = await initDb();
     final List<Map<String, dynamic>> queryResult =
@@ -262,6 +262,7 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
       ..sort(); // ordena la lista alfabéticamente
   }
 
+  @override
   Future<List<String>> getAllCategoryFacto() async {
     final db = await initDb();
     final List<Map<String, dynamic>> queryResult =
@@ -282,8 +283,6 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
   }
 
   Future<List<FactoModel>> getFactoListFilter() async {
-    //TODO: Llamar shp y obtener la lista string de las preferencias seleccionadas por el usuario
-    // dicha lista se usará en el siguiente select
     final db = await initDb();
     final List<Map<String, dynamic>> queryResult =
         await db.rawQuery('SELECT * FROM factos'); //[pref1, pref2, pref3]
@@ -343,7 +342,17 @@ class SQLiteFactoLocalDatasourceImpl implements FactoLocalDatasource {
       result.addAll(r);
     }
 
-    return queryResult.map((e) => FactoModel.fromJson(e)).toList();
+    // return queryResult.map((e) => FactoModel.fromJson(e)).toList();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> blackList = prefs.getStringList('blackListFactos') ?? [];
+
+    List<FactoModel> allFactos = queryResult
+        .map((e) => FactoModel.fromJson(e))
+        .where((facto) => !blackList.contains(facto.title))
+        .toList();
+
+    return allFactos;
   }
 
   Future<List<FactoModel>> getPreference(pref) async {

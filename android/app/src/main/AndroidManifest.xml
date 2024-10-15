@@ -3,9 +3,9 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:label="factos"
+        android:label="Factos"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         
         <!-- change ID app  to test ID in the next line. actually is the real id: 433...-->
         <!-- Sample AdMob app ID, test: ca-app-pub-3940256099942544~3347511713 || 

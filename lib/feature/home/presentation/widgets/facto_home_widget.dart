@@ -6,6 +6,7 @@ import 'package:factos/feature/saved/presentation/screens/saved_factos.dart';
 import 'package:factos/feature/webview/presentation/screens/webview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,7 +52,8 @@ class FactoHomeWidget extends ConsumerWidget {
           shareUrl(facto.description);
           break;
         case 'Dejar de ver':
-          //showDialogToReportProblem(context);
+          sendFactoToBlackList(facto.title);
+
           break;
       }
     }
@@ -277,9 +279,25 @@ class FactoHomeWidget extends ConsumerWidget {
               )),
     );
   }
-  
+
   void shareUrl(descriptionFacto) {
     Share.share(
         '$descriptionFacto \n\nDescubre este y otros factos más usando la App Factos de Programación. Enlace a PlayStore aquí: url ');
+  }
+
+  void sendFactoToBlackList(String title) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    List<String> blackList = prefs.getStringList('blackListFactos') ?? [];
+
+    blackList.add(title);
+
+    await prefs.setStringList('blackListFactos', blackList);
+
+    Fluttertoast.showToast(
+      msg: "No verás este Facto la próxima vez",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+    );
   }
 }

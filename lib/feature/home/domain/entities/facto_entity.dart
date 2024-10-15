@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Facto {
   final String title;
   final String preference;
