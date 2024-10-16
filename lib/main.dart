@@ -21,9 +21,6 @@ Future<void> loadOpenAd() async {
           openAd = ad;
 
           int randomValue = Random().nextInt(2);
-
-          print('numero random: $randomValue');
-
           if (randomValue == 1) {
             openAd!.show();
           }
@@ -46,7 +43,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MobileAds.instance.initialize();
 
-  //crear metodo random entre 1 y 0, si cae 1 se muestra el openAd
   await loadOpenAd();
 
   runApp(ProviderScope(

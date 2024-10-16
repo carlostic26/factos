@@ -49,7 +49,7 @@ class LoadingScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  "Recopilando  ",
+                  "Creando  ",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: subtitleTextColor,
@@ -66,7 +66,7 @@ class LoadingScreen extends ConsumerWidget {
                   loading: () => LoadingDisplay(),
                 ),
                 const Text(
-                  " factos...",
+                  " factos importantes",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: subtitleTextColor,

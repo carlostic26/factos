@@ -41,7 +41,7 @@ class FactoHomeWidget extends ConsumerWidget {
 
     void handleClick(String value) {
       switch (value) {
-        case 'Revisar fuente':
+        case 'Ver info completa':
           openWebviewUrlFacto(
               facto.linkFont, context, facto.title, facto.description);
           break;

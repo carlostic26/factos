@@ -196,6 +196,21 @@ class _CustomPreferenceDialogContentState
             ),
           ),
         ),
+        Positioned(
+            top: height * 0.225,
+            right: width * 0.05,
+            child: IconButton(
+              style: IconButton.styleFrom(
+                backgroundColor: Colors.red,
+                shape: const CircleBorder(),
+                minimumSize: const Size(40, 40),
+                fixedSize: const Size(45, 45),
+              ),
+              icon: const Icon(Icons.close, color: Colors.white),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )),
       ],
     );
   }

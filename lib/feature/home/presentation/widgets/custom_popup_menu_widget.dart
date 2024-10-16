@@ -29,7 +29,7 @@ class CustomPopupMenuButton extends StatelessWidget {
           onSelected: handleClick,
           itemBuilder: (BuildContext context) {
             return {
-              'Revisar fuente',
+              'Ver info completa',
               'Guardar',
               'Compartir mediante...',
               'Dejar de ver'
