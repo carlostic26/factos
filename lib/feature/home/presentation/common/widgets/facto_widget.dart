@@ -2,8 +2,16 @@ import 'package:factos/core/config/styles/constants/theme_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class FactoWidget extends StatelessWidget {
-  const FactoWidget({super.key});
+class ExampleFactoWidget extends StatelessWidget {
+  ExampleFactoWidget(
+      {super.key,
+      required this.title,
+      required this.subtitle,
+      required this.font});
+
+  String title;
+  String subtitle;
+  String font;
 
   @override
   Widget build(BuildContext context) {
@@ -12,10 +20,10 @@ class FactoWidget extends StatelessWidget {
 
     return Stack(children: [
       Padding(
-        padding: const EdgeInsets.all(30.0),
+        padding: const EdgeInsets.all(20.0),
         child: Container(
-          height: height * 0.15,
-          width: width * 0.70,
+          height: height * 0.18,
+          width: width * 0.75,
           decoration: BoxDecoration(
             color: factoBackgroundColor,
             borderRadius: BorderRadius.circular(30),
@@ -25,68 +33,65 @@ class FactoWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   textAlign: TextAlign.start,
-                  'Un 23 de mayo...',
-                  style: TextStyle(
+                  title,
+                  style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Inter',
                       color: lightBackgroundTextColor),
                 ),
-                const Text(
-                  'Un 23 de Mayo de 1995 fue lanzado Java. Desde entonces ha evolucionado en 23 versiones principales.',
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: lightBackgroundTextColor,
-                      fontFamily: 'Inter'),
-                ),
-                const Text(
-                  'Java.com',
-                  style: TextStyle(
-                      fontSize: 8,
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                      fontSize: 10,
                       color: lightBackgroundTextColor,
                       fontFamily: 'Inter'),
                 ),
                 Expanded(
-                  child: Column(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: IconButton(
-                                iconSize: 15,
-                                onPressed: () {},
-                                icon: const Icon(Icons.visibility)),
-                          ),
-                          SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: IconButton(
-                                iconSize: 15,
-                                onPressed: () {},
-                                icon: const Icon(Icons.share)),
-                          ),
-                          SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: IconButton(
-                                iconSize: 15,
-                                onPressed: () {},
-                                icon: const Icon(Icons.bookmark_border)),
-                          ),
-                          SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: IconButton(
-                                iconSize: 15,
-                                onPressed: () {},
-                                icon: const Icon(Icons.delete)),
-                          ),
-                        ],
+                      Text(
+                        font,
+                        style: const TextStyle(
+                            fontSize: 8,
+                            color: lightBackgroundTextColor,
+                            fontFamily: 'Inter'),
+                      ),
+                      Spacer(),
+                      SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: IconButton(
+                            iconSize: 15,
+                            onPressed: () {},
+                            icon: const Icon(Icons.visibility)),
+                      ),
+                      SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: IconButton(
+                            iconSize: 15,
+                            onPressed: () {},
+                            icon: const Icon(Icons.share)),
+                      ),
+                      SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: IconButton(
+                            iconSize: 15,
+                            onPressed: () {},
+                            icon: const Icon(Icons.bookmark_border)),
+                      ),
+                      SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: IconButton(
+                            iconSize: 15,
+                            onPressed: () {},
+                            icon: const Icon(Icons.delete)),
                       ),
                     ],
                   ),

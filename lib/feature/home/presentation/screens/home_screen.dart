@@ -1,18 +1,4 @@
-import 'package:factos/core/config/ads/ads_factos.dart';
-import 'package:factos/core/config/styles/constants/theme_data.dart';
-import 'package:factos/feature/home/infraestucture/datasources/factos_local_datasource.dart';
-import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
-import 'package:factos/core/common/drawer/presentation/widgets/drawer_widget.dart';
-import 'package:factos/feature/home/presentation/widgets/custom_interest_dialog.dart';
-import 'package:factos/feature/home/presentation/widgets/home_searched_bar_factos_widget.dart';
-import 'package:factos/feature/home/presentation/widgets/preference_list_factos_widget.dart';
-import 'package:factos/feature/launch/presentation/provider/preference_selected_provider.dart';
-import 'package:factos/feature/search/presentation/provider/riverpod.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:factos/feature/home/presentation/screens_home_barrel.dart';
 import '../widgets/header_home_widget.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -23,10 +9,9 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  //initializing banner ad
   BannerAd? _anchoredAdaptiveAd;
-  bool _isAdLoaded = false;
-  bool _isLoaded = false;
+  bool isAdLoaded = false;
+  bool isLoaded = false;
 
   String preferenceSelected = 'Historia';
   late SQLiteFactoLocalDatasourceImpl handler;
@@ -83,8 +68,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             .where((category) => !category.contains(','))
             .toSet()
             .toList();
-
-        print('Preferencias de la bd:  $preferencesByDb');
       });
 
       final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -116,8 +99,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             .where((category) => !category.contains(','))
             .toSet()
             .toList();
-
-        print('Preferencias de la bd:  $preferencesByDb');
       });
 
       final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -135,7 +116,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   FactosAds ads = FactosAds();
 
   Future<void> _loadAdaptativeAd() async {
-    if (_isAdLoaded) {
+    if (isAdLoaded) {
       return;
     }
 
@@ -154,14 +135,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (Ad ad) {
-          // print('$ad loaded: ${ad.responseInfo}');
           setState(() {
             _anchoredAdaptiveAd = ad as BannerAd;
-            _isLoaded = true;
+            isLoaded = true;
           });
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          // print('Anchored adaptive banner failedToLoad: $error');
           ad.dispose();
         },
       ),
@@ -177,21 +156,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
 
     final searchState = ref.watch(searchProvider);
     bool isResultSearch = searchState.isLoading;
-
     final isSearchBar = ref.watch(isSearchBarBoolean);
-
     final pageHomePreferenceController = PageController();
 
-    final countListPreferences =
-        ref.watch(listPreferencesProviderToSharedPreferences).length;
-
     bool pageChanged = false;
-
-    print('HOME CONTADOR DE PREFERENCIAS SELECCIONADAS: $countListPreferences');
 
     return Scaffold(
       backgroundColor: scaffoldBackgroundGlobalColor,
@@ -214,7 +185,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           SizedBox(
             height: height * 0.02,
           ),
-          //category controller
           Row(
             children: [
               IconButton(
@@ -261,24 +231,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           Expanded(
             child: isSearchBar
-                ? searchedBarFactos(searchState: searchState)
-
-                /*    Expanded(
-                    child: PageView(
-                        controller: pageHomePreferenceController,
-                        onPageChanged: (int page) {
-                          pageChanged = true;
-
-                          String title = ref.watch(titleSearchedFactoProvider);
-                          getPreferencesBySearchBarFactosBd(title);
-                          preferenceSelected = preferencesByDb[page];
-                        },
-                        children: [
-                          preferencesListFactos(facto: _facto),
-                          for (int i = 0; i < preferencesByDb.length; i++)
-                            preferencesListFactos(facto: _facto),
-                        ]),
-                  ) */
+                ? SearchedBarFactos(searchState: searchState)
                 : Expanded(
                     child: PageView(
                         controller: pageHomePreferenceController,
@@ -293,8 +246,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             preferencesListFactos(facto: _facto),
                         ]),
                   ),
-
-            //preferencesListFactos(facto: _facto),
           ),
         ],
       ),

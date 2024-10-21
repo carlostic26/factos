@@ -1,8 +1,4 @@
-import 'package:factos/core/config/styles/constants/theme_data.dart';
-import 'package:factos/feature/search/presentation/provider/riverpod.dart';
-import 'package:factos/feature/search/presentation/screens/search_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:factos/feature/home/presentation/screens_home_barrel.dart';
 
 class HeaderWidget extends ConsumerWidget {
   HeaderWidget({super.key, required this.height, required this.isResultSearch});

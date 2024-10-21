@@ -1,10 +1,7 @@
-import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
-import 'package:factos/feature/home/presentation/widgets/facto_home_widget.dart';
-import 'package:factos/feature/launch/presentation/screens/loading/loading_barrel.dart';
-import 'package:factos/feature/search/presentation/provider/riverpod.dart';
+import 'package:factos/feature/home/presentation/screens_home_barrel.dart';
 
-class searchedBarFactos extends StatelessWidget {
-  const searchedBarFactos({
+class SearchedBarFactos extends StatelessWidget {
+  const SearchedBarFactos({
     super.key,
     required this.searchState,
   });

@@ -1,11 +1,4 @@
-import 'package:factos/core/config/styles/constants/theme_data.dart';
-import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
-import 'package:factos/feature/home/presentation/widgets/facto_home_widget.dart';
-import 'package:factos/feature/search/presentation/provider/riverpod.dart';
-import 'package:factos/feature/search/presentation/provider/riverpod_ads.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:factos/feature/search/presentation/search_barril.dart';
 
 class SearchScreen extends ConsumerWidget {
   const SearchScreen({super.key});
@@ -17,7 +10,6 @@ class SearchScreen extends ConsumerWidget {
     final textEditingController = ref.watch(textEditingControllerProvider);
 
     final closeSearch = ref.watch(isClosedSearchBarScreen);
-
     final adNotifier = ref.watch(adProvider);
 
     // Cargar el anuncio adaptativo

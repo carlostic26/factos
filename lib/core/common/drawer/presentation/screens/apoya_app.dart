@@ -1,7 +1,4 @@
-import 'package:factos/core/config/ads/ads_factos.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:factos/core/common/drawer/presentation/screens_drawer_barrel.dart';
 
 class ApoyaApp extends StatefulWidget {
   const ApoyaApp({super.key});

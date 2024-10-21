@@ -1,10 +1,4 @@
-import 'package:factos/feature/launch/presentation/provider/category_selected_provider.dart';
-import 'package:factos/feature/launch/presentation/provider/preference_selected_provider.dart';
-import 'package:factos/feature/launch/presentation/screens/loading/loading_barrel.dart';
-import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_fifth_widget_preferences.dart';
-import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_fourth_widget_categories.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:factos/feature/home/presentation/screens_home_barrel.dart';
 
 class CustomInterestDialog extends ConsumerWidget {
   const CustomInterestDialog({Key? key}) : super(key: key);
@@ -61,23 +55,6 @@ class _CustomPreferenceDialogContentState
     });
   }
 
-  // Future<void> loadCategories() async {
-  //   final categoriesNotifier = ref.read(categoriesProviderDatabase.notifier);
-  //   List<bool> categories =
-  //       categoriesNotifier.state; // Asumiendo que el estado es List<bool>
-
-  //   // Convertir List<bool> a List<String>
-  //   List<String> categoryStrings = categories.asMap().entries.map((entry) {
-  //     int index = entry.key;
-  //     bool value = entry.value;
-  //     return "Categoría ${index + 1}: ${value ? 'Sí' : 'No'}";
-  //   }).toList();
-
-  //   setState(() {
-  //     categoryListFromDatabase = categoryStrings;
-  //   });
-  // }
-
   Widget buildProgressIndicator() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
@@ -109,9 +86,6 @@ class _CustomPreferenceDialogContentState
 
     final listSelectedPreferencesToSharedPreferences =
         ref.watch(listPreferencesProviderToSharedPreferences);
-
-    // Actualizar el estado basado en las categorías guardadas en SharedPreferences
-    //ref.read(categoriesProviderDatabaseShp.notifier).updateStateFromShp(categoriesProviderDatabaseShp);
 
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 

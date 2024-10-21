@@ -1,10 +1,4 @@
-import 'package:factos/core/config/ads/ads_factos.dart';
-import 'package:factos/core/config/styles/constants/theme_data.dart';
-import 'package:factos/feature/home/infraestucture/datasources/factos_local_datasource.dart';
-import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
-import 'package:factos/feature/home/presentation/widgets/facto_home_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:factos/feature/saved/presentation/screens_saved_barrel.dart';
 
 class SavedFactos extends StatefulWidget {
   const SavedFactos({super.key});
@@ -14,7 +8,6 @@ class SavedFactos extends StatefulWidget {
 }
 
 class _SavedFactosState extends State<SavedFactos> {
-  //initializing banner ad
   BannerAd? _anchoredAdaptiveAd;
   bool _isAdLoaded = false;
   bool _isLoaded = false;
@@ -107,14 +100,6 @@ class _SavedFactosState extends State<SavedFactos> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: scaffoldBackgroundGlobalColor,
-      /*    appBar: AppBar(
-        title: const Text(
-          'Guardados',
-          style: TextStyle(
-              fontFamily: 'Inter', fontWeight: FontWeight.bold, fontSize: 16),
-        ),
-        centerTitle: true,
-      ), */
       body: CustomScrollView(
         slivers: [
           const SliverAppBar(

@@ -1,14 +1,4 @@
-import 'package:factos/core/config/styles/constants/theme_data.dart';
-import 'package:factos/feature/home/infraestucture/models/factos_model.dart';
-import 'package:factos/feature/home/presentation/provider/riverpod.dart';
-import 'package:factos/feature/home/presentation/widgets/custom_popup_menu_widget.dart';
-import 'package:factos/feature/saved/presentation/screens/saved_factos.dart';
-import 'package:factos/feature/webview/presentation/screens/webview.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:factos/feature/home/presentation/screens_home_barrel.dart';
 
 class FactoHomeWidget extends ConsumerWidget {
   final String title;

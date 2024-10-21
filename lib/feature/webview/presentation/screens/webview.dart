@@ -1,12 +1,4 @@
-import 'package:factos/feature/launch/presentation/screens/loading/loading_barrel.dart';
-import 'package:factos/feature/saved/presentation/screens/saved_factos.dart';
-import 'package:factos/feature/webview/presentation/providers/loading_state_provider.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mailto/mailto.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:factos/feature/webview/presentation/screens_webview_barrel.dart';
 
 class WebviewScreen extends ConsumerWidget {
   final String? titleFacto;

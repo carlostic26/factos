@@ -1,11 +1,4 @@
-import 'package:factos/core/common/app_config.dart';
-import 'package:factos/core/common/drawer/presentation/screens/apoya_app.dart';
-import 'package:factos/core/config/styles/constants/theme_data.dart';
-import 'package:factos/feature/launch/presentation/screens/welcome/widgets/welcome_second_page_facto_card.dart';
-import 'package:factos/feature/saved/presentation/screens/saved_factos.dart';
-import 'package:factos/feature/search/presentation/screens/search_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:factos/core/common/drawer/presentation/screens_drawer_barrel.dart';
 
 class DrawerFactosWidget extends StatelessWidget {
   BuildContext? context;
