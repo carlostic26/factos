@@ -42,68 +42,63 @@ class ExampleFactoWidget extends StatelessWidget {
                       fontFamily: 'Inter',
                       color: lightBackgroundTextColor),
                 ),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                      fontSize: 10,
-                      color: lightBackgroundTextColor,
-                      fontFamily: 'Inter'),
+                Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: Text(
+                    subtitle,
+                    style: const TextStyle(
+                        fontSize: 10,
+                        color: lightBackgroundTextColor,
+                        fontFamily: 'Inter'),
+                  ),
                 ),
                 Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        font,
-                        style: const TextStyle(
-                            fontSize: 8,
-                            color: lightBackgroundTextColor,
-                            fontFamily: 'Inter'),
-                      ),
-                      Spacer(),
-                      SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: IconButton(
-                            iconSize: 15,
-                            onPressed: () {},
-                            icon: const Icon(Icons.visibility)),
-                      ),
-                      SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: IconButton(
-                            iconSize: 15,
-                            onPressed: () {},
-                            icon: const Icon(Icons.share)),
-                      ),
-                      SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: IconButton(
-                            iconSize: 15,
-                            onPressed: () {},
-                            icon: const Icon(Icons.bookmark_border)),
-                      ),
-                      SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: IconButton(
-                            iconSize: 15,
-                            onPressed: () {},
-                            icon: const Icon(Icons.delete)),
-                      ),
-                    ],
+                  child: SizedBox(
+                    height: 20,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          font,
+                          style: const TextStyle(
+                              fontSize: 8,
+                              color: lightBackgroundTextColor,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.bold),
+                        ),
+                        const Spacer(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            InkWell(
+                                onTap: () {
+                                  print('ver');
+                                },
+                                child: Icon(Icons.visibility, size: 15)),
+                            InkWell(
+                                onTap: () {},
+                                child: Icon(Icons.share, size: 15)),
+                            InkWell(
+                                onTap: () {},
+                                child: Icon(Icons.bookmark_border, size: 15)),
+                            InkWell(
+                                onTap: () {},
+                                child: Icon(Icons.delete, size: 15)),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),
         ),
       ),
       Positioned(
-        top: 25,
-        right: 25,
+        top: height * 0.02,
+        right: width * 0.02,
         child: CircleAvatar(
           radius: 18,
           backgroundColor: tagBackgroundColor,

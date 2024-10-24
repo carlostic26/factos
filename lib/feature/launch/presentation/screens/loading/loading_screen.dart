@@ -15,7 +15,7 @@ class LoadingScreen extends ConsumerWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 9), () {
       ref.read(buttonState.notifier).enableButton();
       isLoaded = true;
     });
@@ -49,7 +49,7 @@ class LoadingScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  "Creando  ",
+                  "Buscando  ",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: subtitleTextColor,
@@ -66,7 +66,7 @@ class LoadingScreen extends ConsumerWidget {
                   loading: () => LoadingDisplay(),
                 ),
                 const Text(
-                  " factos importantes",
+                  " factos fríos y contundentes",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: subtitleTextColor,

@@ -161,12 +161,9 @@ class _WelcomePreferencesFifthPage
                     .read(listPreferencesProviderToSharedPreferences.notifier)
                     .addPreferenceToWhiteList(namePreference);
 
-                final countListPreferences = ref
+/*                 final countListPreferences = ref
                     .watch(listPreferencesProviderToSharedPreferences)
-                    .length;
-
-                print(
-                    'CONTADOR DE PREFERENCIAS SELECCIONADAS: $countListPreferences');
+                    .length; */
               },
               child: SizedBox(
                 height: height * 0.05,
@@ -181,37 +178,4 @@ class _WelcomePreferencesFifthPage
       ],
     );
   }
-/* 
-  Widget buildCategoriaPage(List<String> categorias, int pageIndex,
-      double height, StateSetter setState, List<bool> selectedCategorias) {
-    int start = pageIndex * 7;
-    int end = (start + 7 < categorias.length) ? start + 7 : categorias.length;
-
-    return Column(
-      children: [
-        Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          alignment: WrapAlignment.start,
-          children: categorias.getRange(start, end).map((category) {
-            int index = categorias.indexOf(category);
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  selectedCategorias[index] = !selectedCategorias[index];
-                });
-              },
-              child: SizedBox(
-                height: height * 0.04,
-                child: FactosFilterWidget(
-                  categoryName: category,
-                  widgetSelected: selectedCategorias[index],
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  } */
 }

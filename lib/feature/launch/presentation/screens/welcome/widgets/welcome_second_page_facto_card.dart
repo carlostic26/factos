@@ -17,7 +17,7 @@ class WelcomeFactoCardSecondPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: height * 0.1),
+              SizedBox(height: height * 0.05),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: width * 0.15),
                 child: const Text(
@@ -32,7 +32,7 @@ class WelcomeFactoCardSecondPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: height * 0.04),
+              SizedBox(height: height * 0.03),
               Align(
                   alignment: Alignment.centerLeft,
                   child: ExampleFactoWidget(
@@ -57,7 +57,7 @@ class WelcomeFactoCardSecondPage extends StatelessWidget {
                         'Linus Torvalds creó Linux en su habitación a los 21 años. Hoy, su sistema operativo domina servidores y supercomputadoras. ¡Poder al open source! Este finlandés demostró que la colaboración global puede crear maravillas tecnológicas.',
                     font: 'LinuxFoundation',
                   )),
-              SizedBox(height: height * 0.1),
+              SizedBox(height: height * 0.03),
             ],
           ),
         ),

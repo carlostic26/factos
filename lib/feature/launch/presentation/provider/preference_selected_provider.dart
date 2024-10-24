@@ -36,22 +36,6 @@ final preferencesProviderDatabase =
 });
 
 //-------------------------------------------------
-/* 
-// Proveedor para las preferencias para shared preferences
-class ListPreferencesNotifier extends StateNotifier<List<String>> {
-  ListPreferencesNotifier() : super([]);
-
-  // Método para agregar o eliminar preferencias
-  void togglePreferenceToSharedPreferences(String preference) {
-    if (state.contains(preference)) {
-      // Si ya existe, eliminarla
-      state = state.where((p) => p != preference).toList();
-    } else {
-      // Si no existe, agregarla
-      state = [...state, preference];
-    }
-  }
-} */
 
 final preferncesProviderDatabase =
     StateNotifierProvider<PreferencesNotifier, List<bool>>((ref) {
