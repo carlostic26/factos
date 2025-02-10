@@ -44,7 +44,7 @@ class HeaderWidget extends ConsumerWidget {
             height: height * 0.015,
           ),
           Container(
-            height: height * 0.05,
+            height: height * 0.055,
             decoration: BoxDecoration(
               color: searchFieldBackgroundColor,
               borderRadius: BorderRadius.circular(30.0),
@@ -64,26 +64,34 @@ class HeaderWidget extends ConsumerWidget {
                       color: Colors.grey,
                     )),
                 Expanded(
-                  child: TextField(
-                    onChanged: (value) {
-                      if (value.isNotEmpty) {
-                        ref.read(isSearchBarBoolean.notifier).state = true;
-                        ref.read(titleSearchedFactoProvider.notifier).state =
-                            value;
-                      }
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      bottom: height * 0.015,
+                    ),
+                    child: Center(
+                      child: TextField(
+                        onChanged: (value) {
+                          if (value.isNotEmpty) {
+                            ref.read(isSearchBarBoolean.notifier).state = true;
+                            ref
+                                .read(titleSearchedFactoProvider.notifier)
+                                .state = value;
+                          }
 
-                      isResultSearch = true;
-                      searchFactos(value);
-                    },
-                    style: const TextStyle(
-                        color: Colors.white, fontFamily: 'Inter'),
-                    decoration: const InputDecoration(
-                      hintText: 'Python',
-                      hintStyle: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                          fontFamily: 'Inter'),
-                      border: InputBorder.none,
+                          isResultSearch = true;
+                          searchFactos(value);
+                        },
+                        style: const TextStyle(
+                            color: Colors.white, fontFamily: 'Inter'),
+                        decoration: const InputDecoration(
+                          hintText: 'Python',
+                          hintStyle: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                              fontFamily: 'Inter'),
+                          border: InputBorder.none,
+                        ),
+                      ),
                     ),
                   ),
                 ),

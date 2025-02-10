@@ -1,3 +1,4 @@
+import 'package:factos/feature/home/presentation/screens/home_screen.dart';
 import 'package:factos/feature/saved/presentation/screens_saved_barrel.dart';
 
 class SavedFactos extends StatefulWidget {
@@ -98,6 +99,7 @@ class _SavedFactosState extends State<SavedFactos> {
 
   @override
   Widget build(BuildContext context) {
+    double heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: scaffoldBackgroundGlobalColor,
       body: CustomScrollView(
@@ -129,10 +131,37 @@ class _SavedFactosState extends State<SavedFactos> {
                 } else {
                   var itemFacto = snapshot.data ?? <FactoModel>[];
                   if (itemFacto.isEmpty) {
-                    return const Center(
-                      child: Text(
-                        'Aun no tienes factos guardados',
-                        style: TextStyle(fontFamily: 'Inter'),
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(height: heightScreen * 0.35),
+                          const Text(
+                            'Aun no tienes factos guardados.',
+                            style: TextStyle(fontFamily: 'Inter'),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => (const HomeScreen())));
+                            },
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  WidgetStateProperty.all<Color>(Colors.white),
+                            ),
+                            child: const Text(
+                              'Ver Factos',
+                              style:
+                                  TextStyle(fontSize: 10, color: Colors.black),
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   } else {

@@ -1,7 +1,9 @@
 import 'package:factos/feature/launch/presentation/screens/loading/loading_barrel.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final loadingProvider = StateProvider<bool>((ref) => true);
+final errorProvider = StateProvider<bool>((ref) => false);
 
 final webViewControllerProvider =
     Provider.family<WebViewController, String>((ref, url) {
@@ -12,10 +14,24 @@ final webViewControllerProvider =
     ..setNavigationDelegate(
       NavigationDelegate(
         onPageStarted: (String loadingUrl) {
-          ref.read(loadingProvider.notifier).state = true;
+          ref.read(loadingProvider.notifier).state = true; // Activa el loading
+          ref.read(errorProvider.notifier).state =
+              false; // Reinicia el estado de error
         },
         onPageFinished: (String url) {
-          ref.read(loadingProvider.notifier).state = false;
+          ref.read(loadingProvider.notifier).state =
+              false; // Desactiva el loading
+        },
+        onWebResourceError: (WebResourceError error) {
+          print('WebView error: ${error.description}');
+
+          // Verifica si el error es de conexión rechazada
+          if (error.description.contains('ERR_CONNECTION_REFUSED')) {
+            ref.read(loadingProvider.notifier).state =
+                false; // Desactiva el loading
+            ref.read(errorProvider.notifier).state =
+                true; // Activa el estado de error
+          }
         },
       ),
     )

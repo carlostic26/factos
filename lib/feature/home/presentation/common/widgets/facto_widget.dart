@@ -75,16 +75,18 @@ class ExampleFactoWidget extends StatelessWidget {
                                 onTap: () {
                                   print('ver');
                                 },
-                                child: Icon(Icons.visibility, size: 15)),
+                                child:
+                                    const Icon(Icons.travel_explore, size: 15)),
                             InkWell(
                                 onTap: () {},
-                                child: Icon(Icons.share, size: 15)),
+                                child: const Icon(Icons.share, size: 15)),
                             InkWell(
                                 onTap: () {},
-                                child: Icon(Icons.bookmark_border, size: 15)),
+                                child: const Icon(Icons.bookmark_border,
+                                    size: 15)),
                             InkWell(
                                 onTap: () {},
-                                child: Icon(Icons.delete, size: 15)),
+                                child: const Icon(Icons.delete, size: 15)),
                           ],
                         )
                       ],
